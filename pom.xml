@@ -71,7 +71,7 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.36.0.3</version>
+            <version>3.45.0.0</version>
         </dependency>
 
         <dependency>
@@ -152,7 +152,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        no.ntnu.idatt1002.demo.MyApp
+                                        no.ntnu.idatt1002.demo.Main
                                     </mainClass>
                                 </manifest>
                             </archive>

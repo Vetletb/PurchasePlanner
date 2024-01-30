@@ -4,15 +4,14 @@ import no.ntnu.idatt1002.demo.view.MyWindow;
 
 /**
  * Use this class to start the application
- * @author nilstes
  */
-public class MyApp {
+public class Main {
 
     /**
      * Main method for my application
      */
     public static void main(String[] args) throws Exception {
-        MyWindow window = new MyWindow("The Window");
+        MyWindow window = new MyWindow(Globals.APP_NAME);
         window.setVisible(true);
-   }  
+    }
 }
