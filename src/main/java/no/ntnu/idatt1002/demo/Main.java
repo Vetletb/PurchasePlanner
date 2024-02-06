@@ -1,17 +1,17 @@
 package no.ntnu.idatt1002.demo;
 
-import no.ntnu.idatt1002.demo.view.MyWindow;
+import javafx.application.Application;
+import no.ntnu.idatt1002.demo.view.App;
 
 /**
- * Use this class to start the application
+ * Use this class to start the application.
  */
 public class Main {
 
-    /**
-     * Main method for my application
-     */
-    public static void main(String[] args) throws Exception {
-        MyWindow window = new MyWindow(Globals.APP_NAME);
-        window.setVisible(true);
-    }
+  /**
+   * Main method for the application.
+   */
+  public static void main(String[] args) {
+    Application.launch(App.class, args);
+  }
 }
