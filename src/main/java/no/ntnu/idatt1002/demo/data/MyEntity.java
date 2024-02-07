@@ -1,37 +1,36 @@
+
 package no.ntnu.idatt1002.demo.data;
 
-import java.util.Date;
-import java.util.List;
-
 /**
- * This is just a simple Java-bean
+ * This is just a simple Java-bean.
+ *
  * @author nilstes
  */
 public class MyEntity {
-    private String id;
-    private String name;
-    
-    public MyEntity() {
-    }
+  private String id;
+  private String name;
 
-    public MyEntity(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+  public MyEntity() {
+  }
 
-    public String getName() {
-        return name;
-    }
+  public MyEntity(String id, String name) {
+    this.id = id;
+    this.name = name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 }
