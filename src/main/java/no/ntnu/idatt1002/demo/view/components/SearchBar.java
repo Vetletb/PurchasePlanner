@@ -14,6 +14,7 @@ public class SearchBar extends TextField {
   /**
    * Constructor for the SearchBar
    * @param text the text to be initially displayed in the search bar
+   * <p>Uses the {@link #handleTextChange(String)} method to handle the text change</p>
    */
   public SearchBar(String text) {
     super(text);
@@ -27,9 +28,12 @@ public class SearchBar extends TextField {
     });
   }
 
+    /**
+     * Method to handle the text change
+     * @param newValue the new value of the text
+     */
   private void handleTextChange(String newValue) {
     Logger.getLogger("Searchbar").info("Text changed to: " + newValue);
-    
   }
 
 }
