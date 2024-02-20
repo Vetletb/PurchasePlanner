@@ -23,9 +23,6 @@ public class App extends Application {
   private static Properties p = ConfigLoader.load();
 
   public static void main(String[] args) {
-    System.out.println(p.getProperty("app.name"));
-
-    Logger.getLogger().log("Starting application");
     launch(args);
   }
 
@@ -40,5 +37,7 @@ public class App extends Application {
     StackPane root = new StackPane();
     primaryStage.setScene(new Scene(root, bounds.getWidth(), bounds.getHeight()));
     primaryStage.show();
+
+    Logger.info("Application started");
   }
 }
