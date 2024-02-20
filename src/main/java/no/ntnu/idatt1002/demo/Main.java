@@ -12,6 +12,7 @@ public class Main {
    * Main method for the application.
    */
   public static void main(String[] args) {
+    Logger.setLevel(0);
     Application.launch(App.class, args);
   }
 }
