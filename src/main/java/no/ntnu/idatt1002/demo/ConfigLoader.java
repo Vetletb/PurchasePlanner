@@ -27,6 +27,22 @@ public class ConfigLoader {
       return new Properties();
     }
 
+    try {
+      Integer loggerLevel = Integer.parseInt(properties.getProperty("logger_level"));
+
+      if (loggerLevel > 4) {
+        throw new NumberFormatException();
+      }
+
+      Logger.setLevel(loggerLevel);
+      Logger.fatal(loggerLevel.toString());
+
+    } catch (NumberFormatException e) {
+      Logger.fatal("logger_level not set to a valid number");
+    } catch (Exception e) {
+      Logger.fatal("Could not set logger level");
+    }
+
     Logger.info("Loaded properties from " + configFileName);
 
     return properties;
