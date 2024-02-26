@@ -16,7 +16,7 @@ import java.io.File;
  */
 public class Icon extends StackPane {
 
-    private final String path = "src/main/resources/icons/";
+    private final String path = "src/main/resources/no/ntnu/idatt1002/icons/";
     // TODO: Find the correct path that we will have and change this to that
     public static final int DEFAULT_SIZE = 10;
     private final String iconName;
@@ -72,7 +72,7 @@ public class Icon extends StackPane {
             }
             scanner.close();
         } catch (java.io.IOException e) {
-            Logger.getLogger().log("Error reading SVG file: " + filePath);
+            Logger.getLogger().log("Error reading SVG file: " + e.getMessage());
         }
         return contentBuilder.toString();
     }
@@ -110,7 +110,7 @@ public class Icon extends StackPane {
      * @param x X position
      * @param y Y position
      */
-    public void setPostion(int x, int y) {
+    public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -154,5 +154,4 @@ public class Icon extends StackPane {
     public String getIconName() {
         return iconName;
     }
-
 }
