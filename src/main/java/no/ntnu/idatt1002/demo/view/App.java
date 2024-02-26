@@ -10,11 +10,14 @@ import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.ConfigLoader;
 import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.SceneLoader;
+import no.ntnu.idatt1002.demo.view.components.Sidebar;
 
 /**
  * The main application class.
@@ -37,6 +40,14 @@ public class App extends Application {
     StackPane root = new StackPane();
     primaryStage.setScene(new Scene(root, bounds.getWidth(), bounds.getHeight()));
     primaryStage.show();
+
+    HBox mainContainer = new HBox();
+
+    SceneLoader sceneLoader = new SceneLoader();
+    Sidebar sidebar = new Sidebar(sceneLoader);
+
+    mainContainer.getChildren().addAll(sidebar, sceneLoader);
+    root.getChildren().add(mainContainer);
 
     Logger.info("Application started");
   }

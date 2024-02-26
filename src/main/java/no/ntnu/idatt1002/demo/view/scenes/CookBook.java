@@ -6,12 +6,12 @@ import javafx.scene.text.Text;
 /**
  * The inventory page.
  */
-public class Inventory extends VBox {
+public class CookBook extends VBox {
 
-  public Inventory() {
-    super();
+    public CookBook() {
+        super();
 
-    super.getChildren().addAll(new Text("Inventory"));
-  }
+        super.getChildren().addAll(new Text("CookBook"));
+    }
 
 }
