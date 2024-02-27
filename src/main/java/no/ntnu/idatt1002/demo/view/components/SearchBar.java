@@ -22,8 +22,8 @@ public class SearchBar extends TextField {
 
   // TODO add a getBounds method to get the bounds of the screen to the app class
   private Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-  private final int OriginOffsetX = -((int) bounds.getMaxX()- DEFAULT_WIDTH)/2;
-  private final int OriginOffsetY = -((int) bounds.getMaxY()/2 - 2 * DEFAULT_HEIGHT);
+  private final int OriginOffsetX = -((int) bounds.getMaxX() - DEFAULT_WIDTH) / 2;
+  private final int OriginOffsetY = -((int) bounds.getMaxY() / 2 - 2 * DEFAULT_HEIGHT);
 
   /**
    * Constructor for the SearchBar with no provided information
@@ -34,6 +34,7 @@ public class SearchBar extends TextField {
 
   /**
    * Constructor for the SearchBar with only the position of the search bar
+   * 
    * @param text the text to be initially displayed in the search bar
    */
   public SearchBar(String text) {
@@ -42,6 +43,7 @@ public class SearchBar extends TextField {
 
   /**
    * Constructor for the SearchBar with only the position of the search bar
+   * 
    * @param positionX the x position of the search bar
    * @param positionY the y position of the search bar
    */
@@ -51,8 +53,12 @@ public class SearchBar extends TextField {
 
   /**
    * Constructor for the SearchBar
+   * 
    * @param text the text to be initially displayed in the search bar
-   * <p>Uses the {@link #handleTextChange(String)} method to handle the text change</p>
+   *             <p>
+   *             Uses the {@link #handleTextChange(String)} method to handle the
+   *             text change
+   *             </p>
    */
   public SearchBar(String text, int positionX, int positionY) {
     super(text);
@@ -62,11 +68,11 @@ public class SearchBar extends TextField {
 
     // Set the position of the search bar
     setPosition(positionX, positionY);
-    Logger.getLogger().log("Offset values:" + OriginOffsetX + " " + OriginOffsetY);
+    Logger.debug("Offset values:" + OriginOffsetX + " " + OriginOffsetY);
 
     setMaxWidth(DEFAULT_WIDTH);
     setMaxHeight(DEFAULT_HEIGHT);
-    
+
     // Add a listener to the text property
     textProperty().addListener(new ChangeListener<String>() {
       @Override
@@ -78,23 +84,26 @@ public class SearchBar extends TextField {
 
   /**
    * Method to get the value of the search bar
+   * 
    * @return the value of the search bar
    */
   public String getValue() {
     return fieldText;
   }
 
-    /**
-     * Method to handle the text change
-     * @param newValue the new value of the text
-     */
+  /**
+   * Method to handle the text change
+   * 
+   * @param newValue the new value of the text
+   */
   private void handleTextChange(String newValue) {
     fieldText = newValue;
-    Logger.getLogger().log("Text changed to: " + getValue());
+    Logger.debug("Text changed to: " + getValue());
   }
 
   /**
    * Method to set the position of the search bar
+   * 
    * @param positionX the x position of the search bar
    * @param positionY the y position of the search bar
    */
