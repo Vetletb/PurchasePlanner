@@ -6,8 +6,12 @@ import no.ntnu.idatt1002.demo.view.scenes.CookBook;
 import no.ntnu.idatt1002.demo.view.scenes.CookingMode;
 import no.ntnu.idatt1002.demo.view.scenes.Inventory;
 import no.ntnu.idatt1002.demo.view.scenes.Plan;
+import no.ntnu.idatt1002.demo.view.scenes.Settings;
 import no.ntnu.idatt1002.demo.view.scenes.ShoppingList;
 
+/**
+ * The scene loader for the application.
+ */
 public class SceneLoader extends VBox {
   private final HashMap<String, VBox> scenes = new HashMap<>();
 
@@ -27,6 +31,7 @@ public class SceneLoader extends VBox {
     scenes.put("shoppinglist", new ShoppingList());
     scenes.put("plan", new Plan());
     scenes.put("cookingmode", new CookingMode());
+    scenes.put("settings", new Settings());
 
     super.getChildren().add(scenes.get("inventory"));
   }

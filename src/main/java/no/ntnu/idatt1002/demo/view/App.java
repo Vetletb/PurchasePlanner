@@ -1,15 +1,9 @@
 package no.ntnu.idatt1002.demo.view;
 
 import java.util.Properties;
-
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
@@ -38,13 +32,17 @@ public class App extends Application {
 
     primaryStage.setTitle(p.getProperty("app_name"));
     StackPane root = new StackPane();
-    primaryStage.setScene(new Scene(root, bounds.getWidth(), bounds.getHeight()));
+    Scene scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
+    scene.getStylesheets().add(getClass().getResource("/no/ntnu/idatt1002/demo/style/style.css")
+        .toExternalForm());
+    primaryStage.setScene(scene);
     primaryStage.show();
 
     HBox mainContainer = new HBox();
 
     SceneLoader sceneLoader = new SceneLoader();
     Sidebar sidebar = new Sidebar(sceneLoader);
+    sidebar.setPrefHeight(bounds.getHeight());
 
     mainContainer.getChildren().addAll(sidebar, sceneLoader);
     root.getChildren().add(mainContainer);

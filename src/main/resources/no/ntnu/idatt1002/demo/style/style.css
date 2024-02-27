@@ -1,0 +1,28 @@
+.centered {
+    -fx-alignment: center;
+}
+
+.bottom-centered {
+    -fx-alignment: bottom-center;
+
+}
+
+.sidebar {
+    -fx-background-color: #FFFFFF;
+}
+
+.primary-button {
+    -fx-background-color: #95CDE7;
+}
+
+.white-button {
+    -fx-background-color: #FFFFFF;
+}
+
+.white-button:hover {
+    -fx-background-color: #cfe4ed;
+}
+
+.white-button:pressed {
+    -fx-background-color: #81bfdb;
+}
