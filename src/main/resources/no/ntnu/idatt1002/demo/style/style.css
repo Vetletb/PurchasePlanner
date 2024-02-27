@@ -2,6 +2,10 @@
     -fx-alignment: center;
 }
 
+.top-left {
+    -fx-alignment: top-left;
+}
+
 .bottom-centered {
     -fx-alignment: bottom-center;
 
@@ -25,4 +29,8 @@
 
 .white-button:pressed {
     -fx-background-color: #81bfdb;
+}
+
+.icon {
+    -fx-fill: "none";
 }

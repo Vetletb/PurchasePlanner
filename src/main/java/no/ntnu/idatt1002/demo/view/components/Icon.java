@@ -23,7 +23,7 @@ public class Icon extends VBox {
   private final SVGPath svgPath;
   public static final int DEFAULT_SIZE = 10;
   // private static final float DEFAULT_SCALE = 0.1f;
-  private final double strokeWidth = 0.5;
+  private final double strokeWidth = 1.5;
   private final String iconName;
   private int x;
   private int y;
@@ -51,23 +51,26 @@ public class Icon extends VBox {
     // Path to the SVG file
     String svgFilePath = this.filePath + iconName + ".svg";
     // Set the content of the SVG path
-    String svgFileContent = readSVGFromFile(svgFilePath);
+    String svgFileContent = readSvgFromFile(svgFilePath);
     // Split the SVG content and get the data value from the path
-    String svgData = splitSVGContent(svgFileContent, "d");
+    String svgData = splitSvgContent(svgFileContent, "d");
 
     // Create a new SVGPath
     svgPath = new SVGPath();
     // Set the content of the SVG path
     svgPath.setContent(svgData);
     // You can customize the appearance of the SVG path
-    svgPath.setStroke(Color.BLACK);
     svgPath.setStrokeWidth(strokeWidth);
-    // svgPath.setFillRule(FillRule.NON_ZERO);
+    svgPath.setStrokeType(javafx.scene.shape.StrokeType.CENTERED);
+    svgPath.setStroke(Color.BLACK);
 
     getChildren().add(svgPath);
 
     // setSize(size);
     Logger.debug("Icon created: " + iconName);
+
+    this.svgPath.getStyleClass().addAll("icon", "centered");
+    this.getStyleClass().add("icon-container");
   }
 
   /**
@@ -76,7 +79,7 @@ public class Icon extends VBox {
    * @param filePath Path to the SVG file
    * @return Content of the SVG file as a string
    */
-  private String readSVGFromFile(String filePath) {
+  private String readSvgFromFile(String filePath) {
     try {
       // Logger.getLogger().log(Files.readString(Paths.get(filePath)));
       return Files.readString(Paths.get(filePath));
@@ -93,7 +96,7 @@ public class Icon extends VBox {
    * @param regex      Regex to split the content
    * @return Value of the attribute
    */
-  private String splitSVGContent(String svgContent, String regex) {
+  private String splitSvgContent(String svgContent, String regex) {
     return svgContent.split(regex + "=\"")[1].split("\"")[0];
   }
 
@@ -132,19 +135,23 @@ public class Icon extends VBox {
   }
 
   /**
-   * Set the size of the icon
-   * 
+   * Set the size of the icon.
+   *
    * @param size Size of the icon
    */
-  public void setSize(int size) { // TODO: Fix so that it scales correctly
+  public void setSize(int size) {
+
+    // TODO: this """works""" but it still requires manual adjustment of the
+    // position. Fix this
     this.size = size;
-    setScaleX(size);
-    setScaleY(size);
+
+    this.svgPath.setScaleX(size);
+    this.svgPath.setScaleY(size);
   }
 
   /**
-   * Get the x value of the icon
-   * 
+   * Get the x value of the icon.
+   *
    * @return x position
    */
   public int getX() {
@@ -152,8 +159,8 @@ public class Icon extends VBox {
   }
 
   /**
-   * Get the y value of the icon
-   * 
+   * Get the y value of the icon.
+   *
    * @return y position
    */
   public int getY() {
@@ -161,8 +168,8 @@ public class Icon extends VBox {
   }
 
   /**
-   * Get the size of the icon
-   * 
+   * Get the size of the icon.
+   *
    * @return size of the icon
    */
   public int getSize() {
@@ -171,8 +178,8 @@ public class Icon extends VBox {
   }
 
   /**
-   * Get the name of the icon
-   * 
+   * Get the name of the icon.
+   *
    * @return name of the icon
    */
   public String getIconName() {
