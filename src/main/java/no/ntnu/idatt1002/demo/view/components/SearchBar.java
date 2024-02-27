@@ -1,6 +1,5 @@
 package no.ntnu.idatt1002.demo.view.components;
 
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.stage.Screen;
 import no.ntnu.idatt1002.demo.Logger;
@@ -61,7 +60,7 @@ public class SearchBar extends TextField {
    *             </p>
    */
   public SearchBar(String text, int positionX, int positionY) {
-    super(text);
+    super();
 
     // Apply CSS styling for rounded corners
     setStyle("-fx-background-radius: 20;");
@@ -70,14 +69,22 @@ public class SearchBar extends TextField {
     setPosition(positionX, positionY);
     Logger.debug("Offset values:" + OriginOffsetX + " " + OriginOffsetY);
 
+    // Set the alignment of the search bar
     setMaxWidth(DEFAULT_WIDTH);
     setMaxHeight(DEFAULT_HEIGHT);
+
+    setPromptText(text);
 
     // Add a listener to the text property
     textProperty().addListener(new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         handleTextChange(newValue);
+        if(!newValue.isEmpty()) {
+          setPromptText("");
+        } else {
+          setPromptText(text);
+        }
       }
     });
   }
