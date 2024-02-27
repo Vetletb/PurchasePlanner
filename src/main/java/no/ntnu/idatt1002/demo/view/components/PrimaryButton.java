@@ -1,7 +1,12 @@
 package no.ntnu.idatt1002.demo.view.components;
 
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
+/**
+ * The main button for the application.
+ */
 public class PrimaryButton extends Button {
 
   /**
@@ -18,16 +23,23 @@ public class PrimaryButton extends Button {
     PRIMARY, SECONDARY, BLACK, WHITE;
   }
 
-  // icon
+  private Icon icon;
 
   public PrimaryButton(String text) {
-    super(text);
-    this.setButtonType(Type.PRIMARY);
-    this.getStyleClass().add("centered");
+    this(text, Type.PRIMARY, null);
   }
 
   public PrimaryButton(String text, Type type) {
-    super(text);
+    this(text, type, null);
+  }
+
+  public PrimaryButton(String text, Icon icon) {
+    this(text, Type.PRIMARY, icon);
+  }
+
+  public PrimaryButton(String text, Type type, Icon icon) {
+    super(text, icon);
+    this.icon = icon;
     this.setButtonType(type);
     this.getStyleClass().add("centered");
   }
@@ -58,5 +70,13 @@ public class PrimaryButton extends Button {
   public void setCustomStyle(String[] styles) {
     this.getStyleClass().clear();
     this.getStyleClass().addAll(styles);
+  }
+
+  public Icon getIcon() {
+    return icon;
+  }
+
+  public void setIcon(Icon icon) {
+    this.icon = icon;
   }
 }

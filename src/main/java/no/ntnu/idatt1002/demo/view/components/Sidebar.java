@@ -26,35 +26,51 @@ public class Sidebar extends VBox {
 
     // create the buttons
 
-    PrimaryButton inventoryButton = new PrimaryButton("Inventory", PrimaryButton.Type.WHITE);
+    PrimaryButton inventoryButton = new PrimaryButton(
+        "Inventory",
+        PrimaryButton.Type.WHITE,
+        new Icon("inventory"));
+
     inventoryButton.setPrefSize(buttonWidth, buttonHeight);
     inventoryButton.setOnAction(e -> {
       sceneLoader.switchScene("inventory");
       setSelectedButton(inventoryButton);
     });
 
-    PrimaryButton cookBookButton = new PrimaryButton("CookBook", PrimaryButton.Type.WHITE);
+    PrimaryButton cookBookButton = new PrimaryButton(
+        "CookBook",
+        PrimaryButton.Type.WHITE,
+        new Icon("cookbook"));
     cookBookButton.setPrefSize(buttonWidth, buttonHeight);
     cookBookButton.setOnAction(e -> {
       sceneLoader.switchScene("cookbook");
       setSelectedButton(cookBookButton);
     });
 
-    PrimaryButton planButton = new PrimaryButton("Plan", PrimaryButton.Type.WHITE);
+    PrimaryButton planButton = new PrimaryButton(
+        "Plan",
+        PrimaryButton.Type.WHITE,
+        new Icon("plan"));
     planButton.setPrefSize(buttonWidth, buttonHeight);
     planButton.setOnAction(e -> {
       sceneLoader.switchScene("plan");
       setSelectedButton(planButton);
     });
 
-    PrimaryButton shoppingListButton = new PrimaryButton("Shopping list", PrimaryButton.Type.WHITE);
+    PrimaryButton shoppingListButton = new PrimaryButton(
+        "Shopping list",
+        PrimaryButton.Type.WHITE,
+        new Icon("shoppinglist"));
     shoppingListButton.setPrefSize(buttonWidth, buttonHeight);
     shoppingListButton.setOnAction(e -> {
       sceneLoader.switchScene("shoppinglist");
       setSelectedButton(shoppingListButton);
     });
 
-    PrimaryButton cookingModeButton = new PrimaryButton("Cooking mode", PrimaryButton.Type.WHITE);
+    PrimaryButton cookingModeButton = new PrimaryButton(
+        "Cooking mode",
+        PrimaryButton.Type.WHITE,
+        new Icon("cookingmode"));
     cookingModeButton.setPrefSize(buttonWidth, buttonHeight);
     cookingModeButton.setOnAction(e -> {
       sceneLoader.switchScene("cookingmode");
@@ -72,7 +88,10 @@ public class Sidebar extends VBox {
         shoppingListButton,
         cookingModeButton);
 
-    PrimaryButton settingsButton = new PrimaryButton("Settings", PrimaryButton.Type.WHITE);
+    PrimaryButton settingsButton = new PrimaryButton(
+        "Settings",
+        PrimaryButton.Type.WHITE,
+        new Icon("settings"));
     settingsButton.setPrefSize(buttonWidth, buttonHeight);
     settingsButton.setOnAction(e -> {
       sceneLoader.switchScene("settings");
