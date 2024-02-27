@@ -35,7 +35,6 @@ public class ConfigLoader {
       }
 
       Logger.setLevel(loggerLevel);
-      Logger.fatal(loggerLevel.toString());
 
     } catch (NumberFormatException e) {
       Logger.fatal("logger_level not set to a valid number");
