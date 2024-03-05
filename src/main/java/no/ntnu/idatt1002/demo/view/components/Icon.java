@@ -69,8 +69,30 @@ public class Icon extends VBox {
     // setSize(size);
     Logger.debug("Icon created: " + iconName);
 
-    this.svgPath.getStyleClass().addAll("icon", "centered");
+    this.svgPath.getStyleClass().addAll("icon-no-fill", "centered");
     this.getStyleClass().add("icon-container");
+  }
+
+  /**
+   * Set the fill color of the icon.
+   * 
+   * <p>
+   * Fills the icon with the given color. Pass null to remove the fill.
+   * </p>
+   *
+   * @param color The color to fill the icon with
+   */
+  public Icon setFillColor(Color color) {
+
+    if (color == null) {
+      this.svgPath.getStyleClass().add("icon-no-fill");
+      return this;
+    }
+
+    this.svgPath.getStyleClass().remove("icon-no-fill");
+    svgPath.setFill(color);
+
+    return this;
   }
 
   /**
