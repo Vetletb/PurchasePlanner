@@ -1,3 +1,8 @@
+.root {
+    -fx-font-family: "Inter";
+
+}
+
 .centered {
     -fx-alignment: center;
 }
@@ -66,6 +71,7 @@ White button
     -fx-background-color: #81bfdb;
 }
 
+
 /*
 #####################################
                 Icons
@@ -74,4 +80,9 @@ White button
 
 .icon-no-fill {
     -fx-fill: "none"
+}
+
+.combo-box-base {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, white;
+    -fx-background: "none";
 }
