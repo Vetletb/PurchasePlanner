@@ -11,13 +11,48 @@
 
 }
 
+
 .sidebar {
     -fx-background-color: #FFFFFF;
 }
 
+/*
+#######################################
+                Buttons
+#######################################
+*/
+
+/*
+* Primary button
+*/
+
 .primary-button {
     -fx-background-color: #95CDE7;
 }
+
+.primary-button:hover {
+    -fx-background-color: #cfe4ed;
+}
+
+/*
+Transparent button
+*/
+
+.transparent-button {
+    -fx-background-color: transparent;
+}
+
+.transparent-button:hover {
+    -fx-background-color: #cfe4ed;
+}
+
+.transparent-button:pressed {
+    -fx-background-color: #81bfdb;
+}
+
+/*
+White button
+*/
 
 .white-button {
     -fx-background-color: #FFFFFF;
@@ -31,6 +66,12 @@
     -fx-background-color: #81bfdb;
 }
 
-.icon {
-    -fx-fill: "none";
+/*
+#####################################
+                Icons
+#####################################
+*/
+
+.icon-no-fill {
+    -fx-fill: "none"
 }

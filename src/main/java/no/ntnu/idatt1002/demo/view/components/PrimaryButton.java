@@ -20,7 +20,7 @@ public class PrimaryButton extends Button {
    * </ul>
    */
   public enum Type {
-    PRIMARY, SECONDARY, BLACK, WHITE;
+    PRIMARY, SECONDARY, BLACK, WHITE, TRANSPARENT;
   }
 
   private Icon icon;
@@ -35,6 +35,14 @@ public class PrimaryButton extends Button {
 
   public PrimaryButton(String text, Icon icon) {
     this(text, Type.PRIMARY, icon);
+  }
+
+  public PrimaryButton(Type type, Icon icon) {
+    this(null, type, icon);
+  }
+
+  public PrimaryButton(Icon icon) {
+    this(null, Type.PRIMARY, icon);
   }
 
   public PrimaryButton(String text, Type type, Icon icon) {
