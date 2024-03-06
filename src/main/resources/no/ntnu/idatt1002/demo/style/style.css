@@ -3,8 +3,21 @@
 
 }
 
+.full-width {
+    -fx-min-width: 100%;
+}
+
+.full-height {
+    -fx-min-height: 100%;
+
+}
+
 .centered {
     -fx-alignment: center;
+}
+
+.right-centered {
+    -fx-alignment: center-right;
 }
 
 .top-left {

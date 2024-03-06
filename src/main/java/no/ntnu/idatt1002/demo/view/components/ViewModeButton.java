@@ -24,6 +24,7 @@ public class ViewModeButton extends PrimaryButton {
 
     private ViewMode(String name) {
       this.icon = new Icon(name).setFillColor(Color.BLACK);
+      this.icon.getStyleClass().add("centered");
     }
   }
 

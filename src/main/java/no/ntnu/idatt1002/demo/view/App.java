@@ -19,6 +19,8 @@ import no.ntnu.idatt1002.demo.view.components.Sidebar;
 public class App extends Application {
   private static Properties p = ConfigLoader.load();
 
+  private static final int SIDEBAR_WIDTH = 200;
+
   public static void main(String[] args) {
     launch(args);
   }
@@ -41,8 +43,12 @@ public class App extends Application {
     HBox mainContainer = new HBox();
 
     SceneLoader sceneLoader = new SceneLoader();
+    sceneLoader.setPrefWidth(bounds.getWidth() - SIDEBAR_WIDTH);
+    sceneLoader.setPrefHeight(bounds.getHeight());
+
     Sidebar sidebar = new Sidebar(sceneLoader);
     sidebar.setPrefHeight(bounds.getHeight());
+    sidebar.setPrefWidth(SIDEBAR_WIDTH);
 
     mainContainer.getChildren().addAll(sidebar, sceneLoader);
     root.getChildren().add(mainContainer);
