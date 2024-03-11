@@ -22,6 +22,17 @@ public class ItemPane extends VBox {
   private static final int DEFAULT_HEIGHT = 200;
 
   /**
+   * Constructor for the ItemPane class. Creates an ItemPane with a default image.
+   * @param itemId id of the item
+   * @param itemName name of the item
+   * @param positionX the position on the x-axis
+   * @param positionY the position on the y-axis
+   */
+  public ItemPane(int itemId, String itemName, int positionX, int positionY) {
+    this(itemId, itemName, "image-not-found", positionX, positionY);
+  }
+
+  /**
    * Constructor for the ItemPane class.
 
    * @param itemId id of the item

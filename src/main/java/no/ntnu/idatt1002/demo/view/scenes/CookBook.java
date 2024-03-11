@@ -59,17 +59,17 @@ public class CookBook extends VBox {
             recipeListContainer);
 //    super.getChildren().addAll(new Text("CookBook"), favoriteRecipeListContainer, recipeListContainer);
 
-    recipes.add(new ItemPane(1, "test1", "image-not-found", 0, 0));
-    recipes.add(new ItemPane(2, "test2", "image-not-found", 0, 0));
-    recipes.add(new ItemPane(3, "test3", "image-not-found", 0, 0));
-    recipes.add(new ItemPane(4, "test4", "image-not-found", 0, 0));
+    recipes.add(new ItemPane(1, "test1", 0, 0));
+    recipes.add(new ItemPane(2, "test2", 0, 0));
+    recipes.add(new ItemPane(3, "test3", 0, 0));
+    recipes.add(new ItemPane(4, "test4", 0, 0));
 
-    favoriteRecipes.add(new ItemPane(5, "test5", "image-not-found", 0, 0));
-    favoriteRecipes.add(new ItemPane(6, "test6", "image-not-found", 0, 0));
-    favoriteRecipes.add(new ItemPane(7, "test7", "image-not-found", 0, 0));
-    favoriteRecipes.add(new ItemPane(8, "test8", "image-not-found", 0, 0));
+    favoriteRecipes.add(new ItemPane(5, "test5", 0, 0));
+    favoriteRecipes.add(new ItemPane(6, "test6", 0, 0));
+    favoriteRecipes.add(new ItemPane(7, "test7", 0, 0));
+    favoriteRecipes.add(new ItemPane(8, "test8", 0, 0));
 
-    setStyle("-fx-background-color: #f12345;");
+//    setStyle("-fx-background-color: #f12345;");
     update();
   }
 
