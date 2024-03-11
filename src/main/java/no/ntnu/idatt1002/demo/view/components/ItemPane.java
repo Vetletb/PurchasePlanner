@@ -45,7 +45,7 @@ public class ItemPane extends VBox {
     this.image = createImageView(imageName);
 
     setPosition(positionX, positionY);
-    setScale(0.6, 0.6);
+    setScale(0.8, 0.8);
     setMaxSize(DEFAULT_WIDTH + 70, DEFAULT_HEIGHT + 90);
     setStyle("-fx-background-color: #95CDE7;"
             + "-fx-background-radius: 20;"
