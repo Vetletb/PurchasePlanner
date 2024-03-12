@@ -36,6 +36,10 @@ public class Item implements Storable{
     this.item_id = item_id;
   }
 
+  /**
+   * This method returns the attribute names of the item.
+   * @return the attribute names of the item
+   */
   @Override
   public List<String> getAttributes() {
     List<String> attributes = new ArrayList<>();
@@ -45,6 +49,10 @@ public class Item implements Storable{
     return attributes;
   }
 
+  /**
+   * This method returns the attribute names of the item.
+   * @return the attribute names of the item
+   */
   @Override
   public List<String> getAttributeNames() {
     List<String> attributes = new ArrayList<>();
@@ -54,11 +62,19 @@ public class Item implements Storable{
     return attributes;
   }
 
+  /**
+   * This method returns the id of the item.
+   * @return the id of the item
+   */
   @Override
   public int getId() {
     return getItem_id();
   }
 
+  /**
+   * This method returns the name of the id.
+   * @return the name of the id
+   */
   @Override
   public String getIdName() {
     return "item_id";
