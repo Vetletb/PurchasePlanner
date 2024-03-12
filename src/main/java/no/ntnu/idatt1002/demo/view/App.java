@@ -6,6 +6,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.ConfigLoader;
@@ -27,6 +28,9 @@ public class App extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
+
+    loadFonts();
+
     Screen screen = Screen.getPrimary();
     Rectangle2D bounds = screen.getVisualBounds();
     primaryStage.setX(bounds.getMinX());
@@ -54,5 +58,57 @@ public class App extends Application {
     root.getChildren().add(mainContainer);
 
     Logger.info("Application started");
+  }
+
+  /**
+   * Loads the fonts used in the application.
+   */
+  private void loadFonts() {
+
+    Font.loadFont(
+        App.class.getResource("/no/ntnu/idatt1002/demo/style/fonts/inter/Inter-Black.ttf")
+            .toExternalForm(),
+        10);
+
+    Font.loadFont(
+        App.class.getResource("/no/ntnu/idatt1002/demo/style/fonts/inter/Inter-Bold.ttf")
+            .toExternalForm(),
+        10);
+
+    Font.loadFont(
+        App.class.getResource("/no/ntnu/idatt1002/demo/style/fonts/inter/Inter-ExtraBold.ttf")
+            .toExternalForm(),
+        10);
+
+    Font.loadFont(
+        App.class.getResource("/no/ntnu/idatt1002/demo/style/fonts/inter/Inter-ExtraLight.ttf")
+            .toExternalForm(),
+        10);
+
+    Font.loadFont(
+        App.class.getResource("/no/ntnu/idatt1002/demo/style/fonts/inter/Inter-Light.ttf")
+            .toExternalForm(),
+        10);
+
+    Font.loadFont(
+        App.class.getResource("/no/ntnu/idatt1002/demo/style/fonts/inter/Inter-Medium.ttf")
+            .toExternalForm(),
+        10);
+
+    Font.loadFont(
+        App.class.getResource("/no/ntnu/idatt1002/demo/style/fonts/inter/Inter-Regular.ttf")
+            .toExternalForm(),
+        10);
+
+    Font.loadFont(
+        App.class.getResource("/no/ntnu/idatt1002/demo/style/fonts/inter/Inter-SemiBold.ttf")
+            .toExternalForm(),
+        10);
+
+    Font.loadFont(
+        App.class.getResource("/no/ntnu/idatt1002/demo/style/fonts/inter/Inter-Thin.ttf")
+            .toExternalForm(),
+        10);
+
   }
 }

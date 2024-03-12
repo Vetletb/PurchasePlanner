@@ -10,7 +10,6 @@
     -fx-primary-color-dark: #81bfdb;
 }
 
-
 /*
 ######################################
                 Common
@@ -18,8 +17,11 @@
 */
 
 .root {
-    -fx-font-family: "Inter";
+    -fx-font-family: 'Inter';
+}
 
+.test {
+    -fx-font-family: 'Inter';
 }
 
 .full-width {
