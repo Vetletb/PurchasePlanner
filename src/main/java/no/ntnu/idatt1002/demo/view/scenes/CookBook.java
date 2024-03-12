@@ -37,6 +37,7 @@ public class CookBook extends VBox {
     favoriteRecipesLeftArrowButton = new ArrowButton(ArrowButton.Direction.LEFT);
     favoriteRecipesRightArrowButton = new ArrowButton(ArrowButton.Direction.RIGHT);
 
+    // Add action listeners to the arrow buttons to change the index and update the page
     recipesLeftArrowButton.setOnAction(e -> {
       setRecipeListIndex(getRecipeListIndex() - 1);
       update();
@@ -57,8 +58,7 @@ public class CookBook extends VBox {
     super.getChildren().addAll(new Text("CookBook"),
             favoriteRecipeListContainer,
             recipeListContainer);
-//    super.getChildren().addAll(new Text("CookBook"), favoriteRecipeListContainer, recipeListContainer);
-
+    // Temporary Test Data
     recipes.add(new ItemPane(1, "test1", 0, 0));
     recipes.add(new ItemPane(2, "test2", 0, 0));
     recipes.add(new ItemPane(3, "test3", 0, 0));
@@ -69,7 +69,6 @@ public class CookBook extends VBox {
     favoriteRecipes.add(new ItemPane(7, "test7", 0, 0));
     favoriteRecipes.add(new ItemPane(8, "test8", 0, 0));
 
-//    setStyle("-fx-background-color: #f12345;");
     update();
   }
 
