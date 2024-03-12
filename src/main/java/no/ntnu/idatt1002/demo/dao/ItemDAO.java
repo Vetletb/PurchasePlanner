@@ -4,6 +4,7 @@ import no.ntnu.idatt1002.demo.data.Item;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import no.ntnu.idatt1002.demo.data.Storable;
 
 /**
  * This class provides methods for accessing the item table in the database.
@@ -36,12 +37,27 @@ private final DBConnectionProvider connectionProvider;
       }
     }
 
+  public void addToDatabase(Storable obj) {
+    String sql = String.format("INSERT INTO %s(%s) VALUES(?,?,?)",
+        obj.getClass().getSimpleName(), String.join(", ", obj.getAttributeNames()));
+    List<String> attributes = obj.getAttributes();
+    try (Connection connection = connectionProvider.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+      for (int i = 0; i < attributes.size(); i++) {
+        preparedStatement.setString(i + 1, attributes.get(i));
+      }
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new RuntimeException("Error storing " + obj.getClass().getSimpleName(), e);
+    }
+  }
+
   /**
    * This method deletes an item from the database.
     * @param item_id the id of the item to delete
    */
   public void deleteItem(int item_id) {
-      String sql = "DELETE FROM item WHERE item_id = ?";
+      String sql = "DELETE FROM  WHERE item_id = ?";
       try (Connection connection = connectionProvider.getConnection();
            PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
         preparedStatement.setInt(1, item_id);
@@ -50,6 +66,17 @@ private final DBConnectionProvider connectionProvider;
         throw new RuntimeException("Error deleting item", e);
       }
     }
+
+  public void deleteFromDatabase(Storable obj) {
+    String sql = String.format("DELETE FROM %s WHERE %s = ?", obj.getClass().getSimpleName(), obj.getIdName());
+    try (Connection connection = connectionProvider.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+      preparedStatement.setInt(1, obj.getId());
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new RuntimeException("Error deleting " + obj.getClass().getSimpleName(), e);
+    }
+  }
 
 
   /**
@@ -67,6 +94,25 @@ private final DBConnectionProvider connectionProvider;
       preparedStatement.executeUpdate();
     } catch (SQLException e) {
       throw new RuntimeException("Error updating item", e);
+    }
+  }
+
+  public void updateDatabase(Storable obj) {
+    String sql = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
+        obj.getClass().getSimpleName(),
+        String.join(" = ?, ", obj.getAttributeNames()),obj.getIdName());
+        List<String> attributes = obj.getAttributes();
+    try (Connection connection = connectionProvider.getConnection();
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+      for (int i = 0; i < attributes.size(); i++) {
+        preparedStatement.setString(i + 1, attributes.get(i));
+        if (i == attributes.size() - 1) {
+          preparedStatement.setInt(i + 2, obj.getId());
+        }
+      }
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      throw new RuntimeException("Error updating " + obj.getClass().getSimpleName(), e);
     }
   }
 
@@ -92,7 +138,6 @@ private final DBConnectionProvider connectionProvider;
     }
     return items;
   }
-
 
   /**
    * This method searches for items by name in the database.

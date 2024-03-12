@@ -1,9 +1,12 @@
 package no.ntnu.idatt1002.demo.data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This class is a simple bean for an item.
  */
-public class Item {
+public class Item implements Storable{
   private int item_id;
   private String name;
   private String category;
@@ -29,10 +32,36 @@ public class Item {
    * @param allergy the allergy of the item
    */
   public Item(int item_id, String name, String category, String allergy) {
+    this(name, category, allergy);
     this.item_id = item_id;
-    this.name = name;
-    this.category = category;
-    this.allergy = allergy;
+  }
+
+  @Override
+  public List<String> getAttributes() {
+    List<String> attributes = new ArrayList<>();
+    attributes.add(name);
+    attributes.add(category);
+    attributes.add(allergy);
+    return attributes;
+  }
+
+  @Override
+  public List<String> getAttributeNames() {
+    List<String> attributes = new ArrayList<>();
+    attributes.add("name");
+    attributes.add("category");
+    attributes.add("allergy");
+    return attributes;
+  }
+
+  @Override
+  public int getId() {
+    return getItem_id();
+  }
+
+  @Override
+  public String getIdName() {
+    return "item_id";
   }
 
   /**
