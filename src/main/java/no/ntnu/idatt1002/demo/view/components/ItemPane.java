@@ -56,15 +56,21 @@ public class ItemPane extends VBox {
     this.image = createImageView(imageName);
 
     setPosition(positionX, positionY);
-    setScale(0.8, 0.8);
-    setMaxSize(DEFAULT_WIDTH + 70, DEFAULT_HEIGHT + 90);
-    setStyle("-fx-background-color: #95CDE7;"
-            + "-fx-background-radius: 20;"
-            + "-fx-alignment: top-center");
+
 
     Label label = new Label(itemName);
-    label.setStyle("-fx-font-size: 30px;"
-            + "-fx-padding: 10px");
+
+    // Add image style
+    assert image != null;
+    image.getStyleClass().add("item-pane-image");
+
+    // Add item pane style
+    this.getStyleClass().add("item-pane");
+
+    // Add label style
+    label.getStyleClass().add("item-pane-label");
+
+    // Add the label and image to the item pane
     getChildren().add(label);
     getChildren().add(image);
   }
