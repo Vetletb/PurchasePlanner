@@ -1,3 +1,22 @@
+/*
+######################################
+                Colors
+######################################
+*/
+
+* {
+    -fx-primary-color: #95CDE7;
+    -fx-primary-color-light: #cfe4ed;
+    -fx-primary-color-dark: #81bfdb;
+}
+
+
+/*
+######################################
+                Common
+######################################
+*/
+
 .root {
     -fx-font-family: "Inter";
 
@@ -11,6 +30,10 @@
     -fx-min-height: 100%;
 
 }
+
+/*
+alignment
+*/
 
 .centered {
     -fx-alignment: center;
@@ -34,6 +57,11 @@
     -fx-background-color: #FFFFFF;
 }
 
+.transparent {
+    -fx-background-color: transparent;
+
+}
+
 /*
 #######################################
                 Buttons
@@ -45,11 +73,11 @@
 */
 
 .primary-button {
-    -fx-background-color: #95CDE7;
+    -fx-background-color: -fx-primary-color;
 }
 
 .primary-button:hover {
-    -fx-background-color: #cfe4ed;
+    -fx-background-color: -fx-primary-color-light;
 }
 
 /*
@@ -61,11 +89,11 @@ Transparent button
 }
 
 .transparent-button:hover {
-    -fx-background-color: #cfe4ed;
+    -fx-background-color: -fx-primary-color-light;
 }
 
 .transparent-button:pressed {
-    -fx-background-color: #81bfdb;
+    -fx-background-color: -fx-primary-color;
 }
 
 /*
@@ -77,11 +105,11 @@ White button
 }
 
 .white-button:hover {
-    -fx-background-color: #cfe4ed;
+    -fx-background-color: -fx-primary-color-light;
 }
 
 .white-button:pressed {
-    -fx-background-color: #81bfdb;
+    -fx-background-color: -fx-primary-color;
 }
 
 
@@ -95,9 +123,22 @@ White button
     -fx-fill: "none"
 }
 
+/*
+########################################
+                Dropdown
+########################################
+*/
+
 .combo-box-base {
-    -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, white;
-    -fx-background: "none";
+    -fx-background-color: "transparent"
+}
+
+.combo-box-base:hover {
+    -fx-background-color: -fx-primary-color-light;
+}
+
+.combo-box-base:pressed {
+    -fx-background-color: -fx-primary-color;
 }
 
 /*
@@ -106,7 +147,7 @@ White button
 #####################################
 */
 .item-pane {
-    -fx-background-color: #95CDE7;
+    -fx-background-color: -fx-primary-color;
     -fx-background-radius: 20;
     -fx-alignment: top-center;
     -fx-scale-x: 0.9;
@@ -127,6 +168,7 @@ White button
     -fx-scale-x: 0.9;
     -fx-scale-y: 0.9;
 }
+
 /*
 #####################################
                 Image

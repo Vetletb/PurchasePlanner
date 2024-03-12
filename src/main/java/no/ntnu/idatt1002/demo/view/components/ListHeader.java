@@ -1,7 +1,6 @@
 package no.ntnu.idatt1002.demo.view.components;
 
-import org.apache.commons.compress.archivers.dump.DumpArchiveEntry.TYPE;
-
+import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -25,6 +24,8 @@ public class ListHeader extends HBox {
   private ViewModeButton gridButton;
   private PrimaryButton addButton;
   private SearchBar searchBar;
+  private Dropdown filter;
+  private Dropdown sort;
 
   private interface OnAdd {
     void cb();
@@ -38,9 +39,20 @@ public class ListHeader extends HBox {
     void cb(ViewModeButton.ViewMode mode);
   }
 
+  // change these to enums?
+  private interface onFilterChange {
+    void cb(String filter);
+  }
+
+  private interface OnSortChange {
+    void cb(String sort);
+  }
+
   private OnAdd onAdd;
   private OnSearch onSearch;
   private OnViewModeChange onViewModeChange;
+  private onFilterChange onFilterChange;
+  private OnSortChange onSortChange;
 
   public ListHeader setOnAdd(OnAdd onAdd) {
     this.onAdd = onAdd;
@@ -58,6 +70,16 @@ public class ListHeader extends HBox {
     return this;
   }
 
+  public ListHeader setOnFilterChange(onFilterChange onFilterChange) {
+    this.onFilterChange = onFilterChange;
+    return this;
+  }
+
+  public ListHeader setOnSortChange(OnSortChange onSortChange) {
+    this.onSortChange = onSortChange;
+    return this;
+  }
+
   public ListHeader() {
     super();
 
@@ -66,6 +88,30 @@ public class ListHeader extends HBox {
     HBox viewmodeContainer = new HBox();
     HBox.setHgrow(viewmodeContainer, Priority.ALWAYS);
     viewmodeContainer.setPadding(new Insets(0, 0, 0, INSET_AMOUNT));
+
+    HBox filtersortContainer = new HBox();
+
+    filter = new Dropdown("Filter", List.of("All", "Active", "Inactive"));
+    filter.setOnAction(e -> {
+      if (onFilterChange == null) {
+        Logger.error("No filter change callback set");
+        return;
+      }
+      onFilterChange.cb(filter.getValue());
+    });
+
+    sort = new Dropdown("Sort", List.of("Name", "Date", "Type"));
+    sort.setOnAction(e -> {
+      if (onSortChange == null) {
+        Logger.error("No sort change callback set");
+        return;
+      }
+      onSortChange.cb(sort.getValue());
+    });
+
+    filtersortContainer.getChildren().addAll(filter, sort);
+
+    HBox listgridContaner = new HBox();
 
     listButton = new ViewModeButton(ViewModeButton.ViewMode.LIST);
     listButton.setOnAction(e -> {
@@ -85,7 +131,10 @@ public class ListHeader extends HBox {
       onViewModeChange.cb(ViewModeButton.ViewMode.GRID);
     });
 
-    viewmodeContainer.getChildren().addAll(listButton, gridButton);
+    listgridContaner.getChildren().addAll(listButton, gridButton);
+
+    viewmodeContainer.setSpacing(20);
+    viewmodeContainer.getChildren().addAll(filtersortContainer, listgridContaner);
 
     HBox actionContainer = new HBox();
     actionContainer.getStyleClass().add("right-centered");

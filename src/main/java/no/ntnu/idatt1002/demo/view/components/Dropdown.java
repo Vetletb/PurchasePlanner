@@ -20,8 +20,7 @@ public class Dropdown extends ComboBox<String> {
     super();
     this.setPromptText(title);
 
-    this.getStyleClass().add("dropdown");
-
-    super.getItems().addAll(items);
+    this.getStyleClass().addAll("dropdown");
+    this.getItems().addAll(items);
   }
 }
