@@ -123,7 +123,7 @@ public class ItemRegister {
    * @param allergy the allergy of the item
    */
   public void updateItem(int id, String name, String category, String allergy) {
-    Item item = new Item(id, name, category, allergy);
+    Item item = createItem(name, category, allergy);
     dao.updateDatabase(item);
   }
 
