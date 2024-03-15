@@ -43,7 +43,7 @@ public class ShoppingListItem extends Item {
   }
 
   /**
-   * This method returns the attributes of the shopping list item.
+   * This method returns the attributes of the shopping list item as saved in the database.
    * @return the attributes of the quantity item
    */
   @Override
@@ -84,6 +84,17 @@ public class ShoppingListItem extends Item {
   @Override
   public String getIdName() {
     return "shoppinglistitem_id";
+  }
+
+  /**
+   * This method returns all the attributes of the shopping list item.
+   * @return all the attributes of the quantity item
+   */
+  public List<String> getAllAttributes() {
+    List<String> attributes = new ArrayList<>(super.getAttributes());
+    attributes.add(Integer.toString(quantity));
+    attributes.add(unit);
+    return attributes;
   }
 
   /**
