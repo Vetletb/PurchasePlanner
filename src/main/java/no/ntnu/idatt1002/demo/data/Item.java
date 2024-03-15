@@ -8,9 +8,9 @@ import java.util.List;
  */
 public class Item implements Storable{
   private int item_id;
-  private String name;
-  private String category;
-  private String allergy;
+  private final String name;
+  private final String category;
+  private final String allergy;
 
   /**
    * Constructor for the Item class. When creating a new item, the id is not known.
@@ -110,5 +110,14 @@ public class Item implements Storable{
    */
   public String getAllergy() {
     return allergy;
+  }
+
+  /**
+   * This method returns a string representation of the item.
+   * @return a string representation of the item
+   */
+  @Override
+  public String toString() {
+    return "Item ID: " + item_id + ", Name: " + name + ", Category: " + category + ", Allergy: " + allergy;
   }
 }

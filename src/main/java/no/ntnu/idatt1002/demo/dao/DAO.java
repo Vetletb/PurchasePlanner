@@ -24,8 +24,10 @@ private final DBConnectionProvider connectionProvider;
    * @param obj the object to add
    */
   public void addToDatabase(Storable obj) {
+    String placeholders = "?,".repeat(obj.getAttributeNames().size());
+    placeholders = placeholders.substring(0, placeholders.length() - 1);
     String sql = String.format("INSERT INTO %s(%s) VALUES(%s)",
-        obj.getClass().getSimpleName(), String.join(", ", obj.getAttributeNames()), "?".repeat(obj.getAttributeNames().size()));
+        obj.getClass().getSimpleName(), String.join(", ", obj.getAttributeNames()), placeholders);
     List<String> attributes = obj.getAttributes();
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -37,6 +39,7 @@ private final DBConnectionProvider connectionProvider;
       throw new RuntimeException("Error storing " + obj.getClass().getSimpleName(), e);
     }
   }
+
 
   /**
    * This method deletes an item from the database.
