@@ -28,6 +28,21 @@ public class ShoppingListItem extends Item {
   }
 
   /**
+   * Constructor for the ShoppingListItem class. When creating a ShoppingListItem from the database, the id is known.
+   * @param ShoppingListItem_id the id of the ShoppingListItem
+   * @param item_id the id of the item
+   * @param name the name of the item
+   * @param category  the category of the item
+   * @param allergy the allergy of the item
+   * @param quantity the quantity of the item
+   * @param unit the unit of the item
+   */
+  public ShoppingListItem(int ShoppingListItem_id, int item_id, String name, String category, String allergy, int quantity, String unit) {
+    this(item_id, name, category, allergy, quantity, unit);
+    this.ShoppingListItem_id = ShoppingListItem_id;
+  }
+
+  /**
    * This method returns the attributes of the shopping list item.
    * @return the attributes of the quantity item
    */
