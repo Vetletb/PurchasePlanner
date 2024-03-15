@@ -2,6 +2,8 @@ package no.ntnu.idatt1002.demo.repo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.Item;
 
@@ -26,9 +28,9 @@ public class ItemRegister {
    * This method returns the items in the register in the form of lists.
    * @return the items in the register as lists of strings
    */
-  public List<List<String>> getItems() {
+  public Map<Integer, List<String>> getItems() {
     return items.stream()
-        .map(Item::getAttributes).toList();
+        .collect(Collectors.toMap(Item::getId, Item::getAttributes));
   }
 
   /**
@@ -121,7 +123,7 @@ public class ItemRegister {
    * @param allergy the allergy of the item
    */
   public void updateItem(int id, String name, String category, String allergy) {
-    Item item = new Item(id, name, category, allergy);
+    Item item = createItem(name, category, allergy);
     dao.updateDatabase(item);
   }
 
