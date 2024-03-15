@@ -1,10 +1,13 @@
 package no.ntnu.idatt1002.demo.repo;
 
 import no.ntnu.idatt1002.demo.dao.DAO;
+import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.data.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * This class represents a register for recipes. Allowing for communication between the database and the user interface.
@@ -27,9 +30,9 @@ public class RecipeRegister {
    * This method returns the recipes in the register in the form of lists.
    * @return the recipes in the register as lists of strings
    */
-  public List<List<String>> getRecipes() {
+  public Map<Integer, List<String>> getRecipes() {
     return recipes.stream()
-        .map(Recipe::getAttributes).toList();
+        .collect(Collectors.toMap(Recipe::getId, Recipe::getAttributes));
   }
 
   /**
@@ -117,9 +120,13 @@ public class RecipeRegister {
 
   /**
    * This method updates a recipe in the database.
-   * @param recipe the recipe to update
+   * @param name the name of the recipe
+   * @param cooking_time the cooking time of the recipe
+   * @param category the category of the recipe
    */
-  public void updateRecipe(Recipe recipe) {
+  public void updateRecipe(String name, int cooking_time, String category ) {
+
+    Recipe recipe = createRecipe(name, cooking_time, category);
     dao.updateDatabase(recipe);
   }
 
