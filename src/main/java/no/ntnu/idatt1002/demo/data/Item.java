@@ -37,7 +37,7 @@ public class Item implements Storable{
   }
 
   /**
-   * This method returns the attribute names of the item.
+   * This method returns the attributes of the item.
    * @return the attribute names of the item
    */
   @Override
