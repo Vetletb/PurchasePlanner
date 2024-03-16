@@ -33,6 +33,14 @@
 
 }
 
+.semibold {
+    -fx-font-weight: bold;
+}
+
+.text-lg {
+    -fx-font-size: 15px;
+}
+
 /*
 alignment
 */
@@ -179,4 +187,26 @@ White button
 .image {
     -fx-font-size: 30px;
     -fx-padding: 10px;
+}
+
+
+/*
+###########################################
+                List Header                
+###########################################
+*/
+
+.list-header {
+    -fx-font-size: 15px;
+    -fx-padding: 20px;
+}
+
+.list-item {
+    -fx-font-size: 15px;
+    -fx-padding: 10px;
+    -fx-background-color: -fx-primary-color-light;
+}
+
+.list-item:hover {
+    -fx-background-color: -fx-primary-color;
 }
