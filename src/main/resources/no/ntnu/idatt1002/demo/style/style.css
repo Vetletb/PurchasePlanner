@@ -88,6 +88,12 @@ alignment
 
 .primary-button:hover {
     -fx-background-color: -fx-primary-color-light;
+    -fx-cursor: hand;
+}
+
+.primary-button:pressed {
+    -fx-background-color: -fx-primary-color-dark;
+    -fx-cursor: hand;
 }
 
 /*
@@ -100,6 +106,7 @@ Transparent button
 
 .transparent-button:hover {
     -fx-background-color: -fx-primary-color-light;
+    -fx-cursor: hand;
 }
 
 .transparent-button:pressed {
@@ -116,12 +123,38 @@ White button
 
 .white-button:hover {
     -fx-background-color: -fx-primary-color-light;
+    -fx-cursor: hand;
 }
 
 .white-button:pressed {
     -fx-background-color: -fx-primary-color;
 }
 
+
+/*
+############################################
+                Input fields
+############################################
+*/
+
+.text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: -fx-primary-color-light;
+    -fx-border-radius: 5;
+    -fx-padding: 10px;
+}
+
+
+.text-field:hover {
+    -fx-border-color: -fx-primary-color;
+    -fx-cursor: text;
+}
+
+
+.text-field:focused {
+    -fx-border-color: -fx-primary-color-dark;
+    -fx-cursor: text;
+}
 
 /*
 #####################################
@@ -209,4 +242,24 @@ White button
 
 .list-item:hover {
     -fx-background-color: -fx-primary-color;
+}
+
+/*
+#####################################
+                Popup                
+#####################################
+*/
+
+.popup-background {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20px;
+
+    -fx-background-radius: 20px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+}
+
+.popup-title {
+    -fx-font-size: 20px;
+    -fx-padding: 30px;
+    -fx-font-weight: bold;
 }
