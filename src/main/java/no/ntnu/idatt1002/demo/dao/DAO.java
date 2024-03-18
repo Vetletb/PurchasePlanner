@@ -85,13 +85,22 @@ private final DBConnectionProvider connectionProvider;
    * @param table the table to get attributes from
    * @return a list of lists containing all attributes from a table
    */
-  public List<List<String>> getAllFromTable(String table) {
+  public List<List<String>> getAllFromTable(String table, String joinTable, String joinColumn) {
     List<List<String>> items = new ArrayList<>();
-    String sql = "SELECT * FROM " + table;
+    String sql;
+    if (joinTable == null) {
+      sql = "SELECT * FROM " + table;
+    } else {
+      sql = "SELECT * FROM " + table +
+          " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = " + joinTable + "." +  joinColumn;
+    }
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql);
          ResultSet resultSet = preparedStatement.executeQuery()) {
       List<String> columns = getColumnsFromTable(table);
+      if (joinTable != null) {
+        columns.addAll(getColumnsFromTable(joinTable));
+      }
       while (resultSet.next()) {
         List<String> item = new ArrayList<>();
         for (String column : columns) {
