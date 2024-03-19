@@ -102,18 +102,6 @@ public class ShoppingListItem extends Item {
   }
 
   /**
-   * Returns all the attributes of the shopping list item.
-   *
-   * @return all the attributes of the quantity item
-   */
-  public List<String> getAllAttributes() {
-    List<String> attributes = new ArrayList<>(super.getAttributes());
-    attributes.add(Integer.toString(quantity));
-    attributes.add(unit);
-    return attributes;
-  }
-
-  /**
    * Getter method for the quantity of the shopping list item.
    *
    * @return the quantity of the quantity item
