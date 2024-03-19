@@ -12,14 +12,13 @@ public class Recipe implements Storable {
   private int cooking_time;
   private String category;
 
-
   /**
    * Constructor for the Recipe class.
    * @param name the name of the recipe
    * @param category the category of the recipe
    * @param cooking_time the cooking time of the recipe
    */
-  public Recipe(String name, String category, int cooking_time) {
+  public Recipe(String name, int cooking_time, String category) {
       this.name = name;
       this.cooking_time = cooking_time;
       this.category = category;
@@ -33,8 +32,8 @@ public class Recipe implements Storable {
    * @param category
    *
    */
-  public Recipe(int recipe_id, String name, int cooking_time, String category ) {
-      this(name, category, cooking_time);
+  public Recipe(int recipe_id, String name, int cooking_time, String category) {
+      this(name, cooking_time, category);
       this.recipe_id = recipe_id;
   }
 
@@ -113,4 +112,14 @@ public class Recipe implements Storable {
   public int getCooking_time() {
       return cooking_time;
   }
+
+  @Override
+  public String toString() {
+    return
+        "Recipe ID: " + recipe_id +
+        ", Name: " + name +
+        ", Category: " + category +
+        ", Cooking Time: " + cooking_time;
+  }
 }
+

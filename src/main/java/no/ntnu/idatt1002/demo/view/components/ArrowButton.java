@@ -52,4 +52,14 @@ public class ArrowButton extends PrimaryButton {
     super(Type.TRANSPARENT, new Icon(ARROWNAME).setFillColor(new Color(0, 0, 0, 1)));
     super.getIcon().setRotate(direction.angle);
   }
+
+  public void setInactiveColor() {
+    super.getIcon().setFillColor(new Color(0.4, 0.4, 0.4, 1));
+    super.getIcon().setStrokeColor(new Color(0.4, 0.4, 0.4, 1));
+  }
+
+  public void setActiveColor() {
+    super.getIcon().setFillColor(new Color(0, 0, 0, 1));
+    super.getIcon().setStrokeColor(new Color(0, 0, 0, 1));
+  }
 }

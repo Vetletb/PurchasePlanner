@@ -13,22 +13,49 @@ public class ShoppingListItem extends Item {
   private final String unit;
 
   /**
-   * Constructor for the ShoppingListItem class. When creating a new ShoppingListItem, it is required that there is an
+   * Constructor for the ShoppingListItem class.
+   * When creating a new ShoppingListItem, it is required that there is an
    * item in the database with the same name, category and allergy.
+   *
    * @param name the name of the item
    * @param category the category of the item
    * @param allergy the allergy of the item
    * @param quantity the quantity of the item
    * @param unit the unit of the item
    */
-  public ShoppingListItem(int item_id, String name, String category, String allergy, int quantity, String unit) {
+  public ShoppingListItem(
+      int item_id, String name, String category, String allergy, int quantity, String unit) {
     super(item_id, name, category, allergy);
     this.quantity = quantity;
     this.unit = unit;
   }
 
   /**
-   * This method returns the attributes of the shopping list item.
+   * Constructor for the ShoppingListItem class.
+   * When creating a ShoppingListItem from the database, the id is known.
+   *
+   * @param ShoppingListItem_id the id of the ShoppingListItem
+   * @param item_id the id of the item
+   * @param name the name of the item
+   * @param category  the category of the item
+   * @param allergy the allergy of the item
+   * @param quantity the quantity of the item
+   * @param unit the unit of the item
+   */
+  public ShoppingListItem(int ShoppingListItem_id,
+                          int item_id,
+                          String name,
+                          String category,
+                          String allergy,
+                          int quantity,
+                          String unit) {
+    this(item_id, name, category, allergy, quantity, unit);
+    this.ShoppingListItem_id = ShoppingListItem_id;
+  }
+
+  /**
+   * Returns the attributes of the shopping list item as saved in the database.
+   *
    * @return the attributes of the quantity item
    */
   @Override
@@ -41,7 +68,8 @@ public class ShoppingListItem extends Item {
   }
 
   /**
-   * This method returns the attribute names of the shopping list item.
+   * Returns the attribute names of the shopping list item.
+   *
    * @return the attribute names of the quantity item
    */
   @Override
@@ -54,7 +82,8 @@ public class ShoppingListItem extends Item {
   }
 
   /**
-   * This method returns the id of the shopping list item.
+   * Returns the id of the shopping list item.
+   *
    * @return the id of the quantity item
    */
   @Override
@@ -63,7 +92,8 @@ public class ShoppingListItem extends Item {
   }
 
   /**
-   * This method returns the name of the id.
+   * Returns the name of the id.
+   *
    * @return the name of the id
    */
   @Override
@@ -73,6 +103,7 @@ public class ShoppingListItem extends Item {
 
   /**
    * Getter method for the quantity of the shopping list item.
+   *
    * @return the quantity of the quantity item
    */
   public int getQuantity() {
@@ -81,6 +112,7 @@ public class ShoppingListItem extends Item {
 
   /**
    * Getter method for the unit of the shopping list item.
+   *
    * @return the unit of the quantity item
    */
   public String getUnit() {

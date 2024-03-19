@@ -89,6 +89,11 @@ public class ItemBanner extends HBox {
         continue;
       }
 
+      // If the length of items is less than 3, don't move the items
+      if (items.size() <= 3) {
+        continue;
+      }
+
       // Fade out the item if it is going to be moved out of the banner
       if (i <= itemsToMove || i > itemsToMove + 3) {
         FadeTransition fadeTransition = new FadeTransition();
@@ -148,6 +153,29 @@ public class ItemBanner extends HBox {
 
     // Add the right arrow button
     this.getChildren().add(rightArrowButton);
+
+    // If the length of items is less than 3, don't show the arrow buttons
+    if (items.size() <= 3) {
+      leftArrowButton.setInactiveColor();
+      rightArrowButton.setInactiveColor();
+    } else {
+      leftArrowButton.setActiveColor();
+      rightArrowButton.setActiveColor();
+    }
+
+    // If the index is at the start of the list, disable the left arrow button
+    if (itemListIndex == 0) {
+      leftArrowButton.setInactiveColor();
+    } else {
+      leftArrowButton.setActiveColor();
+    }
+
+    // If the index is at the end of the list, disable the right arrow button
+    if (itemListIndex >= items.size() - 3) {
+      rightArrowButton.setInactiveColor();
+    } else {
+      rightArrowButton.setActiveColor();
+    }
 
     // Align the contents to the center
     this.alignmentProperty().setValue(javafx.geometry.Pos.CENTER);

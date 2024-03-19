@@ -18,7 +18,7 @@ public class ItemRegister {
 
   /**
    * Constructor for the ItemRegister class.
-   *
+   * 
    * @param dao the data access object
    */
   public ItemRegister(DAO dao) {
@@ -28,7 +28,7 @@ public class ItemRegister {
 
   /**
    * This method returns the items in the register in the form of lists.
-   *
+   * 
    * @return the items in the register as lists of strings
    */
   public Map<Integer, Item> getItems() {
@@ -37,7 +37,7 @@ public class ItemRegister {
 
   /**
    * This method retrieves filtered items by category from the database.
-   *
+   * 
    * @param category the category to filter by
    */
   public void filterItemsByCategory(String category) {
@@ -48,7 +48,7 @@ public class ItemRegister {
 
   /**
    * This method searches for items by name and retrieves them from the database.
-   *
+   * 
    * @param name the name to search by
    */
   public void searchItemsByName(String name) {
@@ -77,7 +77,7 @@ public class ItemRegister {
 
   /**
    * This method creates a new item.
-   *
+   * 
    * @param name     the name of the item
    * @param category the category of the item
    * @param allergy  the allergy of the item
@@ -89,7 +89,7 @@ public class ItemRegister {
 
   /**
    * This method adds a new item to the database.
-   *
+   * 
    * @param name     the name of the item
    * @param category the category of the item
    * @param allergy  the allergy of the item
@@ -100,7 +100,7 @@ public class ItemRegister {
 
   /**
    * This method deletes an item from the database.
-   *
+   * 
    * @param id the id of the item to delete
    */
   public void deleteItem(int id) {
@@ -110,7 +110,7 @@ public class ItemRegister {
 
   /**
    * This method returns the index of the item with the given id.
-   *
+   * 
    * @param id the id of the item
    * @return the index of the item with the given id
    */
@@ -125,7 +125,7 @@ public class ItemRegister {
 
   /**
    * This method updates an item in the database.
-   *
+   * 
    * @param id       the id of the item to update
    * @param name     the name of the item
    * @param category the category of the item
@@ -138,7 +138,7 @@ public class ItemRegister {
 
   /**
    * This method returns a string representation of the item register.
-   *
+   * 
    * @return a string representation of the item register
    */
   @Override
