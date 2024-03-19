@@ -70,7 +70,7 @@ public class RecipeRegister {
    */
   public void getAllRecipes() {
     recipes = new ArrayList<>();
-    List<List<String>> recipes = dao.getAllFromTable("Recipe");
+    List<List<String>> recipes = dao.getAllFromTable("Recipe", null, null);
     packagetoRecipe(recipes);
   }
 
