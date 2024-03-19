@@ -9,8 +9,9 @@ import java.util.List;
 public class Recipe implements Storable {
   private int recipe_id;
   private String name;
-  private String category;
   private int cooking_time;
+  private String category;
+
 
   /**
    * Constructor for the Recipe class.
@@ -28,10 +29,11 @@ public class Recipe implements Storable {
    * Constructor for the Recipe class.
    * @param recipe_id
    * @param name
-   * @param category
    * @param cooking_time
+   * @param category
+   *
    */
-  public Recipe(int recipe_id, String name, String category, int cooking_time) {
+  public Recipe(int recipe_id, String name, int cooking_time, String category ) {
       this(name, category, cooking_time);
       this.recipe_id = recipe_id;
   }
