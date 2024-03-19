@@ -2,6 +2,8 @@ package no.ntnu.idatt1002.demo.view.scenes;
 
 import java.util.Map;
 import javafx.geometry.Insets;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -23,6 +25,7 @@ import no.ntnu.idatt1002.demo.view.components.ViewModeButton.ViewMode;
  */
 public class Inventory extends VBox {
   private VBox inventoryContainer = new VBox();
+  private ScrollPane scrollPane;
   private Map<Integer, Item> items;
   private ViewMode mode;
 
@@ -32,7 +35,14 @@ public class Inventory extends VBox {
   public Inventory() {
     super();
 
-    this.getStyleClass().add("full-width");
+    this.getStyleClass().addAll("full-width", "no-focus");
+
+    scrollPane = new ScrollPane();
+    scrollPane.setFitToWidth(true);
+    scrollPane.setFitToHeight(true);
+    scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+    scrollPane.setVbarPolicy(ScrollBarPolicy.NEVER);
+    scrollPane.setContent(inventoryContainer);
 
     // get all items
     ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
@@ -46,7 +56,7 @@ public class Inventory extends VBox {
 
     inventoryHeader.setOnAdd(this::addItem);
 
-    super.getChildren().addAll(inventoryHeader, inventoryContainer);
+    super.getChildren().addAll(inventoryHeader, scrollPane);
     loadInventory(ViewModeButton.ViewMode.GRID); // Default view mode
   }
 
