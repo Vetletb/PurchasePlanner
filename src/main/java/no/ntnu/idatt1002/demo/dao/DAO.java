@@ -9,7 +9,7 @@ import no.ntnu.idatt1002.demo.data.Storable;
  * This class provides methods for accessing all tables in the database.
  */
 public class DAO {
-private final DBConnectionProvider connectionProvider;
+  private final DBConnectionProvider connectionProvider;
 
   /**
    * Constructor for the DAO class.
@@ -48,7 +48,7 @@ private final DBConnectionProvider connectionProvider;
   public void deleteFromDatabase(Storable obj) {
     String sql = String.format("DELETE FROM %s WHERE %s = ?", obj.getClass().getSimpleName(), obj.getIdName());
     try (Connection connection = connectionProvider.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       preparedStatement.setInt(1, obj.getId());
       preparedStatement.executeUpdate();
     } catch (SQLException e) {
@@ -59,13 +59,13 @@ private final DBConnectionProvider connectionProvider;
 
   /**
    * This method updates an object in the database.
-    * @param obj the object to be updated
+   * @param obj the object to be updated
    */
   public void updateDatabase(Storable obj) {
     String sql = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
         obj.getClass().getSimpleName(),
         String.join(" = ?, ", obj.getAttributeNames()),obj.getIdName());
-        List<String> attributes = obj.getAttributes();
+    List<String> attributes = obj.getAttributes();
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       for (int i = 0; i < attributes.size(); i++) {

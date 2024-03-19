@@ -28,8 +28,9 @@ public class Recipe implements Storable {
    * Constructor for the Recipe class.
    * @param recipe_id
    * @param name
-   * @param category
    * @param cooking_time
+   * @param category
+   *
    */
   public Recipe(int recipe_id, String name, int cooking_time, String category) {
       this(name, cooking_time, category);
