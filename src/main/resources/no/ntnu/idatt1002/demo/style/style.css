@@ -10,7 +10,7 @@
     -fx-primary-color-dark: #81bfdb;
 
     -fx-secondary-color: #41D37C;
-    -fx-secondary-color-light: #6de5a3;
+    -fx-secondary-color-light: #42d77e;
     -fx-secondary-color-dark: #3abf6b;
 }
 
@@ -137,6 +137,42 @@ White button
 
 .white-button:pressed {
     -fx-background-color: -fx-primary-color;
+}
+
+/*
+Secondary button
+*/
+
+.secondary-button {
+    -fx-background-color: -fx-secondary-color;
+}
+
+.secondary-button:hover {
+    -fx-background-color: -fx-secondary-color-light;
+    -fx-cursor: hand;
+}
+
+.secondary-button:pressed {
+    -fx-background-color: -fx-secondary-color-dark;
+    -fx-cursor: hand;
+}
+
+/*
+Red button
+*/
+
+.red-button {
+    -fx-background-color: #df2c2c;
+}
+
+.red-button:hover {
+    -fx-background-color: #d22020;
+    -fx-cursor: hand;
+}
+
+.red-button:pressed {
+    -fx-background-color: #d81e1e;
+    -fx-cursor: hand;
 }
 
 
