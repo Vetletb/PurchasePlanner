@@ -1,5 +1,7 @@
 package no.ntnu.idatt1002.demo.view.components;
 
+import java.util.ArrayList;
+
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
@@ -23,10 +25,24 @@ public class ListItem<T extends Storable> extends HBox {
     this.setSpacing(SPACING);
     HBox.setHgrow(this, Priority.ALWAYS);
 
+    ArrayList<HBox> containers = new ArrayList<>();
+
+    // add the id of the item
+    HBox idContainer = new HBox();
+    idContainer.getStyleClass().add("list-item-attribute");
+    idContainer.getChildren().add(new Text(String.valueOf(item.getId())));
+    containers.add(idContainer);
+
     // add the attributes of the item
     for (String attribute : getAttributes()) {
-      this.getChildren().add(new Text(attribute));
+      HBox container = new HBox();
+      container.getStyleClass().add("list-item-attribute");
+      container.getChildren().add(new Text(attribute));
+
+      containers.add(container);
     }
+
+    this.getChildren().addAll(containers);
   }
 
   private String[] getAttributes() {

@@ -108,11 +108,14 @@ public class Inventory extends VBox {
       HBox header = new HBox();
       for (String attribute : attibutes) {
         Text text = new Text(attribute);
-        text.getStyleClass().addAll("semibold", "text-lg");
-        header.getChildren().add(text);
+        HBox container = new HBox();
+        text.getStyleClass().addAll("semibold", "text-lg", "centered");
+        container.getChildren().add(text);
+        container.getStyleClass().add("list-item-attribute");
+        header.getChildren().add(container);
       }
       header.setSpacing(100);
-      header.setPadding(new Insets(0, 0, 0, 5));
+      header.setPadding(new Insets(0, 0, 0, 10));
       inventoryContainer.getChildren().add(header);
 
       // add all items to the list - no grouping
