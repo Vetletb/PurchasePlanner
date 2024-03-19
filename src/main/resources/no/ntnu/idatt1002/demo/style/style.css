@@ -8,6 +8,10 @@
     -fx-primary-color: #95CDE7;
     -fx-primary-color-light: #cfe4ed;
     -fx-primary-color-dark: #81bfdb;
+
+    -fx-secondary-color: #41D37C;
+    -fx-secondary-color-light: #6de5a3;
+    -fx-secondary-color-dark: #3abf6b;
 }
 
 /*
@@ -157,6 +161,42 @@ White button
 }
 
 /*
+#########################################
+                Searchbar
+#########################################
+*/
+
+.search-bar-container {
+    -fx-cursor: text;
+    -fx-background-color: transparent;
+}
+
+.search-bar-container:hover {
+    -fx-cursor: text;
+}
+
+.search-bar-container:focused {
+    -fx-cursor: text;
+}
+
+.search-bar {
+    -fx-background-color: #FFFFFF;
+    -fx-background-radius: 20px;
+    -fx-border-color: -fx-secondary-color-light;
+    -fx-border-radius: 20px;
+    -fx-padding: 10px;
+    -fx-border-width: 3px;
+}
+
+.search-bar:hover {
+    -fx-border-color: -fx-secondary-color;
+}
+
+.search-bar:focused {
+    -fx-border-color: -fx-secondary-color-dark;
+}
+
+/*
 #####################################
                 Icons
 #####################################
@@ -183,6 +223,7 @@ White button
 .combo-box-base:pressed {
     -fx-background-color: -fx-primary-color;
 }
+
 
 /*
 #####################################

@@ -42,6 +42,13 @@ public class ListHeader extends HBox {
   }
 
   /**
+   * Callback for when the seach query changes.
+   */
+  public interface OnSearchQueryChange {
+    void cb(String query);
+  }
+
+  /**
    * Callback for changing view mode.
    */
   public interface OnViewModeChange {
@@ -65,6 +72,7 @@ public class ListHeader extends HBox {
 
   private OnAdd onAdd;
   private OnSearch onSearch;
+  private OnSearchQueryChange onSearchQueryChange;
   private OnViewModeChange onViewModeChange;
   private onFilterChange onFilterChange;
   private OnSortChange onSortChange;
@@ -84,6 +92,17 @@ public class ListHeader extends HBox {
     this.onSearch = onSearch;
     return this;
 
+  }
+
+  /**
+   * Set the onSearchQueryChange callback.
+   *
+   * @param onSearchQueryChange The callback
+   * @return The list header
+   */
+  public ListHeader setOnSearchQueryChange(OnSearchQueryChange onSearchQueryChange) {
+    this.onSearchQueryChange = onSearchQueryChange;
+    return this;
   }
 
   /**
@@ -198,9 +217,23 @@ public class ListHeader extends HBox {
       onAdd.cb();
     });
 
-    searchBar = new SearchBar("Search...");
+    searchBar = new SearchBar();
+    searchBar.setOnSearch(query -> {
+      if (onSearch == null) {
+        return;
+      }
+      onSearch.cb(query);
+    });
 
-    actionContainer.getChildren().addAll(addButton);
+    searchBar.setOnChange(query -> {
+      if (onSearchQueryChange == null) {
+        return;
+      }
+      onSearchQueryChange.cb(query);
+    });
+
+    actionContainer.setSpacing(20);
+    actionContainer.getChildren().addAll(addButton, searchBar);
     this.getChildren().addAll(viewmodeContainer, actionContainer);
   }
 

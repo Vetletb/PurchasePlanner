@@ -1,122 +1,172 @@
 package no.ntnu.idatt1002.demo.view.components;
 
-import javafx.geometry.Rectangle2D;
-import javafx.stage.Screen;
+import javafx.scene.layout.StackPane;
 import no.ntnu.idatt1002.demo.Logger;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TextField;
-
 /**
- * Searchbar class for the Application
+ * Searchbar class for the Application.
  */
-public class SearchBar extends TextField {
-
-  private String fieldText;
-  private static final int DEFAULT_WIDTH = 300;
-  private static final int DEFAULT_HEIGHT = 30;
-  private static final int DEFAULT_POSITION_X = 0;
-  private static final int DEFAULT_POSITION_Y = 0;
-
-  // TODO add a getBounds method to get the bounds of the screen to the app class
-  private Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-  private final int OriginOffsetX = -((int) bounds.getMaxX() - DEFAULT_WIDTH) / 2;
-  private final int OriginOffsetY = -((int) bounds.getMaxY() / 2 - 2 * DEFAULT_HEIGHT);
+public class SearchBar extends StackPane {
+  public static final int DEFAULT_WIDTH = 200;
+  public static final int DEFAULT_HEIGHT = 30;
 
   /**
-   * Constructor for the SearchBar with no provided information
+   * Callback for when the user presses enter in the search bar.
+   */
+  public interface OnSearch {
+    void cb(String query);
+  }
+
+  /**
+   * Callback for when the search bar gains focus.
+   */
+  public interface OnFocus {
+    void cb();
+  }
+
+  /**
+   * Callback for when the search bar loses focus.
+   */
+  public interface OnBlur {
+    void cb();
+  }
+
+  /**
+   * Callback for when the contents of the search bar changes.
+   */
+  public interface OnChange {
+    void cb(String query);
+  }
+
+  private OnChange onChange;
+  private OnSearch onSearch;
+  private OnFocus onFocus;
+  private OnBlur onBlur;
+  private Icon searchIcon;
+  private InputField inputField;
+
+  /**
+   * Constructor for the SearchBar class.
    */
   public SearchBar() {
-    this("", DEFAULT_POSITION_X, DEFAULT_POSITION_Y);
-  }
-
-  /**
-   * Constructor for the SearchBar with only the position of the search bar
-   * 
-   * @param text the text to be initially displayed in the search bar
-   */
-  public SearchBar(String text) {
-    this(text, DEFAULT_POSITION_X, DEFAULT_POSITION_Y);
-  }
-
-  /**
-   * Constructor for the SearchBar with only the position of the search bar
-   * 
-   * @param positionX the x position of the search bar
-   * @param positionY the y position of the search bar
-   */
-  public SearchBar(int positionX, int positionY) {
-    this("", positionX, positionY);
-  }
-
-  /**
-   * Constructor for the SearchBar
-   * 
-   * @param text the text to be initially displayed in the search bar
-   *             <p>
-   *             Uses the {@link #handleTextChange(String)} method to handle the
-   *             text change
-   *             </p>
-   */
-  public SearchBar(String text, int positionX, int positionY) {
     super();
+    this.getStyleClass().addAll("centered", "search-bar-container");
+    setPrefSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    setMaxSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    setMinSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-    // Apply CSS styling for rounded corners
-    setStyle("-fx-background-radius: 20;");
+    inputField = new InputField("Search");
+    inputField.getStyleClass().addAll("centered", "search-bar");
 
-    // Set the position of the search bar
-    setPosition(positionX, positionY);
-    Logger.debug("Offset values:" + OriginOffsetX + " " + OriginOffsetY);
+    // focus the input field when the search icon is clicked
+    searchIcon = new Icon("search", 12);
+    searchIcon.setOnMouseClicked(e -> activate());
 
-    // Set the alignment of the search bar
-    setMaxWidth(DEFAULT_WIDTH);
-    setMaxHeight(DEFAULT_HEIGHT);
-
-    setPromptText(text);
-
-    // Add a listener to the text property
-    textProperty().addListener(new ChangeListener<String>() {
-      @Override
-      public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        handleTextChange(newValue);
-        if(!newValue.isEmpty()) {
-          setPromptText("");
-        } else {
-          setPromptText(text);
-        }
+    // listen for changes in the input field
+    inputField.focusedProperty().addListener(v -> {
+      if (inputField.isFocused()) {
+        activate();
+      } else {
+        deactivate();
       }
     });
+
+    // Listen for search action
+    inputField.setOnAction(e -> {
+      if (onSearch == null) {
+        Logger.error("No onSearch callback set for search bar");
+        return;
+      }
+      onSearch.cb(inputField.getText());
+    });
+
+    // Listen for changes in the input field
+    inputField.setOnKeyTyped(v -> {
+      if (onChange == null) {
+        Logger.error("No onChange callback set for search bar");
+        return;
+      }
+      onChange.cb(inputField.getText());
+    });
+
+    searchIcon.setX(40);
+    searchIcon.setY(5);
+
+    this.getChildren().addAll(inputField, searchIcon);
+
   }
 
   /**
-   * Method to get the value of the search bar
-   * 
-   * @return the value of the search bar
+   * Activates the search bar.
    */
-  public String getValue() {
-    return fieldText;
+  private void activate() {
+    this.getChildren().remove(searchIcon);
+    inputField.requestFocus();
+
+    if (onFocus == null) {
+      Logger.error("No onFocus callback set for search bar");
+      return;
+    }
+    onFocus.cb();
   }
 
   /**
-   * Method to handle the text change
-   * 
-   * @param newValue the new value of the text
+   * Deactivates the search bar.
    */
-  private void handleTextChange(String newValue) {
-    fieldText = newValue;
-    Logger.debug("Text changed to: " + getValue());
+  private void deactivate() {
+    if (inputField.getText().isEmpty() && !this.getChildren().contains(searchIcon)) {
+      this.getChildren().add(searchIcon);
+    }
+
+    if (onBlur == null) {
+      Logger.error("No onBlur callback set for search bar");
+      return;
+    }
+    onBlur.cb();
   }
 
   /**
-   * Method to set the position of the search bar
-   * 
-   * @param positionX the x position of the search bar
-   * @param positionY the y position of the search bar
+   * Sets the on search callback for the search bar.
+   *
+   * @param onSearch The callback
+   * @return The search bar
    */
-  public void setPosition(int positionX, int positionY) {
-    setTranslateX(positionX + OriginOffsetX);
-    setTranslateY(positionY + OriginOffsetY);
+
+  public SearchBar setOnSearch(OnSearch onSearch) {
+    this.onSearch = onSearch;
+    return this;
   }
 
+  /**
+   * Sets the on change callback for the search bar.
+   *
+   * @param onChange The callback
+   * @return The search bar
+   */
+  public SearchBar setOnChange(OnChange onChange) {
+    this.onChange = onChange;
+    return this;
+  }
+
+  /**
+   * Sets the on focus callback for the search bar.
+   *
+   * @param onFocus The callback
+   * @return The search bar
+   */
+  public SearchBar setOnFocus(OnFocus onFocus) {
+    this.onFocus = onFocus;
+    return this;
+  }
+
+  /**
+   * Sets the on blur callback for the search bar.
+   *
+   * @param onBlur The callback
+   * @return The search bar
+   */
+  public SearchBar setOnBlur(OnBlur onBlur) {
+    this.onBlur = onBlur;
+    return this;
+  }
 }
