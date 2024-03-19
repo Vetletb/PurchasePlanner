@@ -96,6 +96,17 @@ public class Icon extends VBox {
   }
 
   /**
+   * Set the stroke color of the icon.
+   *
+   * @param color The color to fill the icon with
+   * @return The icon with the given stroke color
+   */
+  public Icon setStrokeColor(Color color) {
+    svgPath.setStroke(color);
+    return this;
+  }
+
+  /**
    * Reads the SVG file and returns the content as a string.
    *
    * @param filePath Path to the SVG file
