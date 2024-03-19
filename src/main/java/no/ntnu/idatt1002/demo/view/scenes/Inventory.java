@@ -87,20 +87,17 @@ public class Inventory extends VBox {
     inventoryContainer.getChildren().clear();
 
     if (mode == ViewModeButton.ViewMode.GRID) {
-      Logger.debug("loading grid");
-      Logger.debug(items.values().toString());
       // get all categories
       String[] categories = items.values().stream()
           .map(Item::getCategory)
           .distinct()
           .toArray(String[]::new);
 
-      Logger.debug("categories: " + categories.length);
-
       // group items based on category
       for (String category : categories) {
         // create a banner for each category
         ItemBanner inventoryBanner = new ItemBanner();
+        inventoryBanner.setTitle(category);
 
         // add all items of the category to the banner
         items.values().stream()
@@ -120,7 +117,6 @@ public class Inventory extends VBox {
               });
 
             });
-
         inventoryContainer.getChildren().add(inventoryBanner);
       }
     } else if (mode == ViewModeButton.ViewMode.LIST) {
@@ -141,7 +137,7 @@ public class Inventory extends VBox {
 
       // add all items to the list - no grouping
       items.values().forEach(item -> {
-        ListItem<Item> listItem = new ListItem<Item>(item);
+        ListItem<Item> listItem = new ListItem<>(item);
         listItem.setOnMouseClicked(v -> {
           ItemPopup itemPopup = new ItemPopup(item);
           itemPopup.setOnSave(this::updateItem);
