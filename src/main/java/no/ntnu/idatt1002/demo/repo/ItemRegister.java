@@ -43,7 +43,7 @@ public class ItemRegister {
   public void filterItemsByCategory(String category) {
     items = new ArrayList<>();
     List<List<String>> items = dao.filterFromTable("Item", "category", category, null, null);
-    packagetoItem(items);
+    packageToItem(items);
   }
 
   /**
@@ -54,7 +54,7 @@ public class ItemRegister {
   public void searchItemsByName(String name) {
     items = new ArrayList<>();
     List<List<String>> items = dao.searchFromTable("Item", name, null, null);
-    packagetoItem(items);
+    packageToItem(items);
   }
 
   /**
@@ -62,14 +62,14 @@ public class ItemRegister {
    */
   public void getAllItems() {
     items = new ArrayList<>();
-    List<List<String>> items = dao.getAllFromTable("Item");
-    packagetoItem(items);
+    List<List<String>> items = dao.getAllFromTable("Item", null, null);
+    packageToItem(items);
   }
 
   /**
    * This method packages the lists of strings into items.
    */
-  private void packagetoItem(List<List<String>> items) {
+  private void packageToItem(List<List<String>> items) {
     for (List<String> item : items) {
       this.items.add(new Item(Integer.parseInt(item.get(0)), item.get(1), item.get(2), item.get(3)));
     }
