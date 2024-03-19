@@ -285,6 +285,11 @@ White button
     -fx-background-color: -fx-primary-color;
 }
 
+.list-item-attribute {
+    -fx-min-width: 100px;
+    -fx-max-width: 100px;
+}
+
 /*
 #####################################
                 Popup                
