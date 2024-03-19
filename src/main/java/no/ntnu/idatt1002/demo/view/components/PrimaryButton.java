@@ -1,8 +1,11 @@
 package no.ntnu.idatt1002.demo.view.components;
 
+import java.util.List;
+
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import no.ntnu.idatt1002.demo.Logger;
 
 /**
  * The main button for the application.
@@ -15,12 +18,12 @@ public class PrimaryButton extends Button {
    * <ul>
    * <li>PRIMARY: A primary button</li>
    * <li>SECONDARY: A secondary button</li>
-   * <li>BLACK: A button with black background</li>
+   * <li>RED: A button with red background</li>
    * <li>WHITE: A button with white background/li>
    * </ul>
    */
   public enum Type {
-    PRIMARY, SECONDARY, BLACK, WHITE, TRANSPARENT;
+    PRIMARY, SECONDARY, RED, WHITE, TRANSPARENT;
   }
 
   private Icon icon;
@@ -61,9 +64,15 @@ public class PrimaryButton extends Button {
    * @see Type
    */
   public PrimaryButton setButtonType(Type type) {
-    this.getStyleClass().removeIf(s -> s.endsWith("-button")); // Remove previous type
+
+    // remove old styles
+    List.of(type.values()).forEach(t -> {
+      this.getStyleClass().remove(t.toString().toLowerCase() + "-button");
+    });
+
     this.addCustomStyle(type.toString().toLowerCase() + "-button"); // Add new type
     return this;
+
   }
 
   public void addCustomStyle(String style) {

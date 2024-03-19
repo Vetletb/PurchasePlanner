@@ -15,6 +15,7 @@ import no.ntnu.idatt1002.demo.repo.ItemRegister;
 import no.ntnu.idatt1002.demo.view.components.AddPopup;
 import no.ntnu.idatt1002.demo.view.components.ItemBanner;
 import no.ntnu.idatt1002.demo.view.components.ItemPane;
+import no.ntnu.idatt1002.demo.view.components.ItemPopup;
 import no.ntnu.idatt1002.demo.view.components.ListHeader;
 import no.ntnu.idatt1002.demo.view.components.ListItem;
 import no.ntnu.idatt1002.demo.view.components.ViewModeButton;
@@ -104,11 +105,21 @@ public class Inventory extends VBox {
         // add all items of the category to the banner
         items.values().stream()
             .filter(item -> item.getCategory().equals(category))
-            .forEach(item -> inventoryBanner.addItem(new ItemPane(
-                item.getId(),
-                item.getName(),
-                0,
-                0)));
+            .forEach(item -> {
+              ItemPane pane = new ItemPane(
+                  item.getId(),
+                  item.getName(),
+                  0,
+                  0);
+              inventoryBanner.addItem(pane);
+              pane.setOnMouseClicked(v -> {
+                ItemPopup itemPopup = new ItemPopup(item);
+                itemPopup.setOnSave(this::updateItem);
+                itemPopup.setOnDelete(this::deleteItem);
+                itemPopup.show(this.getScene().getWindow());
+              });
+
+            });
 
         inventoryContainer.getChildren().add(inventoryBanner);
       }
@@ -129,8 +140,16 @@ public class Inventory extends VBox {
       inventoryContainer.getChildren().add(header);
 
       // add all items to the list - no grouping
-      items.values().forEach(item -> inventoryContainer.getChildren()
-          .add(new ListItem<Item>(item)));
+      items.values().forEach(item -> {
+        ListItem<Item> listItem = new ListItem<Item>(item);
+        listItem.setOnMouseClicked(v -> {
+          ItemPopup itemPopup = new ItemPopup(item);
+          itemPopup.setOnSave(this::updateItem);
+          itemPopup.setOnDelete(this::deleteItem);
+          itemPopup.show(this.getScene().getWindow());
+        });
+        inventoryContainer.getChildren().add(listItem);
+      });
     }
   }
 
@@ -143,6 +162,24 @@ public class Inventory extends VBox {
   private void search(String query) {
     ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
     itemRegister.searchItemsByName(query);
+    items = itemRegister.getItems();
+    loadInventory(mode);
+  }
+
+  private void updateItem(int id, String name, String category, String allergies) {
+    ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
+    itemRegister.getAllItems();
+    itemRegister.updateItem(id, name, category, allergies);
+    itemRegister.getAllItems();
+    items = itemRegister.getItems();
+    loadInventory(mode);
+  }
+
+  private void deleteItem(int id) {
+    ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
+    itemRegister.getAllItems();
+    itemRegister.deleteItem(id);
+    itemRegister.getAllItems();
     items = itemRegister.getItems();
     loadInventory(mode);
   }
