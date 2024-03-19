@@ -9,7 +9,7 @@ import no.ntnu.idatt1002.demo.data.Storable;
  * This class provides methods for accessing all tables in the database.
  */
 public class DAO {
-private final DBConnectionProvider connectionProvider;
+  private final DBConnectionProvider connectionProvider;
 
   /**
    * Constructor for the DAO class.
@@ -48,7 +48,7 @@ private final DBConnectionProvider connectionProvider;
   public void deleteFromDatabase(Storable obj) {
     String sql = String.format("DELETE FROM %s WHERE %s = ?", obj.getClass().getSimpleName(), obj.getIdName());
     try (Connection connection = connectionProvider.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       preparedStatement.setInt(1, obj.getId());
       preparedStatement.executeUpdate();
     } catch (SQLException e) {
@@ -59,13 +59,13 @@ private final DBConnectionProvider connectionProvider;
 
   /**
    * This method updates an object in the database.
-    * @param obj the object to be updated
+   * @param obj the object to be updated
    */
   public void updateDatabase(Storable obj) {
     String sql = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
         obj.getClass().getSimpleName(),
         String.join(" = ?, ", obj.getAttributeNames()),obj.getIdName());
-        List<String> attributes = obj.getAttributes();
+    List<String> attributes = obj.getAttributes();
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       for (int i = 0; i < attributes.size(); i++) {
@@ -85,13 +85,22 @@ private final DBConnectionProvider connectionProvider;
    * @param table the table to get attributes from
    * @return a list of lists containing all attributes from a table
    */
-  public List<List<String>> getAllFromTable(String table) {
+  public List<List<String>> getAllFromTable(String table, String joinTable, String joinColumn) {
     List<List<String>> items = new ArrayList<>();
-    String sql = "SELECT * FROM " + table;
+    String sql;
+    if (joinTable == null) {
+      sql = "SELECT * FROM " + table;
+    } else {
+      sql = "SELECT * FROM " + table +
+          " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = " + joinTable + "." +  joinColumn;
+    }
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql);
          ResultSet resultSet = preparedStatement.executeQuery()) {
       List<String> columns = getColumnsFromTable(table);
+      if (joinTable != null) {
+        columns.addAll(getColumnsFromTable(joinTable));
+      }
       while (resultSet.next()) {
         List<String> item = new ArrayList<>();
         for (String column : columns) {
