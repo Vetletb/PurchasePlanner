@@ -76,18 +76,6 @@ public class ItemRegister {
   }
 
   /**
-   * This method creates a new item.
-   * 
-   * @param name     the name of the item
-   * @param category the category of the item
-   * @param allergy  the allergy of the item
-   * @return the item with the given id
-   */
-  private Item createItem(String name, String category, String allergy) {
-    return new Item(name, category, allergy);
-  }
-
-  /**
    * This method adds a new item to the database.
    * 
    * @param name     the name of the item
@@ -95,7 +83,7 @@ public class ItemRegister {
    * @param allergy  the allergy of the item
    */
   public void addItem(String name, String category, String allergy) {
-    dao.addToDatabase(createItem(name, category, allergy));
+    dao.addToDatabase(new Item(name, category, allergy));
   }
 
   /**
@@ -132,7 +120,7 @@ public class ItemRegister {
    * @param allergy  the allergy of the item
    */
   public void updateItem(int id, String name, String category, String allergy) {
-    Item item = createItem(name, category, allergy);
+    Item item = new Item(id, name, category, allergy);
     dao.updateDatabase(item);
   }
 
