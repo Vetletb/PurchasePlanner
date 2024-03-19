@@ -9,7 +9,14 @@ import java.util.List;
 public class Event implements Storable {
   private int event_id;
   private int recipe_id;
+  private String name;
   private int date;
+  private String category;
+  private int cooking_time;
+
+
+
+
 
 
   /**
@@ -31,6 +38,13 @@ public class Event implements Storable {
   public Event(int event_id, int recipe_id, int date) {
     this(recipe_id, date);
     this.event_id = event_id;
+  }
+
+  public Event(int event_id, int recipe_id, String name, int date, String category, int cooking_time) {
+    this(event_id, recipe_id, date);
+    this.name = name;
+    this.category = category;
+    this.cooking_time = cooking_time;
   }
 
 
@@ -98,5 +112,10 @@ public class Event implements Storable {
    */
   public int getDate() {
     return date;
+  }
+
+  @Override
+  public String toString() {
+    return "Event ID: " + event_id + ", Recipe ID: " + recipe_id + ", Date: ";
   }
 }
