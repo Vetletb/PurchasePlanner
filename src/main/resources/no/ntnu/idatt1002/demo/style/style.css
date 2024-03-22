@@ -400,7 +400,7 @@ Red button
 */
 .shopping-list-table {
     -fx-padding: 20px;
-    -fx-alignment: center;"
+    -fx-alignment: center;
     -fx-font-size: 20px;
     -fx-font-family: 'Inter';
 }
