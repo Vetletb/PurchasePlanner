@@ -9,6 +9,9 @@ import no.ntnu.idatt1002.demo.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Icon class for the Application.
@@ -28,7 +31,6 @@ public class Icon extends VBox {
   private int x;
   private int y;
   private int size;
-
   /**
    * Constructor for the Icon class.
    *
@@ -49,16 +51,37 @@ public class Icon extends VBox {
     this.size = size;
 
     // Path to the SVG file
-    String svgFilePath = this.filePath + iconName + ".svg";
+    String FilePath = this.filePath + iconName + ".svg";
     // Set the content of the SVG path
-    String svgFileContent = readSvgFromFile(svgFilePath);
+    String svgFileContent = readSvgFromFile(FilePath);
     // Split the SVG content and get the data value from the path
-    String svgData = splitSvgContent(svgFileContent, "d");
+    String svgPathString = "";
+
+    try {
+      String[] svgContent = svgFileContent.split("\n");
+      for (String line : svgContent) {
+        if (line.contains("<path")) {
+          svgPathString = getSvgPathString(line);
+        }
+        if (line.contains("<rect")) {
+          Rectangle svgRect = getSvgRect(line);
+          this.getChildren().add(svgRect);
+        }
+        if (line.contains("<circle")) {
+          SVGPath svgCircle = getSvgCircle(line);
+          svgCircle.getStyleClass().add("centered");
+          this.getChildren().add(svgCircle);
+        }
+      }
+
+    } catch (Exception e) {
+      Logger.debug(e.getMessage());
+    }
 
     // Create a new SVGPath
     svgPath = new SVGPath();
     // Set the content of the SVG path
-    svgPath.setContent(svgData);
+    svgPath.setContent(svgPathString);
     // You can customize the appearance of the SVG path
     svgPath.setStrokeWidth(strokeWidth);
     svgPath.setStrokeType(javafx.scene.shape.StrokeType.CENTERED);
@@ -66,7 +89,6 @@ public class Icon extends VBox {
 
     getChildren().add(svgPath);
 
-    // setSize(size);
     Logger.debug("Icon created: " + iconName);
 
     this.svgPath.getStyleClass().addAll("icon-no-fill", "centered");
@@ -96,17 +118,6 @@ public class Icon extends VBox {
   }
 
   /**
-   * Set the stroke color of the icon.
-   *
-   * @param color The color to fill the icon with
-   * @return The icon with the given stroke color
-   */
-  public Icon setStrokeColor(Color color) {
-    svgPath.setStroke(color);
-    return this;
-  }
-
-  /**
    * Reads the SVG file and returns the content as a string.
    *
    * @param filePath Path to the SVG file
@@ -114,13 +125,74 @@ public class Icon extends VBox {
    */
   private String readSvgFromFile(String filePath) {
     try {
-      // Logger.getLogger().log(Files.readString(Paths.get(filePath)));
       return Files.readString(Paths.get(filePath));
     } catch (IOException e) {
       Logger.debug(e.getMessage());
       return ""; // Return empty string if there's an error reading the file
     }
   }
+
+  /**
+   * Splits the SVG content and returns the value of the attribute.
+   *
+   * @param svgContent Content of the SVG file
+   * @return Value of the attribute
+   */
+  private String getSvgPathString(String svgContent) {
+    return svgContent.split("d" + "=\"")[1].split("\"")[0];
+  }
+
+  /**
+   * Splits the provided line from the SVG file and returns the Rectangle that the SVG is describing.
+   * @param svgContent Content of the SVG file
+   * @return The Rectangle described in the SVG file
+   */
+  private Rectangle getSvgRect(String svgContent) {
+    String rectData = svgContent.split("<rect")[1].split("/>")[0];
+    int width = Integer.parseInt(rectData.split("width=\"")[1].split("\"")[0]);
+    int height = Integer.parseInt(rectData.split("height=\"")[1].split("\"")[0]);
+    // int rx = Integer.parseInt(rectData.split("rx=\"")[1].split("\"")[0]);
+    String fill = rectData.split("fill=\"")[1].split("\"")[0];
+    Rectangle svgRect = new Rectangle(width, height);
+    svgRect.setFill(Paint.valueOf(fill));
+
+    return svgRect;
+  }
+
+  /**
+   * Splits the provided line from the SVG file and returns the Circle that the SVG is describing.
+   * @param svgContent Content of the SVG file
+   * @return The Circle described in the SVG file
+   */
+  private SVGPath getSvgCircle(String svgContent) {
+    String circleData = svgContent.split("<circle")[1].split("/>")[0];
+    int cx = Integer.parseInt(circleData.split("cx=\"")[1].split("\"")[0]);
+    int cy = Integer.parseInt(circleData.split("cy=\"")[1].split("\"")[0]);
+    double r = Double.parseDouble(circleData.split("r=\"")[1].split("\"")[0]);
+
+    SVGPath svgCircle = new SVGPath();
+    svgCircle.setContent("M" + cx + " " + cy + "m" + -r + " 0a" + r + " " + r + " 0 1,0 " + r * 2 + " 0a" + r + " " + r + " 0 1,0 " + -r * 2 + " 0");
+
+    if (circleData.contains("stroke=\"")) {
+      String stroke = circleData.split("stroke=\"")[1].split("\"")[0];
+      int strokeWidth = Integer.parseInt(circleData.split("stroke-width=\"")[1].split("\"")[0]);
+      svgCircle.setStroke(Color.valueOf(stroke));
+      svgCircle.setStrokeWidth(strokeWidth);
+    }
+    if (circleData.contains("fill=\"")) {
+      String fill = circleData.split("fill=\"")[1].split("\"")[0];
+      svgCircle.setFill(Paint.valueOf(fill));
+    } else {
+      svgCircle.setFill(Color.TRANSPARENT);
+    }
+
+    return svgCircle;
+  }
+
+  public void setStrokeColor(Color color) {
+    svgPath.setStroke(color);
+  }
+
 
   /**
    * Splits the SVG content and returns the value of the attribute.
@@ -180,6 +252,16 @@ public class Icon extends VBox {
 
     this.svgPath.setScaleX(size);
     this.svgPath.setScaleY(size);
+  }
+
+  /**
+   * Scales the icon.
+   *
+   * @param scale Scale of the icon
+   */
+  public void scale(double scale) {
+    this.svgPath.setScaleX(scale);
+    this.svgPath.setScaleY(scale);
   }
 
   /**

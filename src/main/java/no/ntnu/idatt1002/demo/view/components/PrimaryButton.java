@@ -95,5 +95,6 @@ public class PrimaryButton extends Button {
 
   public void setIcon(Icon icon) {
     this.icon = icon;
+    this.setGraphic(icon);
   }
 }
