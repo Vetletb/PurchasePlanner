@@ -365,9 +365,10 @@ Red button
     -fx-font-weight: bold;
 }
 
+
 /*
 ###########################################
-                Scroll pane                
+                Scroll pane
 ###########################################
 */
 
@@ -390,4 +391,21 @@ Red button
 
 .scroll-pane:focused {
     -fx-border-color: #F5F9FC;
+}
+
+/*
+#####################################
+             ShoppingList
+#####################################
+*/
+.shopping-list-table {
+    -fx-padding: 20px;
+    -fx-alignment: center;"
+    -fx-font-size: 20px;
+    -fx-font-family: 'Inter';
+}
+
+.checkbox-button-container {
+    -fx-spacing: -24px;
+    -fx-padding: 45px;
 }
