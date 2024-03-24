@@ -14,11 +14,15 @@ import no.ntnu.idatt1002.demo.view.components.ListHeader;
  */
 public class ShoppingList extends VBox {
 
+  // Positioning containers
   private final HBox contentContainer;
   private final VBox innerContentContainer;
+
+  // Shopping list containers
   private final VBox shoppingListContainter;
   private final ScrollPane shoppingListScrollPane;
 
+  // Static top and bottom bars
   private final HBox staticListTopBar;
   private final HBox staticListBottomBar;
 
@@ -54,22 +58,21 @@ public class ShoppingList extends VBox {
     // Add the labels to the bottom bar
     staticListBottomBar.getChildren().addAll(bottomBarTotalQuantity, bottomBarTotalPrice);
 
-
-    contentContainer.getStyleClass().add("centered");
-
-    shoppingListContainter.getStyleClass().addAll("shopping-list");
-
-    
+    // Scroll pane settings
     shoppingListScrollPane.setContent(shoppingListContainter);
     shoppingListScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     shoppingListScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
+    // Add the containers to the content container
     innerContentContainer.getChildren().addAll(staticListTopBar, shoppingListScrollPane, staticListBottomBar);
     contentContainer.getChildren().add(innerContentContainer);
 
+    // Create the list header and add to the page
     ListHeader listHeader = new ListHeader();
     super.getChildren().addAll(listHeader, contentContainer);
+    // TODO: Create a connection to the database for the add button
 
+    // Add items to the shopping list TODO: Connect to the database
     this.addItem(new ShoppingListItem(1, "Milk", "Dairy", "Lactose", 1, "l"));
     this.addItem(new ShoppingListItem(2, "Bread", "Bread", "Gluten", 1, "pcs"));
     this.addItem(new ShoppingListItem(3, "Eggs", "Eggs", "Eggs", 12, "pcs"));
@@ -93,7 +96,8 @@ public class ShoppingList extends VBox {
 
 
     // CSS styling
-    innerContentContainer.getStyleClass().clear();
+    contentContainer.getStyleClass().add("centered");
+    shoppingListContainter.getStyleClass().addAll("shopping-list");
     innerContentContainer.getStyleClass().add("shopping-list");
     staticListTopBar.getStyleClass().addAll("static-label-container", "rounded-top");
     staticListBottomBar.getStyleClass().addAll("static-bottom-label-container", "rounded-bottom");
@@ -104,8 +108,6 @@ public class ShoppingList extends VBox {
     topBarItemQuantity.getStyleClass().add("static-label-container-label");
     topBarItemUnit.getStyleClass().add("static-label-container-label");
     topBarItemCheckBox.getStyleClass().add("static-label-container-label");
-
-
     bottomBarTotalPrice.getStyleClass().add("static-label-container-label");
     bottomBarTotalQuantity.getStyleClass().add("static-label-container-label");
   }
@@ -134,7 +136,7 @@ public class ShoppingList extends VBox {
 
     // CSS styling
     shoppingListItemContainer.getStyleClass().add("shopping-list-item-container");
-
+      // Labels
     itemName.getStyleClass().add("shopping-list-text");
     itemCategory.getStyleClass().add("shopping-list-text");
     itemQuantity.getStyleClass().add("shopping-list-text");
