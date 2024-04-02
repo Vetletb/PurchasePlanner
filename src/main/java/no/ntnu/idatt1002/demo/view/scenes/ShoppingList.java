@@ -1,26 +1,35 @@
 package no.ntnu.idatt1002.demo.view.scenes;
 
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Screen;
-import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.dao.DAO;
+import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.ShoppingListItem;
+import no.ntnu.idatt1002.demo.repo.ItemRegister;
+import no.ntnu.idatt1002.demo.view.components.AddPopup;
 import no.ntnu.idatt1002.demo.view.components.CheckBoxButton;
 import no.ntnu.idatt1002.demo.view.components.Icon;
+import no.ntnu.idatt1002.demo.view.components.ListHeader;
 
 /**
  * The inventory page.
  */
 public class ShoppingList extends VBox {
 
+  // Positioning containers
+  private final HBox contentContainer;
+  private final VBox innerContentContainer;
 
-  private final HBox shoppingListContainter;
-  private final TableView<ShoppingListItem> shoppingListTable;
-  private final VBox checkBoxButtons;
+  // Shopping list containers
+  private final VBox shoppingListContainter;
+  private final ScrollPane shoppingListScrollPane;
+
+  // Static top and bottom bars
+  private final HBox staticListTopBar;
+  private final HBox staticListBottomBar;
+
 
   /**
    * Constructor for the ShoppingList class.
@@ -28,90 +37,108 @@ public class ShoppingList extends VBox {
   public ShoppingList() {
     super();
 
-    shoppingListContainter = new HBox();
+    // Initialize the containers
+    contentContainer = new HBox(); // Page content container
+    innerContentContainer = new VBox(); // Inner content container
+    shoppingListContainter = new VBox(); // Shopping list container
+    shoppingListScrollPane = new ScrollPane(); // Shopping list scroll pane
+    staticListTopBar = new HBox(); // Static top bar
+    staticListBottomBar = new HBox(); // Static bottom bar
 
-    // Shopping list table
-    shoppingListTable = new TableView<ShoppingListItem>();
+    // Top bar labels
+    Label topBarItemName = new Label("Name");
+    Label topBarItemCategory = new Label("Category");
+    Label topBarItemQuantity = new Label("Quantity");
+    Label topBarItemUnit = new Label("Unit");
+    Label topBarItemCheckBox = new Label("Done");
 
-    // checkbox container
-    checkBoxButtons = new VBox();
+    // Bottom bar labels TODO: Implement the functionality
+    Label bottomBarTotalQuantity = new Label("Total quantity: 100");
+    Label bottomBarTotalPrice = new Label("Total price: 1200");
 
-    // Shopping list table columns
-    TableColumn<ShoppingListItem, Integer> idColumn
-            = new TableColumn<>("Item Id");
-    idColumn.setCellValueFactory(new PropertyValueFactory<ShoppingListItem, Integer>("Id"));
+    // Add the labels to the top bar
+    staticListTopBar.getChildren().addAll(topBarItemName, topBarItemCategory, topBarItemQuantity, topBarItemUnit, topBarItemCheckBox);
 
-    TableColumn<ShoppingListItem, String> nameColumn
-            = new TableColumn<>("Name");
-    nameColumn.setCellValueFactory(new PropertyValueFactory<ShoppingListItem, String>("Name"));
+    // Add the labels to the bottom bar
+    staticListBottomBar.getChildren().addAll(bottomBarTotalQuantity, bottomBarTotalPrice);
 
-    TableColumn<ShoppingListItem, String> categoryColumn
-            = new TableColumn<>("Category");
-    categoryColumn.setCellValueFactory(new PropertyValueFactory<ShoppingListItem, String>("Category"));
+    // Scroll pane settings
+    shoppingListScrollPane.setContent(shoppingListContainter);
+    shoppingListScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    shoppingListScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-    TableColumn<ShoppingListItem, String> allergyColumn
-            = new TableColumn<>("Allergy");
-    allergyColumn.setCellValueFactory(new PropertyValueFactory<ShoppingListItem, String>("Allergy"));
+    // Add the containers to the content container
+    innerContentContainer.getChildren().addAll(staticListTopBar, shoppingListScrollPane, staticListBottomBar);
+    contentContainer.getChildren().add(innerContentContainer);
 
-    TableColumn<ShoppingListItem, Integer> quantityColumn
-            = new TableColumn<>("Quantity");
-    quantityColumn.setCellValueFactory(new PropertyValueFactory<ShoppingListItem, Integer>("Quantity"));
+    // Create the list header and add to the page
+    ListHeader shoppingListHeader = new ListHeader();
+    super.getChildren().addAll(shoppingListHeader, contentContainer);
+    // TODO: Create a connection to the database for the add button
 
-    TableColumn<ShoppingListItem, String> unitColumn
-            = new TableColumn<>("Unit");
-    unitColumn.setCellValueFactory(new PropertyValueFactory<ShoppingListItem, String>("Unit"));
-
-
-    // Add the columns to the tables
-    shoppingListTable.getColumns().add(idColumn);
-    shoppingListTable.getColumns().add(nameColumn);
-    shoppingListTable.getColumns().add(categoryColumn);
-    shoppingListTable.getColumns().add(allergyColumn);
-    shoppingListTable.getColumns().add(quantityColumn);
-    shoppingListTable.getColumns().add(unitColumn);
-
-    // Set the columns to be non-resizable
-    shoppingListTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    shoppingListTable.setMinHeight(Screen.getPrimary().getVisualBounds().getHeight()*0.8 );
-    shoppingListTable.setMinWidth(Screen.getPrimary().getVisualBounds().getWidth()*0.7 );
-//    shoppingListTable.getStyleClass().add("shopping-list-table");
-    shoppingListTable.setStyle("-fx-padding: 20px;" +
-            "    -fx-alignment: center;" +
-            "    -fx-font-size: 20px;" +
-            "    -fx-font-family: 'Inter';");
-
-    // Make sure the shopping list table is not editable
-    shoppingListTable.setEditable(false);
+    // Add items to the shopping list TODO: Connect to the database
+    this.addItemToList(new ShoppingListItem(1, "Milk", "Dairy", "Lactose", 1, "l"));
+    this.addItemToList(new ShoppingListItem(2, "Bread", "Bread", "Gluten", 1, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Eggs", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
 
 
-    shoppingListContainter.getStyleClass().add("centered");
+    // CSS styling
+    contentContainer.getStyleClass().add("centered");
+    shoppingListContainter.getStyleClass().addAll("shopping-list");
+    innerContentContainer.getStyleClass().add("shopping-list");
+    staticListTopBar.getStyleClass().addAll("static-label-container", "rounded-top");
+    staticListBottomBar.getStyleClass().addAll("static-bottom-label-container", "rounded-bottom");
 
-    checkBoxButtons.getStyleClass().add("checkbox-button-container");
-    checkBoxButtons.setStyle("-fx-spacing: -24px;\n" +
-            "    -fx-padding: 45px;");
-
-    shoppingListContainter.getChildren().addAll(shoppingListTable, checkBoxButtons);
-    super.getChildren().addAll(new Text("Shopping list"), shoppingListContainter);
-
-    this.addItem(new ShoppingListItem(1, "Milk", "Dairy", "Lactose", 1, "l"));
-    this.addItem(new ShoppingListItem(2, "Bread", "Bread", "Gluten", 1, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Eggs", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+      // Labels
+    topBarItemName.getStyleClass().add("static-label-container-label");
+    topBarItemCategory.getStyleClass().add("static-label-container-label");
+    topBarItemQuantity.getStyleClass().add("static-label-container-label");
+    topBarItemUnit.getStyleClass().add("static-label-container-label");
+    topBarItemCheckBox.getStyleClass().add("static-label-container-label");
+    bottomBarTotalPrice.getStyleClass().add("static-label-container-label");
+    bottomBarTotalQuantity.getStyleClass().add("static-label-container-label");
   }
 
   /**
    * This method adds an item to the shopping list.
    * @param item the item to be added
    */
-  public void addItem(ShoppingListItem item) {
-    shoppingListTable.getItems().add(item);
-    Icon icon = new Icon("checkboxUnSelected");
-    CheckBoxButton checkBoxButton = new CheckBoxButton(icon);
-    checkBoxButton.setScaleX(0.58);
-    checkBoxButton.setScaleY(0.58);
+  public void addItemToList(ShoppingListItem item) {
+    // Item Container
+    HBox shoppingListItemContainer = new HBox();
 
-    checkBoxButtons.getChildren().add(checkBoxButton);
+    // item Labels
+    Label itemName = new Label(item.getName());
+    Label itemCategory = new Label(item.getCategory());
+    Label itemQuantity = new Label(Integer.toString(item.getQuantity()));
+    Label itemUnit = new Label(item.getUnit());
+
+    // Create the checkbox button
+    CheckBoxButton checkBoxButton = new CheckBoxButton(new Icon("checkboxUnSelected"));
+    checkBoxButton.setScaleX(0.6);
+    checkBoxButton.setScaleY(0.6);
+
+    // Add the labels and the checkbox button to the container
+    shoppingListItemContainer.getChildren().addAll(itemName, itemCategory, itemQuantity, itemUnit, checkBoxButton);
+
+    // CSS styling
+    shoppingListItemContainer.getStyleClass().add("shopping-list-item-container");
+      // Labels
+    itemName.getStyleClass().add("shopping-list-text");
+    itemCategory.getStyleClass().add("shopping-list-text");
+    itemQuantity.getStyleClass().add("shopping-list-text");
+    itemUnit.getStyleClass().add("shopping-list-text");
+
+    // Add the item to the shopping list
+    shoppingListContainter.getChildren().add(shoppingListItemContainer);
   }
-
 }
 

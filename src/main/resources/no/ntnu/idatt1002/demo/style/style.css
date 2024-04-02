@@ -398,14 +398,50 @@ Red button
              ShoppingList
 #####################################
 */
-.shopping-list-table {
-    -fx-padding: 20px;
-    -fx-alignment: center;
-    -fx-font-size: 20px;
-    -fx-font-family: 'Inter';
+
+.shopping-list {
+    -fx-min-width: 800px;
 }
 
-.checkbox-button-container {
-    -fx-spacing: -24px;
-    -fx-padding: 45px;
+.shopping.list-content-container {
+    -fx-alignment: center-left;
+}
+
+.shopping-list-item-container {
+    -fx-padding: 10px;
+    -fx-spacing: 0px;
+    -fx-alignment: center;
+    -fx-border-color: #b0b0b0;
+    -fx-border-width: 0 0 1 0;
+}
+
+.shopping-list-text {
+    -fx-font-size: 20px;
+    -fx-min-width: 150px;
+    -fx-max-width: 150px;
+    -fx-wrap-text: true;
+}
+
+.static-label-container {
+    /*-fx-padding: 40px;*/
+    /*-fx-spacing: 10px;*/
+    -fx-alignment: center;
+}
+
+.static-label-container-label {
+    -fx-font-size: 20px;
+    -fx-min-width: 150px;
+    -fx-max-width: 300px;
+    -fx-padding: 30px;
+    -fx-alignment: center;
+}
+
+.rounded-top {
+    -fx-background-radius: 20 20 0 0;
+    -fx-background-color: #e7e7e7;
+}
+
+.rounded-bottom {
+    -fx-background-radius: 0 0 20 20;
+    -fx-background-color: #e7e7e7;
 }
