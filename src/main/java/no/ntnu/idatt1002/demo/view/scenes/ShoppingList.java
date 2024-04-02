@@ -4,7 +4,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import no.ntnu.idatt1002.demo.dao.DAO;
+import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.ShoppingListItem;
+import no.ntnu.idatt1002.demo.repo.ItemRegister;
+import no.ntnu.idatt1002.demo.view.components.AddPopup;
 import no.ntnu.idatt1002.demo.view.components.CheckBoxButton;
 import no.ntnu.idatt1002.demo.view.components.Icon;
 import no.ntnu.idatt1002.demo.view.components.ListHeader;
@@ -61,38 +65,29 @@ public class ShoppingList extends VBox {
     // Scroll pane settings
     shoppingListScrollPane.setContent(shoppingListContainter);
     shoppingListScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-    shoppingListScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+    shoppingListScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
     // Add the containers to the content container
     innerContentContainer.getChildren().addAll(staticListTopBar, shoppingListScrollPane, staticListBottomBar);
     contentContainer.getChildren().add(innerContentContainer);
 
     // Create the list header and add to the page
-    ListHeader listHeader = new ListHeader();
-    super.getChildren().addAll(listHeader, contentContainer);
+    ListHeader shoppingListHeader = new ListHeader();
+    super.getChildren().addAll(shoppingListHeader, contentContainer);
     // TODO: Create a connection to the database for the add button
 
     // Add items to the shopping list TODO: Connect to the database
-    this.addItem(new ShoppingListItem(1, "Milk", "Dairy", "Lactose", 1, "l"));
-    this.addItem(new ShoppingListItem(2, "Bread", "Bread", "Gluten", 1, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Eggs", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
-    this.addItem(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(1, "Milk", "Dairy", "Lactose", 1, "l"));
+    this.addItemToList(new ShoppingListItem(2, "Bread", "Bread", "Gluten", 1, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Eggs", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
+    this.addItemToList(new ShoppingListItem(3, "Holy shit a really long name", "Eggs", "Eggs", 12, "pcs"));
 
 
     // CSS styling
@@ -116,7 +111,7 @@ public class ShoppingList extends VBox {
    * This method adds an item to the shopping list.
    * @param item the item to be added
    */
-  public void addItem(ShoppingListItem item) {
+  public void addItemToList(ShoppingListItem item) {
     // Item Container
     HBox shoppingListItemContainer = new HBox();
 
@@ -145,6 +140,5 @@ public class ShoppingList extends VBox {
     // Add the item to the shopping list
     shoppingListContainter.getChildren().add(shoppingListItemContainer);
   }
-
 }
 
