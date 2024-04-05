@@ -90,7 +90,7 @@ public class ShoppingList extends VBox {
 //    itemRegister.getAllItems();
 //    Map<Integer, Item> inventoryItems = itemRegister.getItems();
 //    // Add the items to the shopping list TODO fix the unit to match the item
-//    inventoryItems.values().forEach(item -> addNewItem(new ShoppingListItem(item.getId(), item.getName(), item.getCategory(), item.getAllergy(), 1, "kg")));
+//    inventoryItems.values().forEach(item -> addItem(new ShoppingListItem(item.getId(), item.getName(), item.getCategory(), item.getAllergy(), 1, "kg")));
 
 
     // Initialize the itemsList
