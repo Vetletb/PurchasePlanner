@@ -1,5 +1,7 @@
 package no.ntnu.idatt1002.demo.data;
 
+import no.ntnu.idatt1002.demo.util.VerifyInput;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,8 @@ public class Item implements Storable{
    * @param allergy the allergy of the item
    */
   public Item(String name, String category, String allergy) {
+    VerifyInput.verifyNotEmpty(name, "name");
+    VerifyInput.verifyNotEmpty(category, "category");
     this.name = name;
     this.category = category;
     this.allergy = allergy;
