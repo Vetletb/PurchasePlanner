@@ -1,13 +1,13 @@
 package no.ntnu.idatt1002.demo.repo;
 
 import no.ntnu.idatt1002.demo.dao.DAO;
-import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.data.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import no.ntnu.idatt1002.demo.data.RecipeIngredient;
 
 /**
  * This class represents a register for recipes. Allowing for communication between the database and the user interface.
@@ -41,7 +41,15 @@ public class RecipeRegister {
    */
   private void packagetoRecipe(List<List<String>> recipes) {
     for (List<String> recipe : recipes) {
-      this.recipes.add(new Recipe(Integer.parseInt(recipe.get(0)), recipe.get(1), Integer.parseInt(recipe.get(2)), recipe.get(3)));
+      Recipe newRecipe = new Recipe(Integer.parseInt(recipe.get(0)), recipe.get(1), Integer.parseInt(recipe.get(2)), recipe.get(3));
+      List<List<String>> ingredients = dao.filterFromTable("RecipeIngredient", "recipe_id", Integer.toString(newRecipe.getId()), "Item", "item_id");
+      for (List<String> ingredient : ingredients) {
+        newRecipe.addIngredient(Integer.parseInt(ingredient.get(0)),
+            Integer.parseInt(ingredient.get(1)), ingredient.get(6), ingredient.get(7),
+            ingredient.get(8), Integer.parseInt(ingredient.get(3)), ingredient.get(4),
+            Integer.parseInt(ingredient.get(2)));
+      }
+      this.recipes.add(newRecipe);
     }
   }
 
@@ -75,24 +83,13 @@ public class RecipeRegister {
   }
 
   /**
-   * This method creates a recipe object.
-   * @param name the name of the recipe
-   * @param cooking_time the cooking time of the recipe
-   * @param category the category of the recipe
-   * @return a recipe object
-   */
-  public Recipe createRecipe(String name, int cooking_time, String category) {
-    return new Recipe(name, cooking_time, category);
-  }
-
-  /**
    * This method adds a recipe to the database.
    * @param name the name of the recipe
    * @param category the category of the recipe
    * @param cooking_time the cooking time of the recipe
    */
   public void addRecipe(String name, String category, int cooking_time) {
-    dao.addToDatabase(createRecipe(name, cooking_time, category));
+    dao.addToDatabase(new Recipe(name, cooking_time, category));
   }
 
   /**
@@ -115,6 +112,11 @@ public class RecipeRegister {
    */
   public void deleteRecipe(int id) {
     int index = getRecipesFromId(id);
+    Recipe recipe = recipes.get(index);
+    List<RecipeIngredient> recipeIngredient = recipe.getIngredients();
+    for (RecipeIngredient ingredient : recipeIngredient) {
+      dao.deleteFromDatabase(ingredient);
+    }
     dao.deleteFromDatabase(recipes.get(index));
   }
 
@@ -124,10 +126,38 @@ public class RecipeRegister {
    * @param cooking_time the cooking time of the recipe
    * @param category the category of the recipe
    */
-  public void updateRecipe(String name, int cooking_time, String category ) {
-
-    Recipe recipe = createRecipe(name, cooking_time, category);
+  public void updateRecipe(int recipe_id, String name, int cooking_time, String category ) {
+    Recipe recipe = new Recipe(recipe_id, name, cooking_time, category);
     dao.updateDatabase(recipe);
+  }
+
+  public void addIngredient(int item_id,int quantity, String unit, int recipe_id) {
+    dao.addToDatabase(new RecipeIngredient(item_id, null, null, null, quantity, unit, recipe_id));
+  }
+
+  public void deleteIngredient(int id) {
+    for (Recipe recipe : recipes) {
+      if (recipe.getIngredientById(id) != null) {
+        dao.deleteFromDatabase(recipe.getIngredientById(id));
+        break;
+      }
+    }
+  }
+
+  public void updateIngredient(int recipeIngredient_id, int item_id, int quantity, String unit) {
+    int recipe_id = -1;
+    for (Recipe recipe : recipes) {
+      if (recipe.getIngredientById(recipeIngredient_id) != null) {
+        recipe_id = recipe.getRecipe_id();
+        break;
+      }
+    }
+    if (recipe_id > 0) {
+      RecipeIngredient recipeIngredient =
+          new RecipeIngredient(recipeIngredient_id, item_id, null, null, null, quantity, unit,
+              recipe_id);
+      dao.updateDatabase(recipeIngredient);
+    }
   }
 
   /**
