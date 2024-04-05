@@ -23,8 +23,12 @@ public class ShoppingListItem extends Item {
    * @param quantity the quantity of the item
    * @param unit the unit of the item
    */
-  public ShoppingListItem(
-      int item_id, String name, String category, String allergy, int quantity, String unit) {
+  public ShoppingListItem(int item_id,
+                          String name,
+                          String category,
+                          String allergy,
+                          int quantity,
+                          String unit) {
     super(item_id, name, category, allergy);
     this.quantity = quantity;
     this.unit = unit;
@@ -84,11 +88,20 @@ public class ShoppingListItem extends Item {
   /**
    * Returns the id of the shopping list item.
    *
-   * @return the id of the quantity item
+   * @return the id of the shopping list item
    */
   @Override
   public int getId() {
     return ShoppingListItem_id;
+  }
+
+  /**
+   * Returns the id of the item
+   *
+   * @return the id of the item
+   */
+  public int getItemId() {
+    return super.getItem_id();
   }
 
   /**

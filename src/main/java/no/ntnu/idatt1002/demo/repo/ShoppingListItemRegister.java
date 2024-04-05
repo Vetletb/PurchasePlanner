@@ -2,29 +2,35 @@ package no.ntnu.idatt1002.demo.repo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.dao.DAO;
+import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.data.ShoppingListItem;
+import no.ntnu.idatt1002.demo.view.scenes.ShoppingList;
 
 /**
  * This class represents a register for shopping list items.
  * Allowing for communication between the database and the user interface.
  */
-public class ShoppingList {
+public class ShoppingListItemRegister {
   private List<ShoppingListItem> shoppingListItems;
   private final DAO dao;
 
-  public ShoppingList(DAO dao) {
+  public ShoppingListItemRegister(DAO dao) {
     this.dao = dao;
     this.shoppingListItems =  new ArrayList<>();
   }
 
   /**
-   * This method retrieves all the shopping list items from the register and returns them as a list.
+   * This method returns the items in the register in the form of lists.
    *
-   * @return the shopping list items in the register as a map
+   * @return the items in the register as lists of strings
    */
-  public List<ShoppingListItem> getShoppingListItems() {
-    return shoppingListItems;
+  public Map<Integer, ShoppingListItem> getItems() {
+    return shoppingListItems.stream().collect(Collectors.toMap(ShoppingListItem::getId, item -> item));
   }
 
 
@@ -32,10 +38,13 @@ public class ShoppingList {
    * Gets all shopping list items from the database and
    * packages them into a list of shopping list items.
    */
-  public void getAllShoppingListItems() {
+  public void getAllItems() {
     shoppingListItems = new ArrayList<>();
     List<List<String>> items = dao.getAllFromTable("ShoppingListItem", "Item", "item_id");
+    Logger.debug("Item count: " + Integer.toString(items.size())); //TODO: REMOVE THIS LATER
+    Logger.debug("List of Items: " + items.toString());
     packageToShoppingListItem(items);
+    Logger.info(Integer.toString(shoppingListItems.size()));
   }
 
   /**
@@ -45,14 +54,16 @@ public class ShoppingList {
    */
   private void packageToShoppingListItem(List<List<String>> items) {
     for (List<String> item : items) {
+      List<List<String>> matchingItem = dao.filterFromTable("Item", "item_id", item.get(1), null, null);
+      Logger.warning("Package Item: " + item.toString() + " Matching Item: " + matchingItem.toString());
       shoppingListItems.add(new ShoppingListItem(
-          Integer.parseInt(item.get(0)),
-          Integer.parseInt(item.get(1)),
-          item.get(5),
-          item.get(6),
-          item.get(7),
-          Integer.parseInt(item.get(2)),
-          item.get(3)));
+              Integer.parseInt(item.get(0)), // shoppingListItem_id
+              Integer.parseInt(item.get(1)), // item_id
+              matchingItem.get(0).get(1),    // name
+              matchingItem.get(0).get(2),    // category
+              matchingItem.get(0).get(3),    // allergy
+              Integer.parseInt(item.get(2)), // quantity
+              item.get(3)));                 // unit
     }
   }
 
@@ -65,6 +76,7 @@ public class ShoppingList {
    */
   public void addToShoppingList(int item_id,  int quantity, String unit) {
     dao.addToDatabase(new ShoppingListItem(item_id, null, null, null, quantity, unit));
+    Logger.info("Added item to shopping list with id " + item_id + ", quantity " + quantity + " and unit " + unit + "."); //TODO remove
   }
 
   /**
@@ -108,4 +120,16 @@ public class ShoppingList {
     dao.updateDatabase(new ShoppingListItem(id, item_id, name, category, allergy, quantity, unit));
   }
 
+  /**
+   * Method to search for items in the shopping list by name.
+   * <p>Uses the {@link #packageToShoppingListItem(List) packageToShoppingListItem} to create ShoppingListItem instances from the returned list of data from the {@link DAO#searchFromTable(String, String, String, String) DAO.searchFromTable}</p>
+   *
+   * @param name the name of the item to search for
+   */
+  public void searchItemsByName(String name) {
+    shoppingListItems = new ArrayList<>();
+    List<List<String>> items = dao.searchFromTable("ShoppingListItem", name, "Item", "item_id");
+    items.forEach(item -> Logger.warning("Searched Item: " + item.toString()));
+    packageToShoppingListItem(items);
+  }
 }
