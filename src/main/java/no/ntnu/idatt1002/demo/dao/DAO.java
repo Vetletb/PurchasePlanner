@@ -137,6 +137,9 @@ public class DAO {
       preparedStatement.setString(1, "%" + name + "%");
       ResultSet resultSet = preparedStatement.executeQuery();
       List<String> columns = getColumnsFromTable(table);
+      if (joinTable != null) {
+        columns.addAll(getColumnsFromTable(joinTable));
+      }
       while (resultSet.next()) {
         List<String> item = new ArrayList<>();
         for (String column : columns) {
@@ -174,6 +177,9 @@ public class DAO {
       preparedStatement.setString(1, filter);
       ResultSet resultSet = preparedStatement.executeQuery();
       List<String> columns = getColumnsFromTable(table);
+      if (joinTable != null) {
+        columns.addAll(getColumnsFromTable(joinTable));
+      }
       while (resultSet.next()) {
         List<String> item = new ArrayList<>();
         for (String column : columns) {

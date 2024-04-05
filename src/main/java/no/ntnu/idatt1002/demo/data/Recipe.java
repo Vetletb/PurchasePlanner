@@ -11,6 +11,7 @@ public class Recipe implements Storable {
   private String name;
   private int cooking_time;
   private String category;
+  private List<RecipeIngredient> ingredients;
 
   /**
    * Constructor for the Recipe class.
@@ -22,6 +23,7 @@ public class Recipe implements Storable {
       this.name = name;
       this.cooking_time = cooking_time;
       this.category = category;
+      this.ingredients = new ArrayList<>();
   }
 
   /**
@@ -113,6 +115,47 @@ public class Recipe implements Storable {
       return cooking_time;
   }
 
+  /**
+   * Adds an ingredient to the recipe.
+   * @param recipeIngredient_id the id of the recipe ingredient
+   * @param item_id the id of the item
+   * @param name the name of the item
+   * @param category the category of the item
+   * @param allergy the allergy information of the item
+   * @param quantity the quantity of the item
+   * @param unit the unit of the item
+   * @param recipe_id the id of the recipe
+   */
+  public void addIngredient(int recipeIngredient_id, int item_id, String name, String category, String allergy, int quantity, String unit, int recipe_id) {
+    ingredients.add(new RecipeIngredient(recipeIngredient_id, item_id, name, category, allergy, quantity, unit, recipe_id));
+  }
+
+  /**
+   * Returns the ingredients of the recipe.
+   * @return the ingredients of the recipe
+   */
+  public List<RecipeIngredient> getIngredients() {
+    return ingredients;
+  }
+
+  /**
+   * Returns the ingredient with the given id.
+   * @param id the id of the ingredient
+   * @return the ingredient with the given id
+   */
+  public RecipeIngredient getIngredientById(int id) {
+    for (RecipeIngredient ingredient : ingredients) {
+      if (ingredient.getId() == id) {
+        return ingredient;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Returns the recipe as a string representation.
+ * @return the string representation of the recipe
+   */
   @Override
   public String toString() {
     return
