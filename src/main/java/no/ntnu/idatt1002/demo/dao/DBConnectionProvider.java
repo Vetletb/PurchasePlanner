@@ -14,7 +14,7 @@ public class DBConnectionProvider {
   private final String url;
   private static DBConnectionProvider databaseConnectionProvider;
 
-  private static final String DB_PATH =
+  private static String DB_PATH =
       "src/main/resources/no/ntnu/idatt1002/database/database.sqlite";
 
   /**
@@ -22,6 +22,15 @@ public class DBConnectionProvider {
    */
   public DBConnectionProvider() {
     this.url = "jdbc:sqlite:" + DB_PATH;
+  }
+
+  /**
+   * This method sets the path to the database. Mainly used for testing purposes.
+   *
+   * @param dbPath the path to the database
+   */
+  public void setDbPath(String dbPath) {
+    DB_PATH = dbPath;
   }
 
   /**
@@ -92,4 +101,3 @@ public class DBConnectionProvider {
     }
   }
 }
-
