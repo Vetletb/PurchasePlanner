@@ -1,7 +1,6 @@
 package no.ntnu.idatt1002.demo;
 
 import no.ntnu.idatt1002.demo.data.Event;
-import no.ntnu.idatt1002.demo.data.Recipe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -12,65 +11,104 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This class is a test class for the Event class.
+ */
 public class EventTest {
   private Event event;
 
+  /**
+   * This method is executed before each test. Makes a test event.
+   */
   @BeforeEach
   void setUp() {
     event = new Event(1, 2, 240501);
   }
 
+  /**
+   * This class contains positive tests for the Event class.
+   */
   @Nested
   @DisplayName("Positive tests for the Event class.")
   class PositiveEventTest {
 
+    /**
+     * This method tests the getAttributes method in the Event class. The result is expected to be true.
+     */
     @Test
     void testGetAttributesPositive() {
       List<String> expectedAttributes = Arrays.asList("2", "240501");
       assertEquals(expectedAttributes, event.getAttributes());
     }
 
+    /**
+     * This method tests the getAttributeNames method in the Event class. The result is expected to be true.
+     */
     @Test
     void testGetAttributeNamesPositive() {
       List<String> expectedAttributeNames = Arrays.asList("recipe_id", "date");
       assertEquals(expectedAttributeNames, event.getAttributeNames());
     }
 
+    /**
+     * This method tests the getId method in the Event class. The result is expected to be true.
+     */
     @Test
     void testGetIdPositive() {
       assertEquals(1, event.getId());
     }
 
+    /**
+     * This method tests the getEvent_id method in the Event class. The result is expected to be true.
+     */
     @Test
     void testGetEvent_id() {
       assertEquals(1, event.getEvent_id());
     }
 
+    /**
+     * This method tests the getRecipe_id method in the Event class. The result is expected to be true.
+     */
     @Test
     void testGetIdNamePositive() {
       assertEquals("event_id", event.getIdName());
     }
 
+    /**
+     * This method tests the getRecipe_id method in the Event class. The result is expected to be true.
+     */
     @Test
     void testGetRecipeIdPositive() {
       assertEquals(2, event.getRecipe_id());
     }
 
+    /**
+     * This method tests the getDate method in the Event class. The result is expected to be true.
+     */
     @Test
     void testGetDatePositive() {
       assertEquals(240501, event.getDate());
     }
 
+    /**
+     * This method tests the toString method in the Event class. The result is expected to be true.
+     */
     @Test
     void testToStringPositive() {
       assertEquals("Event ID: 1, Recipe ID: 2, Date: 240501", event.toString());
     }
   }
 
+  /**
+   * This class contains negative tests for the Event class.
+   */
   @Nested
   @DisplayName("Negative tests for the Event class.")
   class NegativeEventTest {
 
+    /**
+     * This method tests that an IllegalArgumentException is thrown when the recipe_id is a lower integer than 1..
+     */
     @Test
     void testVerifyRecipe_idIntegerException() {
       try {
@@ -81,6 +119,9 @@ public class EventTest {
       }
     }
 
+    /**
+     * This method tests that an IllegalArgumentException is thrown when the date is a negative number.
+     */
     @Test
     void testVerifyDateIntegerException() {
       try {
@@ -90,6 +131,10 @@ public class EventTest {
         assertEquals("The input for the parameter 'date' must be a positive number", e.getMessage());
       }
     }
+
+    /**
+     * This method tests that an IllegalArgumentException is thrown when the date is not six figures..
+     */
     @Test
     void testVerifyDateLengthException() {
       try {
