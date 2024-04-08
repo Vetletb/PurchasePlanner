@@ -107,6 +107,9 @@ public class RecipeTest {
       assertEquals(expectedCooking_time, recipe.getCooking_time());
     }
 
+    /**
+     * This method tests the addIngredient method in the Recipe class. The result is expected to be true.
+     */
     @Test
     void testAddIngredientPositive() {
       int recipeIngredient_id = 1;
@@ -134,6 +137,9 @@ public class RecipeTest {
       //assertEquals(recipe_id, addedIngredient.getRecipe_id());
     }
 
+    /**
+     * This method tests the getIngredients method in the Recipe class. The result is expected to be true.
+     */
     @Test
     void testGetIngredientsPositive() {
       List<RecipeIngredient> ingredients = recipe.getIngredients();
@@ -151,6 +157,9 @@ public class RecipeTest {
       //assertEquals(3, ingredient.getRecipe_id());
     }
 
+    /**
+     * This method tests the getIngredientById method in the Recipe class. The result is expected to be true.
+     */
     @Test
     void testGetIngredientByIdPositive() {
       int recipeIngredient_id = 1;
@@ -192,6 +201,9 @@ public class RecipeTest {
   @Nested
   @DisplayName("Negative tests for the Recipe class.")
   class NegativeRecipeTest {
+    /**
+     * This method tests the getAttributes method in the Recipe class. The result is expected to be false.
+     */
     @Test
     void testGetAttributesNegative() {
       try {
@@ -202,24 +214,36 @@ public class RecipeTest {
       }
     }
 
+    /**
+     * This method tests the getAttributeNames method in the Recipe class. The result is expected to be false.
+     */
     @Test
     void testGetIdNegative() {
       int unexpectedId = 2;
       assertNotEquals(unexpectedId, recipe.getId());
     }
 
+    /**
+     * This method tests the getIdName method in the Recipe class. The result is expected to be false.
+     */
     @Test
     void testGetIdNameNegative() {
       String unexpectedIdName = "id";
       assertNotEquals(unexpectedIdName, recipe.getIdName());
     }
 
+    /**
+     * This method tests the getRecipe_id method in the Recipe class. The result is expected to be false.
+     */
     @Test
     void testGetRecipe_idNegative() {
       int unexpectedRecipe_id = 2;
       assertNotEquals(unexpectedRecipe_id, recipe.getRecipe_id());
     }
 
+    /**
+     * This method tests the getName method in the Recipe class. The method tests if correct exception is thrown.
+     */
     @Test
     void testGetNameNegative() {
       try {
@@ -230,6 +254,9 @@ public class RecipeTest {
       }
     }
 
+    /**
+     * This method tests the getCategory method in the Recipe class. The method tests if correct exception is thrown.
+     */
     @Test
     void testGetCategoryNegative() {
       try {
@@ -240,6 +267,9 @@ public class RecipeTest {
       }
     }
 
+    /**
+     * This method tests the getCooking_time method in the Recipe class. The method tests if correct exception is thrown.
+     */
     @Test
     void testGetCooking_timeNegative() {
       try {
