@@ -71,7 +71,7 @@ public class VerifyInput {
    * @throws IllegalArgumentException if the int(date) does not have six figures or is zero or minus one
    */
   public static void verifyDateZeroAndMinusOneAccepted(int input, String parameter) {
-    if((Integer.toString(input).length() != 6) || input == 0 || input == -1) {
+    if((Integer.toString(input).length() != 6) && input != 0 &&  input != -1) {
       throw new IllegalArgumentException("The input for the parameter '" + parameter + "' must have six figures");
     }
   }
