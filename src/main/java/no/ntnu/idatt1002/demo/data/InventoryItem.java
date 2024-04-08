@@ -1,5 +1,8 @@
 package no.ntnu.idatt1002.demo.data;
 
+import no.ntnu.idatt1002.demo.util.VerifyInput;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +28,7 @@ public class InventoryItem extends ShoppingListItem {
       int item_id, String name, String category, String allergy,
       int quantity, String unit, int expirationDate) {
     super(item_id, name, category, allergy, quantity, unit);
+    VerifyInput.verifyDateZeroAndMinusOneAccepted(expirationDate, "expirationDate");
     this.expirationDate = expirationDate;
   }
 
