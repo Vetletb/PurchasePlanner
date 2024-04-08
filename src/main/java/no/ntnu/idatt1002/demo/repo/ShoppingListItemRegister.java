@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.dao.DAO;
-import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.data.ShoppingListItem;
-import no.ntnu.idatt1002.demo.view.scenes.ShoppingList;
 
 /**
  * This class represents a register for shopping list items.
@@ -30,7 +27,8 @@ public class ShoppingListItemRegister {
    * @return the items in the register as lists of strings
    */
   public Map<Integer, ShoppingListItem> getItems() {
-    return shoppingListItems.stream().collect(Collectors.toMap(ShoppingListItem::getId, item -> item));
+    return shoppingListItems.stream()
+        .collect(Collectors.toMap(ShoppingListItem::getId, item -> item));
   }
 
 
@@ -54,8 +52,10 @@ public class ShoppingListItemRegister {
    */
   private void packageToShoppingListItem(List<List<String>> items) {
     for (List<String> item : items) {
-      List<List<String>> matchingItem = dao.filterFromTable("Item", "item_id", item.get(1), null, null);
-      Logger.warning("Package Item: " + item.toString() + " Matching Item: " + matchingItem.toString());
+      List<List<String>> matchingItem = dao.filterFromTable(
+          "Item", "item_id", item.get(1), null, null);
+      Logger.warning("Package Item: " + item.toString() + " Matching Item: "
+          + matchingItem.toString());
       shoppingListItems.add(new ShoppingListItem(
               Integer.parseInt(item.get(0)), // shoppingListItem_id
               Integer.parseInt(item.get(1)), // item_id
@@ -76,7 +76,8 @@ public class ShoppingListItemRegister {
    */
   public void addToShoppingList(int item_id,  int quantity, String unit) {
     dao.addToDatabase(new ShoppingListItem(item_id, null, null, null, quantity, unit));
-    Logger.info("Added item to shopping list with id " + item_id + ", quantity " + quantity + " and unit " + unit + "."); //TODO remove
+    Logger.info("Added item to shopping list with id "
+        + item_id + ", quantity " + quantity + " and unit " + unit + "."); //TODO remove
   }
 
   /**
@@ -122,7 +123,9 @@ public class ShoppingListItemRegister {
 
   /**
    * Method to search for items in the shopping list by name.
-   * <p>Uses the {@link #packageToShoppingListItem(List) packageToShoppingListItem} to create ShoppingListItem instances from the returned list of data from the {@link DAO#searchFromTable(String, String, String, String) DAO.searchFromTable}</p>
+   * <p>Uses the {@link #packageToShoppingListItem(List) packageToShoppingListItem}
+   * to create ShoppingListItem instances from the returned list of data from the
+   * {@link DAO#searchFromTable(String, String, String, String) DAO.searchFromTable}</p>
    *
    * @param name the name of the item to search for
    */

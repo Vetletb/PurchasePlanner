@@ -1,14 +1,13 @@
 package no.ntnu.idatt1002.demo.data;
 
-import no.ntnu.idatt1002.demo.util.VerifyInput;
-
 import java.util.ArrayList;
 import java.util.List;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class is a simple bean for an item.
  */
-public class Item implements Storable{
+public class Item implements Storable {
   private int item_id;
   private final String name;
   private final String category;
@@ -16,6 +15,7 @@ public class Item implements Storable{
 
   /**
    * Constructor for the Item class. When creating a new item, the id is not known.
+   *
    * @param name the name of the item
    * @param category the category of the item
    * @param allergy the allergy of the item
@@ -30,6 +30,7 @@ public class Item implements Storable{
 
   /**
    * Constructor for the Item class. When creating an item from the database, the id is known.
+   *
    * @param item_id the id of the item
    * @param name the name of the item
    * @param category the category of the item
@@ -42,6 +43,7 @@ public class Item implements Storable{
 
   /**
    * This method returns the attributes of the item.
+   *
    * @return the attribute names of the item
    */
   @Override
@@ -55,6 +57,7 @@ public class Item implements Storable{
 
   /**
    * This method returns the attribute names of the item.
+   *
    * @return the attribute names of the item
    */
   @Override
@@ -68,6 +71,7 @@ public class Item implements Storable{
 
   /**
    * This method returns the id of the item.
+   *
    * @return the id of the item
    */
   @Override
@@ -77,6 +81,7 @@ public class Item implements Storable{
 
   /**
    * This method returns the name of the id.
+   *
    * @return the name of the id
    */
   @Override
@@ -86,6 +91,7 @@ public class Item implements Storable{
 
   /**
    * This method returns the id of the item.
+   *
    * @return the id of the item
    */
   public int getItem_id() {
@@ -94,6 +100,7 @@ public class Item implements Storable{
 
   /**
    * This method returns the name of the item.
+   *
    * @return the name of the item
    */
   public String getName() {
@@ -102,6 +109,7 @@ public class Item implements Storable{
 
   /**
    * This method returns the category of the item.
+   *
    * @return the category of the item
    */
   public String getCategory() {
@@ -110,6 +118,7 @@ public class Item implements Storable{
 
   /**
    * This method returns the allergy of the item.
+   *
    * @return the allergy of the item
    */
   public String getAllergy() {
@@ -118,10 +127,12 @@ public class Item implements Storable{
 
   /**
    * This method returns a string representation of the item.
+   *
    * @return a string representation of the item
    */
   @Override
   public String toString() {
-    return "Item ID: " + item_id + ", Name: " + name + ", Category: " + category + ", Allergy: " + allergy;
+    return "Item ID: " + item_id + ", Name: " + name + ", Category: " + category
+        + ", Allergy: " + allergy;
   }
 }

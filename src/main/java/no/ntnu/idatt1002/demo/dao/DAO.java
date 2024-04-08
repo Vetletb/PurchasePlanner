@@ -1,6 +1,10 @@
 package no.ntnu.idatt1002.demo.dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import no.ntnu.idatt1002.demo.data.Storable;
@@ -13,6 +17,7 @@ public class DAO {
 
   /**
    * Constructor for the DAO class.
+   *
    * @param connectionProvider the connection provider
    */
   public DAO(DBConnectionProvider connectionProvider) {
@@ -21,6 +26,7 @@ public class DAO {
 
   /**
    * This method adds an object to the database.
+   *
    * @param obj the object to add
    */
   public void addToDatabase(Storable obj) {
@@ -43,10 +49,12 @@ public class DAO {
 
   /**
    * This method deletes an item from the database.
+   *
    * @param obj the object to be deleted
    */
   public void deleteFromDatabase(Storable obj) {
-    String sql = String.format("DELETE FROM %s WHERE %s = ?", obj.getClass().getSimpleName(), obj.getIdName());
+    String sql = String.format("DELETE FROM %s WHERE %s = ?",
+        obj.getClass().getSimpleName(), obj.getIdName());
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       preparedStatement.setInt(1, obj.getId());
@@ -59,12 +67,13 @@ public class DAO {
 
   /**
    * This method updates an object in the database.
+   *
    * @param obj the object to be updated
    */
   public void updateDatabase(Storable obj) {
     String sql = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
         obj.getClass().getSimpleName(),
-        String.join(" = ?, ", obj.getAttributeNames()),obj.getIdName());
+        String.join(" = ?, ", obj.getAttributeNames()), obj.getIdName());
     List<String> attributes = obj.getAttributes();
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -82,6 +91,7 @@ public class DAO {
 
   /**
    * This method returns all attributes from a table.
+   *
    * @param table the table to get attributes from
    * @return a list of lists containing all attributes from a table
    */
@@ -91,8 +101,9 @@ public class DAO {
     if (joinTable == null) {
       sql = "SELECT * FROM " + table;
     } else {
-      sql = "SELECT * FROM " + table +
-          " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = " + joinTable + "." +  joinColumn;
+      sql = "SELECT * FROM " + table
+          + " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = "
+          + joinTable + "." +  joinColumn;
     }
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -116,21 +127,24 @@ public class DAO {
 
   /**
    * This method searches for objects by name in the database.
+   *
    * @param table the table to search in
    * @param name the name to search for (can also be only part of the name)
    * @param joinTable the table to join with if needed
    * @param joinColumn the column to join on if needed
    * @return a list of lists containing the attributes of the objects with the given name
    */
-  public List<List<String>> searchFromTable(String table, String name, String joinTable, String joinColumn) {
+  public List<List<String>> searchFromTable(
+      String table, String name, String joinTable, String joinColumn) {
     List<List<String>> items = new ArrayList<>();
     String sql;
     if (joinTable == null) {
-      sql = "SELECT * FROM "+ table + " WHERE name LIKE ?";
+      sql = "SELECT * FROM " + table + " WHERE name LIKE ?";
     } else {
-      sql = "SELECT * FROM " + table +
-          " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = " + joinTable + "." +  joinColumn +
-          " WHERE name LIKE ?";
+      sql = "SELECT * FROM " + table
+          + " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = "
+          + joinTable + "." +  joinColumn
+          + " WHERE name LIKE ?";
     }
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -155,6 +169,7 @@ public class DAO {
 
   /**
    * This method filters objects by a given column in the database.
+   *
    * @param table the table to filter from
    * @param filterColumn the column to filter by
    * @param filter the filter to use
@@ -162,15 +177,18 @@ public class DAO {
    * @param joinColumn the column to join on if needed
    * @return a list of items with the given category
    */
-  public List<List<String>> filterFromTable(String table, String filterColumn, String filter, String joinTable, String joinColumn) {
+  public List<List<String>> filterFromTable(
+      String table, String filterColumn, String filter,
+      String joinTable, String joinColumn) {
     List<List<String>> items = new ArrayList<>();
     String sql;
     if (joinTable == null) {
       sql = "SELECT * FROM " + table + " WHERE " + filterColumn + " LIKE ?";
     } else {
-      sql = "SELECT * FROM " + table +
-          " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = " + joinTable + "." +  joinColumn +
-          " WHERE " + filterColumn + " LIKE ?";
+      sql = "SELECT * FROM " + table
+          + " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = "
+          + joinTable + "." +  joinColumn
+          + " WHERE " + filterColumn + " LIKE ?";
     }
     try (Connection connection = connectionProvider.getConnection();
          PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -195,6 +213,7 @@ public class DAO {
 
   /**
    * This method returns all columns from a table.
+   *
    * @param table the table to get columns from
    * @return a list of all columns from the table
    */

@@ -6,13 +6,14 @@ import java.util.List;
 /**
  * This class represents a recipe ingredient connected to a recipe.
  */
-public class RecipeIngredient extends ShoppingListItem{
+public class RecipeIngredient extends ShoppingListItem {
 
   private int recipeIngredient_id;
-  private int recipe_id;
+  private final int recipe_id;
 
   /**
    * Constructor for the RecipeIngredient class.
+   *
    * @param item_id the id of the item
    * @param name the name of the item
    * @param category the category of the item
@@ -21,13 +22,16 @@ public class RecipeIngredient extends ShoppingListItem{
    * @param unit the unit of the item
    * @param recipe_id the id of the recipe
    */
-  public RecipeIngredient(int item_id, String name, String category, String allergy, int quantity, String unit, int recipe_id) {
+  public RecipeIngredient(
+      int item_id, String name, String category, String allergy,
+      int quantity, String unit, int recipe_id) {
     super(item_id, name, category, allergy, quantity, unit);
     this.recipe_id = recipe_id;
   }
 
   /**
    * Constructor for the RecipeIngredient class with recipe ingredient id.
+   *
    * @param recipeIngredient_id the id of the recipe ingredient
    * @param item_id the id of the item
    * @param name the name of the item
@@ -37,13 +41,16 @@ public class RecipeIngredient extends ShoppingListItem{
    * @param unit the unit of the item
    * @param recipe_id the id of the recipe
    */
-  public RecipeIngredient(int recipeIngredient_id, int item_id, String name, String category, String allergy, int quantity, String unit, int recipe_id) {
+  public RecipeIngredient(
+      int recipeIngredient_id, int item_id, String name, String category,
+      String allergy, int quantity, String unit, int recipe_id) {
     this(item_id, name, category, allergy, quantity, unit, recipe_id);
     this.recipeIngredient_id = recipeIngredient_id;
   }
 
   /**
    * Returns the attributes of the recipe ingredient.
+   *
    * @return the attributes of the recipe ingredient
    */
   @Override
@@ -58,6 +65,7 @@ public class RecipeIngredient extends ShoppingListItem{
 
   /**
    * Returns the attribute names of the recipe ingredient.
+   *
    * @return the attribute names of the recipe ingredient
    */
   @Override
@@ -72,19 +80,39 @@ public class RecipeIngredient extends ShoppingListItem{
 
   /**
    * Returns the id of the recipe ingredient.
+   *
    * @return the id of the recipe ingredient
    */
   @Override
   public int getId() {
-    return recipeIngredient_id;
+    return getRecipeIngredient_id();
   }
 
   /**
    * Returns the id name of the recipe ingredient.
+   *
    * @return the id name of the recipe ingredient
    */
   @Override
   public String getIdName() {
     return "recipeIngredient_id";
+  }
+
+  /**
+   * Returns the recipe id of the recipe ingredient.
+   *
+   * @return the recipe id of the recipe ingredient
+   */
+  public int getRecipe_id() {
+    return recipe_id;
+  }
+
+  /**
+   * Returns the recipe ingredient id.
+   *
+   * @return the recipe ingredient id
+   */
+  public int getRecipeIngredient_id() {
+    return recipeIngredient_id;
   }
 }
