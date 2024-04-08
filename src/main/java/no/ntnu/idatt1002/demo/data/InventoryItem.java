@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is a simple bean for an inventory item. This is an item with a quantity, a unit and an expiration date.
+ * This class is a simple bean for an inventory item.
+ * This is an item with a quantity, a unit and an expiration date.
  */
 public class InventoryItem extends ShoppingListItem {
   private int inventory_id;

@@ -1,9 +1,8 @@
 package no.ntnu.idatt1002.demo.data;
 
-import no.ntnu.idatt1002.demo.util.VerifyInput;
-
 import java.util.ArrayList;
 import java.util.List;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class is a simple bean for an item.
@@ -16,6 +15,7 @@ public class Item implements Storable {
 
   /**
    * Constructor for the Item class. When creating a new item, the id is not known.
+   *
    * @param name the name of the item
    * @param category the category of the item
    * @param allergy the allergy of the item
@@ -30,6 +30,7 @@ public class Item implements Storable {
 
   /**
    * Constructor for the Item class. When creating an item from the database, the id is known.
+   *
    * @param item_id the id of the item
    * @param name the name of the item
    * @param category the category of the item

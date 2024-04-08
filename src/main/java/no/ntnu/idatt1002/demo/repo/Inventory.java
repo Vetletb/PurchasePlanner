@@ -130,10 +130,10 @@ public class Inventory {
    * @param unit the unit of the item
    * @param expirationDate the expiration date of the item
    */
-   public void updateInventoryItem(
-       int inventory_id, int item_id, int quantity, String unit, int expirationDate) {
+  public void updateInventoryItem(
+      int inventory_id, int item_id, int quantity, String unit, int expirationDate) {
     InventoryItem inventoryItem = new InventoryItem(
-        inventory_id, item_id, null, null, null, quantity, unit, expirationDate);
+    inventory_id, item_id, null, null, null, quantity, unit, expirationDate);
     dao.updateDatabase(inventoryItem);
   }
 }

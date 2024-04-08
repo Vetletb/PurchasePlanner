@@ -98,7 +98,7 @@ public class EventRegister {
    *
    * @param date the date of the event
    */
- public void getEventsByDate(int date) {
+  public void getEventsByDate(int date) {
     events = new ArrayList<>();
     List<List<String>> events = dao.filterFromTable(
         "Event", "date", Integer.toString(date), "recipe", "recipe_id");
