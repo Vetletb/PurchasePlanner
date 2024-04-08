@@ -1,5 +1,7 @@
 package no.ntnu.idatt1002.demo.data;
 
+import no.ntnu.idatt1002.demo.util.VerifyInput;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +22,9 @@ public class Recipe implements Storable {
    * @param cooking_time the cooking time of the recipe
    */
   public Recipe(String name, int cooking_time, String category) {
+      VerifyInput.verifyNotEmpty(name, "name");
+      VerifyInput.verifyNotEmpty(category, "category");
+      VerifyInput.verifyPositiveNumberMinusOneAccepted(cooking_time, "cooking_time");
       this.name = name;
       this.cooking_time = cooking_time;
       this.category = category;
