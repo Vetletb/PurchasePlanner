@@ -27,7 +27,7 @@ public class VerifyInput {
    */
   public static void verifyPositiveNumberMinusOneAccepted(int input, String parameter) {
     if(input == 0|| input < -1) {
-      throw new IllegalArgumentException("The input for the parameter: " + parameter + "must be a positive number or minus one");
+      throw new IllegalArgumentException("The input for the parameter: " + parameter + " must be a positive number or minus one");
     }
   }
 
@@ -40,7 +40,7 @@ public class VerifyInput {
    */
   public static void verifyPositiveNumberMinusOneNotAccepted(int input, String parameter) {
     if(input < 0) {
-      throw new IllegalArgumentException("The input for the parameter: " + parameter + "must be a positive number");
+      throw new IllegalArgumentException("The input for the parameter: " + parameter + " must be a positive number");
     }
   }
 }
