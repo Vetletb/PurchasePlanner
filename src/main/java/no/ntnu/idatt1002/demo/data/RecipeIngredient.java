@@ -1,5 +1,7 @@
 package no.ntnu.idatt1002.demo.data;
 
+import no.ntnu.idatt1002.demo.util.VerifyInput;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class RecipeIngredient extends ShoppingListItem{
    */
   public RecipeIngredient(int item_id, String name, String category, String allergy, int quantity, String unit, int recipe_id) {
     super(item_id, name, category, allergy, quantity, unit);
+    VerifyInput.verifyPositiveNumberZeroNotAccepted(recipe_id, "recipe_id");
     this.recipe_id = recipe_id;
   }
 
