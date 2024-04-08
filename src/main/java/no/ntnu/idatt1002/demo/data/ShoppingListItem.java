@@ -1,5 +1,7 @@
 package no.ntnu.idatt1002.demo.data;
 
+import no.ntnu.idatt1002.demo.util.VerifyInput;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,8 @@ public class ShoppingListItem extends Item {
                           int quantity,
                           String unit) {
     super(item_id, name, category, allergy);
+    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(quantity, "quantity");
+    VerifyInput.verifyNotEmpty(unit, "unit");
     this.quantity = quantity;
     this.unit = unit;
   }

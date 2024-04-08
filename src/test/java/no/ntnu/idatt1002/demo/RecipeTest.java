@@ -1,6 +1,7 @@
 package no.ntnu.idatt1002.demo;
 
 import no.ntnu.idatt1002.demo.data.Recipe;
+import no.ntnu.idatt1002.demo.data.RecipeIngredient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,6 +25,7 @@ public class RecipeTest {
   @BeforeEach
   void setUp() {
     recipe = new Recipe(1, "pasta", 30, "Italian");
+    recipe.addIngredient(1, 2, "carrot", "vegetable", "", 1, "kg", 3);
   }
 
   /**
@@ -106,6 +108,84 @@ public class RecipeTest {
     }
 
     /**
+     * This method tests the addIngredient method in the Recipe class. The result is expected to be true.
+     */
+    @Test
+    void testAddIngredientPositive() {
+      int recipeIngredient_id = 1;
+      int item_id = 2;
+      String name = "carrot";
+      String category = "vegetable";
+      String allergy = "";
+      int quantity = 1;
+      String unit = "kg";
+      int recipe_id = 3;
+
+      recipe.addIngredient(recipeIngredient_id, item_id, name, category, allergy, quantity, unit, recipe_id);
+
+      RecipeIngredient addedIngredient = recipe.getIngredientById(recipeIngredient_id);
+
+      assertNotNull(addedIngredient);
+
+      assertEquals(recipeIngredient_id, addedIngredient.getId());
+      assertEquals(item_id, addedIngredient.getItem_id());
+      assertEquals(name, addedIngredient.getName());
+      assertEquals(category, addedIngredient.getCategory());
+      assertEquals(allergy, addedIngredient.getAllergy());
+      assertEquals(quantity, addedIngredient.getQuantity());
+      assertEquals(unit, addedIngredient.getUnit());
+      //assertEquals(recipe_id, addedIngredient.getRecipe_id());
+    }
+
+    /**
+     * This method tests the getIngredients method in the Recipe class. The result is expected to be true.
+     */
+    @Test
+    void testGetIngredientsPositive() {
+      List<RecipeIngredient> ingredients = recipe.getIngredients();
+      assertNotNull(ingredients);
+      assertEquals(1, ingredients.size());
+
+      RecipeIngredient ingredient = ingredients.get(0);
+      assertEquals(1, ingredient.getId());
+      assertEquals(2, ingredient.getItem_id());
+      assertEquals("carrot", ingredient.getName());
+      assertEquals("vegetable", ingredient.getCategory());
+      assertEquals("", ingredient.getAllergy());
+      assertEquals(1, ingredient.getQuantity());
+      assertEquals("kg", ingredient.getUnit());
+      //assertEquals(3, ingredient.getRecipe_id());
+    }
+
+    /**
+     * This method tests the getIngredientById method in the Recipe class. The result is expected to be true.
+     */
+    @Test
+    void testGetIngredientByIdPositive() {
+      int recipeIngredient_id = 1;
+      int item_id = 2;
+      String name = "carrot";
+      String category = "vegetable";
+      String allergy = "";
+      int quantity = 1;
+      String unit = "kg";
+      int recipe_id = 3;
+
+      RecipeIngredient addedIngredient = recipe.getIngredientById(recipeIngredient_id);
+
+      assertNotNull(addedIngredient);
+
+      assertEquals(recipeIngredient_id, addedIngredient.getId());
+      assertEquals(item_id, addedIngredient.getItem_id());
+      assertEquals(name, addedIngredient.getName());
+      assertEquals(category, addedIngredient.getCategory());
+      assertEquals(allergy, addedIngredient.getAllergy());
+      assertEquals(quantity, addedIngredient.getQuantity());
+      assertEquals(unit, addedIngredient.getUnit());
+      //assertEquals(recipe_id, addedIngredient.getRecipe_id());
+    }
+
+    /**
      * This method tests the toString method in the Recipe class. The result is expected to be true.
      */
     @Test
@@ -121,5 +201,43 @@ public class RecipeTest {
   @Nested
   @DisplayName("Negative tests for the Recipe class.")
   class NegativeRecipeTest {
+    /**
+     * This method tests the getAttributes method in the Recipe class. The result is expected to be false.
+     */
+    @Test
+    void testVerifyNameNotNullException() {
+      try {
+        new Recipe(1, "", 30, "Italian");
+        fail("This test failed, since it should have thrown an exception");
+      } catch (IllegalArgumentException e) {
+        assertEquals("The input for the parameter 'name' cannot be null or blank", e.getMessage());
+      }
+    }
+
+    /**
+     * This method tests the getCategory method in the Recipe class. The method tests if correct exception is thrown.
+     */
+    @Test
+    void testVerifyCategoryNotNullException() {
+      try {
+        new Recipe(1, "pasta", 30, "");
+        fail("This test failed, since it should have thrown an exception");
+      } catch (IllegalArgumentException e) {
+        assertEquals("The input for the parameter 'category' cannot be null or blank", e.getMessage());
+      }
+    }
+
+    /**
+     * This method tests the getCooking_time method in the Recipe class. The method tests if correct exception is thrown.
+     */
+    @Test
+    void testVerifyCooking_timeIntegerException() {
+      try {
+        new Recipe(1, "pasta", -1, "Italian");
+        fail("This test failed, since it should have thrown an exception");
+      } catch (IllegalArgumentException e) {
+        assertEquals("The input for the parameter 'cooking_time' must be a positive number or minus one", e.getMessage());
+      }
+    }
   }
 }

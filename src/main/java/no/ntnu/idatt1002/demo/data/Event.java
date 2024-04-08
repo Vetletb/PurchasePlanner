@@ -1,5 +1,7 @@
 package no.ntnu.idatt1002.demo.data;
 
+import no.ntnu.idatt1002.demo.util.VerifyInput;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class Event implements Storable {
    * @param date the date of the event
    */
   public Event(int recipe_id, int date) {
+    VerifyInput.verifyPositiveNumberZeroNotAccepted(recipe_id, "recipe_id");
+    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(date, "date");
+    VerifyInput.verifyDateLength(date, "date");
     this.recipe_id = recipe_id;
     this.date = date;
   }
@@ -140,6 +145,6 @@ public class Event implements Storable {
 
   @Override
   public String toString() {
-    return "Event ID: " + event_id + ", Recipe ID: " + recipe_id + ", Date: ";
+    return "Event ID: " + event_id + ", Recipe ID: " + recipe_id + ", Date: " + date;
   }
 }
