@@ -202,7 +202,7 @@ public class RecipeTest {
   @DisplayName("Negative tests for the Recipe class.")
   class NegativeRecipeTest {
     /**
-     * This method tests the getAttributes method in the Recipe class. The result is expected to be false.
+     * This method tests that an IllegalArgumentException is thrown when the name is null or empty.
      */
     @Test
     void testVerifyNameNotNullException() {
@@ -215,7 +215,7 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the getCategory method in the Recipe class. The method tests if correct exception is thrown.
+     * This method tests that an IllegalArgumentException is thrown when the category is null or empty.
      */
     @Test
     void testVerifyCategoryNotNullException() {
@@ -228,7 +228,7 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the getCooking_time method in the Recipe class. The method tests if correct exception is thrown.
+     * This method tests that an IllegalArgumentException is thrown when the cooking_time is a negative number.
      */
     @Test
     void testVerifyCooking_timeIntegerException() {
