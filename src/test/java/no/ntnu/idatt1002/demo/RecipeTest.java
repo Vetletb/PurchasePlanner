@@ -107,6 +107,9 @@ public class RecipeTest {
       assertEquals(expectedCooking_time, recipe.getCooking_time());
     }
 
+    /**
+     * This method tests the addIngredient method in the Recipe class. The result is expected to be true.
+     */
     @Test
     void testAddIngredientPositive() {
       int recipeIngredient_id = 1;
@@ -134,6 +137,9 @@ public class RecipeTest {
       //assertEquals(recipe_id, addedIngredient.getRecipe_id());
     }
 
+    /**
+     * This method tests the getIngredients method in the Recipe class. The result is expected to be true.
+     */
     @Test
     void testGetIngredientsPositive() {
       List<RecipeIngredient> ingredients = recipe.getIngredients();
@@ -151,6 +157,9 @@ public class RecipeTest {
       //assertEquals(3, ingredient.getRecipe_id());
     }
 
+    /**
+     * This method tests the getIngredientById method in the Recipe class. The result is expected to be true.
+     */
     @Test
     void testGetIngredientByIdPositive() {
       int recipeIngredient_id = 1;
@@ -192,78 +201,43 @@ public class RecipeTest {
   @Nested
   @DisplayName("Negative tests for the Recipe class.")
   class NegativeRecipeTest {
+    /**
+     * This method tests the getAttributes method in the Recipe class. The result is expected to be false.
+     */
     @Test
-    void testGetAttributesNegative() {
+    void testVerifyNameNotNullException() {
       try {
         new Recipe(1, "", 30, "Italian");
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("The input for the parameter: name cannot be null or blank", e.getMessage());
+        assertEquals("The input for the parameter 'name' cannot be null or blank", e.getMessage());
       }
     }
 
+    /**
+     * This method tests the getCategory method in the Recipe class. The method tests if correct exception is thrown.
+     */
     @Test
-    void testGetIdNegative() {
-      int unexpectedId = 2;
-      assertNotEquals(unexpectedId, recipe.getId());
-    }
-
-    @Test
-    void testGetIdNameNegative() {
-      String unexpectedIdName = "id";
-      assertNotEquals(unexpectedIdName, recipe.getIdName());
-    }
-
-    @Test
-    void testGetRecipe_idNegative() {
-      int unexpectedRecipe_id = 2;
-      assertNotEquals(unexpectedRecipe_id, recipe.getRecipe_id());
-    }
-
-    @Test
-    void testGetNameNegative() {
-      try {
-        new Recipe(1, "", 30, "Italian");
-        fail("This test failed, since it should have thrown an exception");
-      } catch (IllegalArgumentException e) {
-        assertEquals("The input for the parameter: name cannot be null or blank", e.getMessage());
-      }
-    }
-
-    @Test
-    void testGetCategoryNegative() {
+    void testVerifyCategoryNotNullException() {
       try {
         new Recipe(1, "pasta", 30, "");
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("The input for the parameter: category cannot be null or blank", e.getMessage());
+        assertEquals("The input for the parameter 'category' cannot be null or blank", e.getMessage());
       }
     }
 
+    /**
+     * This method tests the getCooking_time method in the Recipe class. The method tests if correct exception is thrown.
+     */
     @Test
-    void testGetCooking_timeNegative() {
+    void testVerifyCooking_timeIntegerException() {
       try {
-        new Recipe(1, "pasta", 0, "Italian");
+        new Recipe(1, "pasta", -1, "Italian");
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("The input for the parameter: cooking_time must be a positive number or minus one", e.getMessage());
+        assertEquals("The input for the parameter 'cooking_time' must be a positive number or minus one", e.getMessage());
       }
-    }
-
-    @Test
-    void testAddIngredientNegative() {
-    }
-
-    @Test
-    void testGetIngredientsNegative() {
-    }
-
-    @Test
-    void testGetIngredientByIdNegative() {
-    }
-
-    @Test
-    void testToStringNegative() {
     }
   }
 }
