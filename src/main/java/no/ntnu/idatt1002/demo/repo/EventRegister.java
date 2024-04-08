@@ -1,15 +1,16 @@
 package no.ntnu.idatt1002.demo.repo;
 
-import no.ntnu.idatt1002.demo.dao.DAO;
-import no.ntnu.idatt1002.demo.data.Event;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import no.ntnu.idatt1002.demo.dao.DAO;
+import no.ntnu.idatt1002.demo.data.Event;
+
 
 /**
- * This class represents a register for events. Allowing for communication between the database and the user interface.
+ * This class represents a register for events.
+ * Allowing for communication between the database and the user interface.
  */
 public class EventRegister {
   private List<Event> events;
@@ -17,6 +18,7 @@ public class EventRegister {
 
   /**
    * Constructor for the EventRegister class.
+   *
    * @param dao the data access object
    */
   public EventRegister(DAO dao) {
@@ -26,6 +28,7 @@ public class EventRegister {
 
   /**
    * This method returns the events in the register in the form of lists.
+   *
    * @return the events in the register as lists of strings
    */
   public Map<Integer, List<String>> getEvents() {
@@ -44,6 +47,7 @@ public class EventRegister {
 
   /**
    * This method adds an event to the database.
+   *
    * @param recipe_id the id of the recipe
    * @param date the date of the event
    */
@@ -54,6 +58,7 @@ public class EventRegister {
 
   /**
    * This method returns the index of the event with the given id.
+   *
    * @param id the id of the event
    * @return the index of the event
    */
@@ -68,6 +73,7 @@ public class EventRegister {
 
   /**
    * This method deletes an event from the database.
+   *
    * @param id the id of the event to be deleted
    */
   public void deleteEvent(int id) {
@@ -77,6 +83,7 @@ public class EventRegister {
 
   /**
    * This method updates an event in the database.
+   *
    * @param event_id the id of the event
    * @param recipe_id the id of the recipe
    * @param date the date of the event
@@ -88,16 +95,19 @@ public class EventRegister {
 
   /**
    * This method gets the events by the date.
+   *
    * @param date the date of the event
    */
  public void getEventsByDate(int date) {
     events = new ArrayList<>();
-    List<List<String>> events = dao.filterFromTable("Event", "date", Integer.toString(date), "recipe", "recipe_id");
+    List<List<String>> events = dao.filterFromTable(
+        "Event", "date", Integer.toString(date), "recipe", "recipe_id");
     packageToEvent(events);
   }
 
   /**
    * Helper method to package the events into the Event class.
+   *
    * @param eventList the list of events
    */
   private void packageToEvent(List<List<String>> eventList) {
@@ -117,6 +127,7 @@ public class EventRegister {
 
   /**
    * This method returns a string representation of the events.
+   *
    * @return a string representation of the events
    */
   @Override

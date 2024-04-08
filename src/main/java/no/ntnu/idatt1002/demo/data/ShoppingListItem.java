@@ -92,11 +92,11 @@ public class ShoppingListItem extends Item {
    */
   @Override
   public int getId() {
-    return ShoppingListItem_id;
+    return getShoppingListItem_id();
   }
 
   /**
-   * Returns the id of the item
+   * Returns the id of the item.
    *
    * @return the id of the item
    */
@@ -112,6 +112,10 @@ public class ShoppingListItem extends Item {
   @Override
   public String getIdName() {
     return "shoppinglistitem_id";
+  }
+
+  public int getShoppingListItem_id() {
+    return ShoppingListItem_id;
   }
 
   /**

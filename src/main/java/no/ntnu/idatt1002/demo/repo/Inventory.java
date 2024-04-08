@@ -6,7 +6,8 @@ import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.InventoryItem;
 
 /**
- * This class represents a register for inventory items. Allowing for communication between the database and the user interface.
+ * This class represents a register for inventory items.
+ * Allowing for communication between the database and the user interface.
  */
 public class Inventory {
   private List<InventoryItem> inventoryItems;
@@ -14,6 +15,7 @@ public class Inventory {
 
   /**
    * Constructor for the Inventory class.
+   *
    * @param dao the database access object
    */
   public Inventory(DAO dao) {
@@ -23,6 +25,7 @@ public class Inventory {
 
   /**
    * This method returns the inventory items in the register in the form of lists.
+   *
    * @return the inventory items in the register as lists of strings
    */
   public List<InventoryItem> getInventoryItems() {
@@ -40,16 +43,19 @@ public class Inventory {
 
   /**
    * This method retrieves filtered inventory items by category from the database.
+   *
    * @param category the category to filter by
    */
   public void filterInventoryByCategory(String category) {
     inventoryItems = new ArrayList<>();
-    List<List<String>> inventoryItems = dao.filterFromTable("InventoryItem", "category", category, "item", "item_id");
+    List<List<String>> inventoryItems = dao.filterFromTable(
+        "InventoryItem", "category", category, "item", "item_id");
     packageToInventoryItems(inventoryItems);
   }
 
   /**
    * This method searches for inventory items by name and retrieves them from the database.
+   *
    * @param name the name to search by
    */
   public void searchInventoryByName(String name) {
@@ -60,6 +66,7 @@ public class Inventory {
 
   /**
    * This method packages lists of lists representing inventory items into InventoryItem objects.
+   *
    * @param inventoryItems the list of lists representing inventory items
    */
   private void packageToInventoryItems(List<List<String>> inventoryItems) {
@@ -79,6 +86,7 @@ public class Inventory {
 
   /**
    * This method adds a new inventory item to the database.
+   *
    * @param item_id the id of the item
    * @param quantity the quantity of the item
    * @param unit the unit of the item
@@ -90,6 +98,7 @@ public class Inventory {
 
   /**
    * This method retrieves the index of an inventory item by its id.
+   *
    * @param id the id of the inventory item
    * @return the index of the inventory item
    */
@@ -104,6 +113,7 @@ public class Inventory {
 
   /**
    * This method deletes an inventory item from the database.
+   *
    * @param id the id of the inventory item to delete
    */
   public void deleteInventoryItem(int id) {
@@ -111,16 +121,19 @@ public class Inventory {
     dao.deleteFromDatabase(inventoryItems.get(index));
   }
 
-  /**
+   /**
    * This method updates an inventory item in the database.
+   *
    * @param inventory_id the id of the inventory item
    * @param item_id the id of the item
    * @param quantity the quantity of the item
    * @param unit the unit of the item
    * @param expirationDate the expiration date of the item
    */
-   public void updateInventoryItem(int inventory_id, int item_id, int quantity, String unit, int expirationDate) {
-    InventoryItem inventoryItem = new InventoryItem(inventory_id, item_id, null, null, null, quantity, unit, expirationDate);
+   public void updateInventoryItem(
+       int inventory_id, int item_id, int quantity, String unit, int expirationDate) {
+    InventoryItem inventoryItem = new InventoryItem(
+        inventory_id, item_id, null, null, null, quantity, unit, expirationDate);
     dao.updateDatabase(inventoryItem);
   }
 }

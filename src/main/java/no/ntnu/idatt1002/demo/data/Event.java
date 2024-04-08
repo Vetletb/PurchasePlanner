@@ -8,19 +8,15 @@ import java.util.List;
  */
 public class Event implements Storable {
   private int event_id;
-  private int recipe_id;
+  private final int recipe_id;
   private String name;
-  private int date;
+  private final int date;
   private String category;
   private int cooking_time;
 
-
-
-
-
-
   /**
    * Constructor for the Event class.
+   *
    * @param recipe_id the id of the recipe
    * @param date the date of the event
    */
@@ -31,6 +27,7 @@ public class Event implements Storable {
 
   /**
    * Constructor for the Event class.
+   *
    * @param event_id the id of the event
    * @param recipe_id the id of the recipe
    * @param date the date of the event
@@ -40,7 +37,18 @@ public class Event implements Storable {
     this.event_id = event_id;
   }
 
-  public Event(int event_id, int recipe_id, String name, int date, String category, int cooking_time) {
+  /**
+   * Constructor for the Event class.
+   *
+   * @param event_id the id of the event
+   * @param recipe_id the id of the recipe
+   * @param name the name of the event
+   * @param date the date of the event
+   * @param category the category of the event
+   * @param cooking_time the cooking time of the event
+   */
+  public Event(
+      int event_id, int recipe_id, String name, int date, String category, int cooking_time) {
     this(event_id, recipe_id, date);
     this.name = name;
     this.category = category;
@@ -50,6 +58,7 @@ public class Event implements Storable {
 
   /**
    * Returns the attributes of the event.
+   *
    * @return the attributes of the event
    */
   @Override
@@ -62,6 +71,7 @@ public class Event implements Storable {
 
   /**
    * Returns the attribute names of the event.
+   *
    * @return the attribute names of the event
    */
   @Override
@@ -74,15 +84,17 @@ public class Event implements Storable {
 
   /**
    * Returns the id of the event.
+   *
    * @return the id of the event
    */
   @Override
   public int getId() {
-    return event_id;
+    return getEvent_id();
   }
 
   /**
    * Returns the name of the id.
+   *
    * @return the name of the id
    */
   @Override
@@ -92,6 +104,7 @@ public class Event implements Storable {
 
   /**
    * Getter method for the event id.
+   *
    * @return the event id
    */
   public int getEvent_id() {
@@ -100,6 +113,7 @@ public class Event implements Storable {
 
   /**
    * Getter method for the recipe id of the event.
+   *
    * @return the recipe id of the event
    */
   public int getRecipe_id() {
@@ -108,10 +122,20 @@ public class Event implements Storable {
 
   /**
    * Getter method for the date of the event.
+   *
    * @return the date of the event
    */
   public int getDate() {
     return date;
+  }
+
+  /**
+   * Getter method for the name of the event.
+   *
+   * @return the name of the event
+   */
+  public String getName() {
+    return name;
   }
 
   @Override

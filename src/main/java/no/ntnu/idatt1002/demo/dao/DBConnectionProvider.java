@@ -1,6 +1,11 @@
 package no.ntnu.idatt1002.demo.dao;
 
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * This class provides a connection to the database.
@@ -9,7 +14,8 @@ public class DBConnectionProvider {
   private final String url;
   private static DBConnectionProvider databaseConnectionProvider;
 
-  private static final String DB_PATH = "src/main/resources/no/ntnu/idatt1002/database/database.sqlite";
+  private static final String DB_PATH =
+      "src/main/resources/no/ntnu/idatt1002/database/database.sqlite";
 
   /**
    * Constructor for the DBConnectionProvider class.
@@ -20,6 +26,7 @@ public class DBConnectionProvider {
 
   /**
    * This method returns a connection to the database.
+   *
    * @return a connection to the database
    */
   Connection getConnection() {
@@ -32,6 +39,7 @@ public class DBConnectionProvider {
 
   /**
    * This method returns an instance of the DBConnectionProvider.
+   *
    * @return an instance of the DBConnectionProvider
    */
   public static DBConnectionProvider getInstance() {
@@ -43,6 +51,7 @@ public class DBConnectionProvider {
 
   /**
    * This method closes the connection to the database.
+   *
    * @param connection the connection to the database
    */
   public void closeConnection(Connection connection) {
@@ -55,6 +64,7 @@ public class DBConnectionProvider {
 
   /**
    * This method closes the PreparedStatement.
+   *
    * @param preparedStatement the PreparedStatement
    */
   public void closePreparedStatement(PreparedStatement preparedStatement) {
@@ -69,6 +79,7 @@ public class DBConnectionProvider {
 
   /**
    * This method closes the ResultSet.
+   *
    * @param resultSet the ResultSet
    */
   public void closeResultSet(ResultSet resultSet) {

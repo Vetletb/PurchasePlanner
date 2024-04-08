@@ -1,16 +1,16 @@
 package no.ntnu.idatt1002.demo.repo;
 
-import no.ntnu.idatt1002.demo.dao.DAO;
-import no.ntnu.idatt1002.demo.data.Recipe;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import no.ntnu.idatt1002.demo.dao.DAO;
+import no.ntnu.idatt1002.demo.data.Recipe;
 import no.ntnu.idatt1002.demo.data.RecipeIngredient;
 
 /**
- * This class represents a register for recipes. Allowing for communication between the database and the user interface.
+ * This class represents a register for recipes.
+ * Allowing for communication between the database and the user interface.
  */
 public class RecipeRegister {
 
@@ -19,6 +19,7 @@ public class RecipeRegister {
 
   /**
    * Constructor for the RecipeRegister class.
+   *
    * @param dao the data access object
    */
   public RecipeRegister(DAO dao) {
@@ -28,6 +29,7 @@ public class RecipeRegister {
 
   /**
    * This method returns the recipes in the register in the form of lists.
+   *
    * @return the recipes in the register as lists of strings
    */
   public Map<Integer, List<String>> getRecipes() {
@@ -37,12 +39,16 @@ public class RecipeRegister {
 
   /**
    * This method packages the recipes into a list of recipes.
+   *
    * @param recipes the recipes to package
    */
   private void packagetoRecipe(List<List<String>> recipes) {
     for (List<String> recipe : recipes) {
-      Recipe newRecipe = new Recipe(Integer.parseInt(recipe.get(0)), recipe.get(1), Integer.parseInt(recipe.get(2)), recipe.get(3));
-      List<List<String>> ingredients = dao.filterFromTable("RecipeIngredient", "recipe_id", Integer.toString(newRecipe.getId()), "Item", "item_id");
+      Recipe newRecipe = new Recipe(
+          Integer.parseInt(recipe.get(0)), recipe.get(1),
+          Integer.parseInt(recipe.get(2)), recipe.get(3));
+      List<List<String>> ingredients = dao.filterFromTable(
+          "RecipeIngredient", "recipe_id", Integer.toString(newRecipe.getId()), "Item", "item_id");
       for (List<String> ingredient : ingredients) {
         newRecipe.addIngredient(Integer.parseInt(ingredient.get(0)),
             Integer.parseInt(ingredient.get(1)), ingredient.get(6), ingredient.get(7),
@@ -55,6 +61,7 @@ public class RecipeRegister {
 
   /**
    * This method retrieves filtered recipes by category from the database.
+   *
    * @param category the category to filter by
    */
   public void filterRecipesByCategory(String category) {
@@ -65,6 +72,7 @@ public class RecipeRegister {
 
   /**
    * This method searches for recipes by name and retrieves them from the database.
+   *
    * @param name the name to search by
    */
   public void searchRecipesByName(String name) {
@@ -84,6 +92,7 @@ public class RecipeRegister {
 
   /**
    * This method adds a recipe to the database.
+   *
    * @param name the name of the recipe
    * @param category the category of the recipe
    * @param cooking_time the cooking time of the recipe
@@ -94,6 +103,7 @@ public class RecipeRegister {
 
   /**
    * This method retrieves the index of a recipe from the register by id.
+   *
    * @param id the id of the recipe
    * @return the index of the recipe
    */
@@ -108,6 +118,7 @@ public class RecipeRegister {
 
   /**
    * This method deletes a recipe from the database.
+   *
    * @param id the id of the recipe to delete
    */
   public void deleteRecipe(int id) {
@@ -122,19 +133,25 @@ public class RecipeRegister {
 
   /**
    * This method updates a recipe in the database.
+   *
    * @param name the name of the recipe
    * @param cooking_time the cooking time of the recipe
    * @param category the category of the recipe
    */
-  public void updateRecipe(int recipe_id, String name, int cooking_time, String category ) {
+  public void updateRecipe(int recipe_id, String name, int cooking_time, String category) {
     Recipe recipe = new Recipe(recipe_id, name, cooking_time, category);
     dao.updateDatabase(recipe);
   }
 
-  public void addIngredient(int item_id,int quantity, String unit, int recipe_id) {
+  public void addIngredient(int item_id, int quantity, String unit, int recipe_id) {
     dao.addToDatabase(new RecipeIngredient(item_id, null, null, null, quantity, unit, recipe_id));
   }
 
+  /**
+   * This method deletes an ingredient from the database.
+   *
+   * @param id the id of the ingredient to delete
+   **/
   public void deleteIngredient(int id) {
     for (Recipe recipe : recipes) {
       if (recipe.getIngredientById(id) != null) {
@@ -144,6 +161,14 @@ public class RecipeRegister {
     }
   }
 
+  /**
+   * This method updates an ingredient in the database.
+   *
+   * @param recipeIngredient_id the id of the recipe ingredient
+   * @param item_id the id of the item
+   * @param quantity the quantity of the item
+   * @param unit the unit of the item
+   */
   public void updateIngredient(int recipeIngredient_id, int item_id, int quantity, String unit) {
     int recipe_id = -1;
     for (Recipe recipe : recipes) {
@@ -162,6 +187,7 @@ public class RecipeRegister {
 
   /**
    * This method returns a string representation of the recipe register.
+   *
    * @return a string representation of the recipe register
    */
   public String toString() {

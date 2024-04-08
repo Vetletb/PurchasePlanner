@@ -8,26 +8,28 @@ import java.util.List;
  */
 public class Recipe implements Storable {
   private int recipe_id;
-  private String name;
-  private int cooking_time;
-  private String category;
-  private List<RecipeIngredient> ingredients;
+  private final String name;
+  private final int cooking_time;
+  private final String category;
+  private final List<RecipeIngredient> ingredients;
 
   /**
    * Constructor for the Recipe class.
+   *
    * @param name the name of the recipe
    * @param category the category of the recipe
    * @param cooking_time the cooking time of the recipe
    */
   public Recipe(String name, int cooking_time, String category) {
-      this.name = name;
-      this.cooking_time = cooking_time;
-      this.category = category;
-      this.ingredients = new ArrayList<>();
+    this.name = name;
+    this.cooking_time = cooking_time;
+    this.category = category;
+    this.ingredients = new ArrayList<>();
   }
 
   /**
    * Constructor for the Recipe class.
+   *
    * @param recipe_id
    * @param name
    * @param cooking_time
@@ -35,88 +37,97 @@ public class Recipe implements Storable {
    *
    */
   public Recipe(int recipe_id, String name, int cooking_time, String category) {
-      this(name, cooking_time, category);
-      this.recipe_id = recipe_id;
+    this(name, cooking_time, category);
+    this.recipe_id = recipe_id;
   }
 
   /**
    * Returns the attributes of the recipe.
+   *
    * @return the attributes of the recipe
    */
   @Override
   public List<String> getAttributes() {
-      List<String> attributes = new ArrayList<>();
-      attributes.add(name);
-      attributes.add(Integer.toString(cooking_time));
-      attributes.add(category);
-      return attributes;
+    List<String> attributes = new ArrayList<>();
+    attributes.add(name);
+    attributes.add(Integer.toString(cooking_time));
+    attributes.add(category);
+    return attributes;
   }
 
   /**
    * Returns the attribute names of the recipe.
+   *
    * @return the attribute names of the recipe
    */
   @Override
   public List<String> getAttributeNames() {
-      List<String> attributes = new ArrayList<>();
-      attributes.add("name");
-      attributes.add("cooking_time");
-      attributes.add("category");
-      return attributes;
+    List<String> attributes = new ArrayList<>();
+    attributes.add("name");
+    attributes.add("cooking_time");
+    attributes.add("category");
+    return attributes;
   }
 
   /**
    * Returns the id of the recipe.
+   *
    * @return the id of the recipe
    */
   @Override
   public int getId() {
-      return recipe_id;
+    return getRecipe_id();
   }
 
   /**
    * Returns the name of the id.
+   *
    * @return the name of the id
    */
   @Override
   public String getIdName() {
-      return "recipe_id";
+    return "recipe_id";
   }
 
   /**
    * Returns the recipe id.
+   *
    * @return the recipe id
    */
   public int getRecipe_id() {
-      return recipe_id;
+    return recipe_id;
   }
 
   /**
    * Returns the name of the recipe.
+   *
    * @return the name of the recipe
    */
   public String getName() {
-      return name;
+    return name;
   }
 
   /**
    * Returns the category of the recipe.
+   *
    * @return the category of the recipe
    */
   public String getCategory() {
-      return category;
+    return category;
   }
 
   /**
    * Returns the cooking time of the recipe.
+   *
    * @return the cooking time of the recipe
    */
   public int getCooking_time() {
-      return cooking_time;
+    return cooking_time;
   }
 
   /**
    * Adds an ingredient to the recipe.
+   *
    * @param recipeIngredient_id the id of the recipe ingredient
    * @param item_id the id of the item
    * @param name the name of the item
@@ -126,12 +137,17 @@ public class Recipe implements Storable {
    * @param unit the unit of the item
    * @param recipe_id the id of the recipe
    */
-  public void addIngredient(int recipeIngredient_id, int item_id, String name, String category, String allergy, int quantity, String unit, int recipe_id) {
-    ingredients.add(new RecipeIngredient(recipeIngredient_id, item_id, name, category, allergy, quantity, unit, recipe_id));
+  public void addIngredient(
+      int recipeIngredient_id, int item_id, String name, String category,
+      String allergy, int quantity, String unit, int recipe_id) {
+    ingredients.add(
+        new RecipeIngredient(
+            recipeIngredient_id, item_id, name, category, allergy, quantity, unit, recipe_id));
   }
 
   /**
    * Returns the ingredients of the recipe.
+   *
    * @return the ingredients of the recipe
    */
   public List<RecipeIngredient> getIngredients() {
@@ -140,6 +156,7 @@ public class Recipe implements Storable {
 
   /**
    * Returns the ingredient with the given id.
+   *
    * @param id the id of the ingredient
    * @return the ingredient with the given id
    */
@@ -154,15 +171,16 @@ public class Recipe implements Storable {
 
   /**
    * Returns the recipe as a string representation.
- * @return the string representation of the recipe
+   *
+   * @return the string representation of the recipe
    */
   @Override
   public String toString() {
     return
-        "Recipe ID: " + recipe_id +
-        ", Name: " + name +
-        ", Category: " + category +
-        ", Cooking Time: " + cooking_time;
+      "Recipe ID: " + recipe_id
+      + ", Name: " + name
+      + ", Category: " + category
+      + ", Cooking Time: " + cooking_time;
   }
 }
 
