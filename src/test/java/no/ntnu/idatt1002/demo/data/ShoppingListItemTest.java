@@ -76,13 +76,13 @@ class ShoppingListItemTest {
   @DisplayName("Negative tests")
   class NegativeTests {
     @Test
-    @DisplayName("Test constructor with null name")
+    @DisplayName("Test constructor with Empty name")
     public void testConstructorEmptyName() {
       assertThrows(IllegalArgumentException.class, () -> new ShoppingListItem(14, "", "dairy", "lactose", 2, "liters"));
     }
 
     @Test
-    @DisplayName("Test constructor with null category")
+    @DisplayName("Test constructor with Blank category")
     public void testConstructorBlankCategory() {
       assertThrows(IllegalArgumentException.class, () -> new ShoppingListItem(14, "milk", "  ", "lactose", 2, "liters"));
     }
