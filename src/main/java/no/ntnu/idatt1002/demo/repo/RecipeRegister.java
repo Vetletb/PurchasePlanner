@@ -32,9 +32,9 @@ public class RecipeRegister {
    *
    * @return the recipes in the register as lists of strings
    */
-  public Map<Integer, List<String>> getRecipes() {
+  public Map<Integer, Recipe> getRecipes() {
     return recipes.stream()
-        .collect(Collectors.toMap(Recipe::getId, Recipe::getAttributes));
+        .collect(Collectors.toMap(Recipe::getId, recipe -> recipe));
   }
 
   /**
@@ -71,7 +71,8 @@ public class RecipeRegister {
   }
 
   /**
-   * This method searches for recipes by name and retrieves them from the database.
+   * This method searches for recipes by name and retrieves them from the
+   * database.
    *
    * @param name the name to search by
    */
@@ -93,8 +94,8 @@ public class RecipeRegister {
   /**
    * This method adds a recipe to the database.
    *
-   * @param name the name of the recipe
-   * @param category the category of the recipe
+   * @param name         the name of the recipe
+   * @param category     the category of the recipe
    * @param cooking_time the cooking time of the recipe
    */
   public void addRecipe(String name, String category, int cooking_time) {
@@ -133,10 +134,11 @@ public class RecipeRegister {
 
   /**
    * This method updates a recipe in the database.
+   * 
    *
-   * @param name the name of the recipe
+   * @param name         the name of the recipe
    * @param cooking_time the cooking time of the recipe
-   * @param category the category of the recipe
+   * @param category     the category of the recipe
    */
   public void updateRecipe(int recipe_id, String name, int cooking_time, String category) {
     Recipe recipe = new Recipe(recipe_id, name, cooking_time, category);
@@ -144,7 +146,7 @@ public class RecipeRegister {
   }
 
   public void addIngredient(int item_id, int quantity, String unit, int recipe_id) {
-    dao.addToDatabase(new RecipeIngredient(item_id, null, null, null, quantity, unit, recipe_id));
+    dao.addToDatabase(new RecipeIngredient(item_id, "d", "d", "d", quantity, unit, recipe_id));
   }
 
   /**
@@ -165,9 +167,9 @@ public class RecipeRegister {
    * This method updates an ingredient in the database.
    *
    * @param recipeIngredient_id the id of the recipe ingredient
-   * @param item_id the id of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
+   * @param item_id             the id of the item
+   * @param quantity            the quantity of the item
+   * @param unit                the unit of the item
    */
   public void updateIngredient(int recipeIngredient_id, int item_id, int quantity, String unit) {
     int recipe_id = -1;
@@ -178,15 +180,16 @@ public class RecipeRegister {
       }
     }
     if (recipe_id > 0) {
-      RecipeIngredient recipeIngredient =
-          new RecipeIngredient(recipeIngredient_id, item_id, null, null, null, quantity, unit,
-              recipe_id);
+      RecipeIngredient recipeIngredient = new RecipeIngredient(recipeIngredient_id, item_id, "a", "a", "a", quantity,
+          unit,
+          recipe_id);
       dao.updateDatabase(recipeIngredient);
     }
   }
 
   /**
    * This method returns a string representation of the recipe register.
+   * 
    *
    * @return a string representation of the recipe register
    */

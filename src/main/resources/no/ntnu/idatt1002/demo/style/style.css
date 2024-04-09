@@ -201,6 +201,22 @@ Red button
     -fx-cursor: text;
 }
 
+.text-field-error {
+    -fx-border-color: #df2c2c;
+}
+
+.text-field-error:hover {
+    -fx-border-color: #df2c2c;
+    -fx-cursor: text;
+}
+
+
+.text-field-error:focused {
+    -fx-border-color: #df2c2c;
+    -fx-cursor: text;
+}
+
+
 /*
 #########################################
                 Searchbar
