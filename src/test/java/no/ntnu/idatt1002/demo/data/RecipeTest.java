@@ -1,4 +1,4 @@
-package no.ntnu.idatt1002.demo;
+package no.ntnu.idatt1002.demo.data;
 
 import no.ntnu.idatt1002.demo.data.Recipe;
 import no.ntnu.idatt1002.demo.data.RecipeIngredient;

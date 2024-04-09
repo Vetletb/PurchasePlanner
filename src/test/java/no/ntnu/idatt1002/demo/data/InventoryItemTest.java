@@ -18,7 +18,7 @@ class InventoryItemTest {
 
 @BeforeEach
   public void setUp() {
-    inventoryItem = new InventoryItem(2, 14, "milk", "dairy", "lactose", 2, "liters", 150524);
+    inventoryItem = new InventoryItem(2, 14, "milk", "dairy", "lactose", 2, "liters", 20240524);
   }
 
   @Nested
@@ -26,7 +26,7 @@ class InventoryItemTest {
   class PositiveTests {
     @Test
     public void testGetAttributes() {
-      List<String> expected = List.of("14", "2", "liters", "150524");
+      List<String> expected = List.of("14", "2", "liters", "20240524");
       assertEquals(expected, inventoryItem.getAttributes());
     }
 
@@ -76,7 +76,7 @@ class InventoryItemTest {
     @Test
     @DisplayName("Test getExpirationDate")
     public void testGetExpirationDate() {
-      assertEquals(150524, inventoryItem.getExpirationDate());
+      assertEquals(20240524, inventoryItem.getExpirationDate());
     }
   }
 
