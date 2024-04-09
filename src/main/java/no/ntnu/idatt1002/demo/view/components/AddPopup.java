@@ -1,5 +1,7 @@
 package no.ntnu.idatt1002.demo.view.components;
 
+import java.util.ArrayList;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
@@ -10,6 +12,7 @@ import javafx.stage.Popup;
 import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
+import no.ntnu.idatt1002.demo.data.Storable;
 import no.ntnu.idatt1002.demo.repo.ItemRegister;
 
 /**
@@ -17,16 +20,15 @@ import no.ntnu.idatt1002.demo.repo.ItemRegister;
  * TODO: Make this class be able to add recipes. Maybe make a superclas?
  */
 public class AddPopup extends Popup {
-  private InputField nameField;
-  private InputField categoryField;
-  private InputField allergyField;
   private OnAdd onAdd;
+  private ArrayList<Field> fields = new ArrayList<>();
+  private String type;
 
   /**
    * A callback for when the form is submitted.
    */
   public interface OnAdd {
-    void cb(String name, String category, String allergies);
+    void cb(Object[] values);
   }
 
   /**
@@ -35,7 +37,11 @@ public class AddPopup extends Popup {
   public AddPopup(String type) {
     super();
     this.setAutoHide(true); // close the popup automatically
+    this.type = type;
+    render();
+  }
 
+  private void render() {
     // Create a container for the popup
     StackPane container = new StackPane();
 
@@ -58,11 +64,6 @@ public class AddPopup extends Popup {
     Text title = new Text("Adding " + type);
     title.getStyleClass().addAll("popup-title", "centered");
 
-    // Add the input fields to the VBox
-    nameField = new InputField("Name");
-    categoryField = new InputField("Category");
-    allergyField = new InputField("Allergies");
-
     // Add a button to submit the form
     PrimaryButton submitButton = new PrimaryButton("Add");
     submitButton.setOnAction(e -> {
@@ -70,19 +71,33 @@ public class AddPopup extends Popup {
     });
     submitButton.setPrefWidth(200);
     submitButton.setPrefHeight(50);
+    background.getChildren().add(title);
+
+    for (Field<?> field : fields) {
+      background.getChildren().add(field.getRenderedField());
+    }
 
     // Add the content to the VBox
-    background.getChildren().addAll(title, nameField, categoryField, allergyField, submitButton);
+    background.getChildren().add(submitButton);
+  }
+
+  /**
+   * Adds a new field to the popup.
+   *
+   * @param <T>   the type of the field
+   * @param field the field to add
+   * @return the field
+   */
+  public <T> Field<T> addField(Field<T> field) {
+    fields.add(field);
+    render();
+    return field;
   }
 
   /**
    * Adds an item to the inventory.
    */
   private void addItem() {
-    Logger.debug("Adding item to inventory");
-    Logger.debug("Name: " + nameField.getText());
-    Logger.debug("Category: " + categoryField.getText());
-    Logger.debug("Allergies: " + allergyField.getText());
     // TODO: check fields!!
 
     if (onAdd == null) {
@@ -90,10 +105,16 @@ public class AddPopup extends Popup {
       return;
     }
 
-    onAdd.cb(nameField.getText(), categoryField.getText(), allergyField.getText());
+    ArrayList<Object> values = new ArrayList<>();
+    for (Field<?> field : fields) {
+      values.add(field.getValue());
+    }
+
+    onAdd.cb(values.toArray());
 
     // If no errors, close the popup
     this.hide();
+
   }
 
   /**
