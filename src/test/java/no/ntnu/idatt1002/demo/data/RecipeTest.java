@@ -36,7 +36,8 @@ public class RecipeTest {
   class PositiveRecipeTest {
 
     /**
-     * This method tests the getAttributes method in the Recipe class. The result is expected to be true.
+     * This method tests the getAttributes method in the Recipe class. The result is
+     * expected to be true.
      */
     @Test
     void testGetAttributesPositive() {
@@ -45,7 +46,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the getAttributeNames method in the Recipe class. The result is expected to be true.
+     * This method tests the getAttributeNames method in the Recipe class. The
+     * result is expected to be true.
      */
     @Test
     void testGetAttributeNamesPositive() {
@@ -54,7 +56,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the getId method in the Recipe class. The result is expected to be true.
+     * This method tests the getId method in the Recipe class. The result is
+     * expected to be true.
      */
     @Test
     void testGetIdPositive() {
@@ -63,7 +66,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the getIdName method in the Recipe class. The result is expected to be true.
+     * This method tests the getIdName method in the Recipe class. The result is
+     * expected to be true.
      */
     @Test
     void testGetIdNamePositive() {
@@ -72,7 +76,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the getRecipe_id method in the Recipe class. The result is expected to be true.
+     * This method tests the getRecipe_id method in the Recipe class. The result is
+     * expected to be true.
      */
     @Test
     void testGetRecipe_idPositive() {
@@ -81,7 +86,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the getName method in the Recipe class. The result is expected to be true.
+     * This method tests the getName method in the Recipe class. The result is
+     * expected to be true.
      */
     @Test
     void testGetNamePositive() {
@@ -90,7 +96,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the getCategory method in the Recipe class. The result is expected to be true.
+     * This method tests the getCategory method in the Recipe class. The result is
+     * expected to be true.
      */
     @Test
     void testGetCategoryPositive() {
@@ -99,7 +106,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the getCooking_time method in the Recipe class. The result is expected to be true.
+     * This method tests the getCooking_time method in the Recipe class. The result
+     * is expected to be true.
      */
     @Test
     void testGetCooking_timePositive() {
@@ -108,7 +116,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests the addIngredient method in the Recipe class. The result is expected to be true.
+     * This method tests the addIngredient method in the Recipe class. The result is
+     * expected to be true.
      */
     @Test
     void testAddIngredientPositive() {
@@ -128,17 +137,18 @@ public class RecipeTest {
       assertNotNull(addedIngredient);
 
       assertEquals(recipeIngredient_id, addedIngredient.getId());
-      assertEquals(item_id, addedIngredient.getItem_id());
+      assertEquals(item_id, addedIngredient.getItemId());
       assertEquals(name, addedIngredient.getName());
       assertEquals(category, addedIngredient.getCategory());
       assertEquals(allergy, addedIngredient.getAllergy());
       assertEquals(quantity, addedIngredient.getQuantity());
       assertEquals(unit, addedIngredient.getUnit());
-      //assertEquals(recipe_id, addedIngredient.getRecipe_id());
+      // assertEquals(recipe_id, addedIngredient.getRecipe_id());
     }
 
     /**
-     * This method tests the getIngredients method in the Recipe class. The result is expected to be true.
+     * This method tests the getIngredients method in the Recipe class. The result
+     * is expected to be true.
      */
     @Test
     void testGetIngredientsPositive() {
@@ -148,17 +158,18 @@ public class RecipeTest {
 
       RecipeIngredient ingredient = ingredients.get(0);
       assertEquals(1, ingredient.getId());
-      assertEquals(2, ingredient.getItem_id());
+      assertEquals(2, ingredient.getItemId());
       assertEquals("carrot", ingredient.getName());
       assertEquals("vegetable", ingredient.getCategory());
       assertEquals("", ingredient.getAllergy());
       assertEquals(1, ingredient.getQuantity());
       assertEquals("kg", ingredient.getUnit());
-      //assertEquals(3, ingredient.getRecipe_id());
+      // assertEquals(3, ingredient.getRecipe_id());
     }
 
     /**
-     * This method tests the getIngredientById method in the Recipe class. The result is expected to be true.
+     * This method tests the getIngredientById method in the Recipe class. The
+     * result is expected to be true.
      */
     @Test
     void testGetIngredientByIdPositive() {
@@ -176,17 +187,18 @@ public class RecipeTest {
       assertNotNull(addedIngredient);
 
       assertEquals(recipeIngredient_id, addedIngredient.getId());
-      assertEquals(item_id, addedIngredient.getItem_id());
+      assertEquals(item_id, addedIngredient.getItemId());
       assertEquals(name, addedIngredient.getName());
       assertEquals(category, addedIngredient.getCategory());
       assertEquals(allergy, addedIngredient.getAllergy());
       assertEquals(quantity, addedIngredient.getQuantity());
       assertEquals(unit, addedIngredient.getUnit());
-      //assertEquals(recipe_id, addedIngredient.getRecipe_id());
+      // assertEquals(recipe_id, addedIngredient.getRecipe_id());
     }
 
     /**
-     * This method tests the toString method in the Recipe class. The result is expected to be true.
+     * This method tests the toString method in the Recipe class. The result is
+     * expected to be true.
      */
     @Test
     void testToStringPositive() {
@@ -202,7 +214,8 @@ public class RecipeTest {
   @DisplayName("Negative tests for the Recipe class.")
   class NegativeRecipeTest {
     /**
-     * This method tests that an IllegalArgumentException is thrown when the name is null or empty.
+     * This method tests that an IllegalArgumentException is thrown when the name is
+     * null or empty.
      */
     @Test
     void testVerifyNameNotNullException() {
@@ -215,7 +228,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests that an IllegalArgumentException is thrown when the category is null or empty.
+     * This method tests that an IllegalArgumentException is thrown when the
+     * category is null or empty.
      */
     @Test
     void testVerifyCategoryNotNullException() {
@@ -228,7 +242,8 @@ public class RecipeTest {
     }
 
     /**
-     * This method tests that an IllegalArgumentException is thrown when the cooking_time is a negative number.
+     * This method tests that an IllegalArgumentException is thrown when the
+     * cooking_time is a negative number.
      */
     @Test
     void testVerifyCooking_timeIntegerException() {
@@ -236,7 +251,8 @@ public class RecipeTest {
         new Recipe(1, "pasta", -1, "Italian");
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("The input for the parameter 'cooking_time' must be a positive number or minus one", e.getMessage());
+        assertEquals("The input for the parameter 'cooking_time' must be a positive number or minus one",
+            e.getMessage());
       }
     }
   }

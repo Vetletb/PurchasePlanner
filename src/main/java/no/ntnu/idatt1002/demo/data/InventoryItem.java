@@ -17,11 +17,11 @@ public class InventoryItem extends ShoppingListItem {
   /**
    * Constructor for the InventoryItem class.
    *
-   * @param name the name of the item
-   * @param category the category of the item
-   * @param allergy the allergy of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
+   * @param name           the name of the item
+   * @param category       the category of the item
+   * @param allergy        the allergy of the item
+   * @param quantity       the quantity of the item
+   * @param unit           the unit of the item
    * @param expirationDate the expiration date of the item
    */
   public InventoryItem(
@@ -35,13 +35,13 @@ public class InventoryItem extends ShoppingListItem {
   /**
    * Constructor for the InventoryItem class.
    *
-   * @param inventory_id the id of the inventory item
-   * @param item_id the id of the item
-   * @param name the name of the item
-   * @param category the category of the item
-   * @param allergy the allergy of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
+   * @param inventory_id   the id of the inventory item
+   * @param item_id        the id of the item
+   * @param name           the name of the item
+   * @param category       the category of the item
+   * @param allergy        the allergy of the item
+   * @param quantity       the quantity of the item
+   * @param unit           the unit of the item
    * @param expirationDate the expiration date of the item
    */
   public InventoryItem(
@@ -59,7 +59,7 @@ public class InventoryItem extends ShoppingListItem {
   @Override
   public List<String> getAttributes() {
     List<String> attributes = new ArrayList<>();
-    attributes.add(Integer.toString(super.getItem_id()));
+    attributes.add(Integer.toString(super.getItemId()));
     attributes.add(Integer.toString(super.getQuantity()));
     attributes.add(super.getUnit());
     attributes.add(Integer.toString(expirationDate));
