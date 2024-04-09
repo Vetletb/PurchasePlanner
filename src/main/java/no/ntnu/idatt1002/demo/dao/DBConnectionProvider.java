@@ -30,7 +30,7 @@ public class DBConnectionProvider {
    *
    * @param dbPath the path to the database
    */
-  public void setDbPath(String dbPath) {
+  public static void setDbPath(String dbPath) {
     DB_PATH = dbPath;
   }
 
