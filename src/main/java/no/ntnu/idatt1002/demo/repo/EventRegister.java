@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.Event;
 
@@ -27,13 +29,12 @@ public class EventRegister {
   }
 
   /**
-   * This method returns the events in the register in the form of lists.
+   * This method returns the events in the register.
    *
-   * @return the events in the register as lists of strings
+   * @return the events in the register as a Map
    */
-  public Map<Integer, List<String>> getEvents() {
-    return events.stream()
-        .collect(Collectors.toMap(Event::getId, Event::getAttributes));
+  public Map<Integer, Event> getEvents() {
+    return events.stream().collect(Collectors.toMap(Event::getId, event -> event));
   }
 
   /**
@@ -100,8 +101,7 @@ public class EventRegister {
    */
   public void getEventsByDate(int date) {
     events = new ArrayList<>();
-    List<List<String>> events = dao.filterFromTable(
-        "Event", "date", Integer.toString(date), "recipe", "recipe_id");
+    List<List<String>> events = dao.filterFromTable("Recipe", "date", Integer.toString(date), "Event", "recipe_id");
     packageToEvent(events);
   }
 
@@ -113,6 +113,7 @@ public class EventRegister {
   private void packageToEvent(List<List<String>> eventList) {
     List<Event> newEvents = new ArrayList<>();
     for (List<String> event : eventList) {
+      Logger.warning(event.toString());
       newEvents.add(new Event(
           Integer.parseInt(event.get(4)),
           Integer.parseInt(event.get(5)),
