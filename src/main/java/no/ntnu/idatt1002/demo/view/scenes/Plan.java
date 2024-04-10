@@ -11,9 +11,7 @@ import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.Event;
 import no.ntnu.idatt1002.demo.repo.EventRegister;
-import no.ntnu.idatt1002.demo.view.components.EventPane;
-import no.ntnu.idatt1002.demo.view.components.Icon;
-import no.ntnu.idatt1002.demo.view.components.PrimaryButton;
+import no.ntnu.idatt1002.demo.view.components.*;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -29,14 +27,14 @@ public class Plan extends VBox {
 
   private VBox dayContainer;
   private HBox labelContainer;
-  private HBox eventContainer;
+  private VBox eventContainer;
 
 
   public Plan() {
     super();
     contentContainer = new HBox();
     buttonContainer = new HBox();
-    addButton = new PrimaryButton(PrimaryButton.Type.PRIMARY, new Icon("plus").setFillColor(Color.BLACK));
+    addButton = new PrimaryButton(new Icon("plus").setFillColor(Color.BLACK));
     buttonContainer.getChildren().add(addButton);
     loadPlaner();
 
@@ -45,11 +43,13 @@ public class Plan extends VBox {
 
     // CSS styling
 //    buttonContainer. = HBox.setHgrow(buttonContainer, Priority.ALWAYS); TODO: Fix this
-    addButton.getStyleClass().add("centered");
+    buttonContainer.getStyleClass().add("event-add-button-container");
+//    addButton.getStyleClass().add("event-add-button");
     contentContainer.getStyleClass().add("planer-content-container");
   }
 
   public void loadPlaner() {
+    contentContainer.getChildren().clear();
     LocalDate nowDate = LocalDate.now();
 
     EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
@@ -57,7 +57,7 @@ public class Plan extends VBox {
     for (int i = 0; i < 7; i++) {
       dayContainer = new VBox();
       labelContainer = new HBox();
-      eventContainer = new HBox();
+      eventContainer = new VBox();
 
       LocalDate date = nowDate.plusDays(i);
       Label dayLabel = new Label(date.getDayOfWeek().toString().substring(0, 3)
@@ -80,7 +80,14 @@ public class Plan extends VBox {
       Map<Integer, Event> events = eventRegister.getEvents();
 
       events.forEach((id, event) -> {
-        eventContainer.getChildren().add(new EventPane(id, event.getName()));
+        EventPane eventPane = new EventPane(id, event.getName());
+        eventContainer.getChildren().add(eventPane);
+        eventPane.setOnMouseClicked(v -> {
+          EventPopup eventPopup = new EventPopup(event);
+          eventPopup.setOnSave(this::updateEvent);
+          eventPopup.setOnDelete(this::deleteEvent);
+          eventPopup.show(this.getScene().getWindow());
+        });
       });
 
       dayContainer.getChildren().add(labelContainer);
@@ -92,6 +99,22 @@ public class Plan extends VBox {
       dayContainer.getStyleClass().add("day-container");
       labelContainer.getStyleClass().add("label-container");
     }
+  }
+
+  private void updateEvent(int event_id, int recipe_id, int date) {
+    EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
+    eventRegister.getAllEvents();
+    eventRegister.updateEvent(event_id, recipe_id, date);
+    eventRegister.getAllEvents();
+    loadPlaner();
+  }
+
+  private void deleteEvent(int event_id) {
+    EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
+    eventRegister.getAllEvents();
+    eventRegister.deleteEvent(event_id);
+    eventRegister.getAllEvents();
+    loadPlaner();
   }
 
 }
