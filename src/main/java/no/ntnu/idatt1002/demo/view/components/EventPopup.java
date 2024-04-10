@@ -106,7 +106,9 @@ public class EventPopup extends Popup {
     submitButton.setButtonType(PrimaryButton.Type.SECONDARY);
     submitButton.setOnAction(e -> {
       if (onSave != null) {
-        Logger.warning("Event_id: " + event.getId() + " Recipe_id: " + recipeField.getValue()[0].toString() + " Date: " + dateField.getValue()[0].toString());
+        Logger.warning("Event_id: " + event.getId());
+        Logger.warning(recipeField.getValue()[0].getClass().getName());
+        Logger.warning(dateField.getValue()[0].getClass().getName());
 //        onSave.cb(
 //                event.getId(),
 //                recipeField.getValue()[0],
