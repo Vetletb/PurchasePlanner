@@ -38,6 +38,15 @@ public class EventRegister {
   }
 
   /**
+   * This method returns the events in the register as a list.
+   *
+   * @return the events in the register as a list
+   */
+  public List<Event> getEventsAsList() {
+    return events;
+  }
+
+  /**
    * This method retrieves all events from the database.
    */
   public void getAllEvents() {
