@@ -59,7 +59,8 @@ public class Plan extends VBox {
 
     EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
 
-    for (int i = 0; i < 7; i++) {
+    int dayOfWeekAsInt = nowDate.getDayOfWeek().getValue() - 1;
+    for (int i = - dayOfWeekAsInt; i < 7 - dayOfWeekAsInt; i++) {
       dayContainer = new VBox();
       labelContainer = new HBox();
       eventContainer = new VBox();
@@ -115,8 +116,11 @@ public class Plan extends VBox {
     addPopup.addField(Field.ofMap("Recipe", recipeRegister.getRecipes()));
 
     Map<Integer, Date> dates = new HashMap<>();
-    for (int i = 0; i < 7; i++) {
-      LocalDate date = LocalDate.now().plusDays(i);
+
+    LocalDate nowDate = LocalDate.now();
+    int dayOfWeekAsInt = nowDate.getDayOfWeek().getValue() - 1;
+    for (int i = - dayOfWeekAsInt; i < 7 - dayOfWeekAsInt; i++) {
+      LocalDate date = nowDate.plusDays(i);
       String dateStr = Integer.toString(date.getYear() - 2000)
               + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
               + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth());
