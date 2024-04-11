@@ -489,7 +489,7 @@ Red button
 
 .event-container {
     -fx-padding: 10px;
-    -fx-spacing: 0px;
+    -fx-spacing: 10px;
     -fx-alignment: center;
 }
 
@@ -500,11 +500,6 @@ Red button
     -fx-min-width: 180px;
     -fx-min-height: 600px;
     /*-fx-max-height: 600px;*/
-}
-
-.planer-content-container {
-    -fx-border-color: blue;
-    -fx-alignment: center;
 }
 
 .event-pane {
@@ -527,8 +522,8 @@ Red button
 }
 
 .event-add-button {
-    -fx-alignment: center;
+    /*-fx-alignment: center;*/
+    -fx-min-width: 100px;
     -fx-background-color: -fx-primary-color;
     -fx-min-height: 30px;
-    -fx-min-width: 100px;
 }

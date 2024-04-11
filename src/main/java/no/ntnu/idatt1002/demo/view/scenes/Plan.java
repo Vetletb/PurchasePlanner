@@ -39,6 +39,7 @@ public class Plan extends VBox {
     contentContainer = new HBox();
     buttonContainer = new HBox();
     addButton = new PrimaryButton(new Icon("plus").setFillColor(Color.BLACK));
+//    addButton.getStyleClass().add("event-add-button");
     addButton.setOnAction(e -> addEvent());
     buttonContainer.getChildren().add(addButton);
     loadPlaner();
@@ -50,7 +51,7 @@ public class Plan extends VBox {
 //    buttonContainer. = HBox.setHgrow(buttonContainer, Priority.ALWAYS); TODO: Fix this
     buttonContainer.getStyleClass().add("event-add-button-container");
 //    addButton.getStyleClass().add("event-add-button");
-    contentContainer.getStyleClass().add("planer-content-container");
+    contentContainer.getStyleClass().add("centered");
   }
 
   public void loadPlaner() {
