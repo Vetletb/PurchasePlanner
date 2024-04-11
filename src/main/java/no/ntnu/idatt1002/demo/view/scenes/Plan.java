@@ -9,11 +9,15 @@ import javafx.scene.text.Text;
 import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
+import no.ntnu.idatt1002.demo.data.Date;
 import no.ntnu.idatt1002.demo.data.Event;
+import no.ntnu.idatt1002.demo.data.Recipe;
 import no.ntnu.idatt1002.demo.repo.EventRegister;
+import no.ntnu.idatt1002.demo.repo.RecipeRegister;
 import no.ntnu.idatt1002.demo.view.components.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,6 +39,7 @@ public class Plan extends VBox {
     contentContainer = new HBox();
     buttonContainer = new HBox();
     addButton = new PrimaryButton(new Icon("plus").setFillColor(Color.BLACK));
+    addButton.setOnAction(e -> addEvent());
     buttonContainer.getChildren().add(addButton);
     loadPlaner();
 
@@ -101,9 +106,63 @@ public class Plan extends VBox {
     }
   }
 
-  private void updateEvent(int event_id, int recipe_id, int date) {
+  private void addEvent() {
+    AddPopup addPopup = new AddPopup("Event");
+    addPopup.show(this.getScene().getWindow());
+
+    RecipeRegister recipeRegister = new RecipeRegister(new DAO(new DBConnectionProvider()));
+    recipeRegister.getAllRecipes();
+    addPopup.addField(Field.ofMap("Recipe", recipeRegister.getRecipes()));
+
+    Map<Integer, Date> dates = new HashMap<>();
+    for (int i = 0; i < 7; i++) {
+      LocalDate date = LocalDate.now().plusDays(i);
+      String dateStr = Integer.toString(date.getYear() - 2000)
+              + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
+              + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth());
+      dates.put(Integer.parseInt(dateStr), new Date(date));
+    }
+    addPopup.addField(Field.ofMap("Date", dates));
+
+
+    addPopup.setOnAdd((Object[] o) -> {
+      for (Object object : o) {
+        Logger.debug(object.getClass().getName());
+
+      }
+      Object[] recipe_id_As_List = (Object[])o[0];
+      Object[] date_As_List = (Object[])o[1];
+      int recipe_id = (int)recipe_id_As_List[0];
+      int date = (int)date_As_List[0];
+
+      EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
+      eventRegister.getAllEvents();
+
+      eventRegister.addEvent(recipe_id, date);
+      loadPlaner();
+    });
+  }
+
+  private void updateEvent(Object[] values) {
     EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
     eventRegister.getAllEvents();
+    Object[] recipe_id_As_List = (Object[])values[1];
+    Object[] date_As_List = (Object[])values[2];
+    int event_id =  (int)values[0];
+    int recipe_id = -1;
+    int date = -1;
+    if (recipe_id_As_List == null) {
+      eventRegister.getEventById(event_id);
+      Event event = eventRegister.getEvents().get(event_id);
+      recipe_id = Integer.parseInt(event.getAttributes().get(0));
+    } else recipe_id = (int)recipe_id_As_List[0];
+
+    if (date_As_List == null) {
+      eventRegister.getEventById(event_id);
+      Event event = eventRegister.getEvents().get(event_id);
+      date = Integer.parseInt(event.getAttributes().get(1));
+    } else date = (int)date_As_List[0];
+
     eventRegister.updateEvent(event_id, recipe_id, date);
     eventRegister.getAllEvents();
     loadPlaner();

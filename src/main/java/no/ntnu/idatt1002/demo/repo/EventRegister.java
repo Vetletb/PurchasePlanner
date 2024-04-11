@@ -115,6 +115,17 @@ public class EventRegister {
   }
 
   /**
+   * This method gets the events by the recipe id.
+   *
+   * @param id the id of the recipe
+   */
+  public void getEventById(int id) {
+    events = new ArrayList<>();
+    List<List<String>> events = dao.filterFromTable("Recipe", "event_id", Integer.toString(id), "Event", "recipe_id");
+    packageToEvent(events);
+  }
+
+  /**
    * Helper method to package the events into the Event class.
    *
    * @param eventList the list of events

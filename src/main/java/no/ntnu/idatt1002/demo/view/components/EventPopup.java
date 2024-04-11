@@ -29,7 +29,7 @@ public class EventPopup extends Popup {
    * Interface for when the user saves the form.
    */
   public interface OnSave {
-    void cb(int event_id, int recipe_id, int date);
+    void cb(Object[] values);
   }
 
   /**
@@ -106,13 +106,11 @@ public class EventPopup extends Popup {
     submitButton.setButtonType(PrimaryButton.Type.SECONDARY);
     submitButton.setOnAction(e -> {
       if (onSave != null) {
-        Logger.warning("Event_id: " + event.getId());
-        Logger.warning(recipeField.getValue()[0].getClass().getName());
-        Logger.warning(dateField.getValue()[0].getClass().getName());
-//        onSave.cb(
-//                event.getId(),
-//                recipeField.getValue()[0],
-//                dateField.getValue()[0]);
+        onSave.cb(new Object[]{
+                event.getId(),
+                recipeField.getValue(),
+                dateField.getValue()
+        });
       }
       this.hide();
     });
@@ -143,13 +141,13 @@ public class EventPopup extends Popup {
     );
   }
 
-  public EventPopup setOnSave(OnSave onSave) {
-    this.onSave = onSave;
+  public EventPopup setOnSave(OnSave cb) {
+    this.onSave = cb;
     return this;
   }
 
-  public EventPopup setOnDelete(OnDelete onDelete) {
-    this.onDelete = onDelete;
+  public EventPopup setOnDelete(OnDelete cb) {
+    this.onDelete = cb;
     return this;
   }
 
@@ -158,4 +156,6 @@ public class EventPopup extends Popup {
     Map<Object, Boolean> map = new ConcurrentHashMap<>();
     return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
   }
+
+
 }
