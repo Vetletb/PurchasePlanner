@@ -11,9 +11,7 @@ import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.data.ShoppingListItem;
 import no.ntnu.idatt1002.demo.repo.ItemRegister;
 import no.ntnu.idatt1002.demo.repo.ShoppingListItemRegister;
-import no.ntnu.idatt1002.demo.view.components.CheckBoxButton;
-import no.ntnu.idatt1002.demo.view.components.Icon;
-import no.ntnu.idatt1002.demo.view.components.ListHeader;
+import no.ntnu.idatt1002.demo.view.components.*;
 
 import java.util.Map;
 
@@ -73,14 +71,51 @@ public class ShoppingList extends VBox {
     shoppingListScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
     shoppingListScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
+    // Clear all button and clear completed button container
+    HBox clearButtonsContainer = new HBox();
+
+    // Clear all button and clear completed button
+    PrimaryButton clearAllButton = new PrimaryButton("Clear all");
+    clearAllButton.setOnAction(e -> {
+      ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+      shoppingListItemRegister.getAllItems();
+      shoppingListItemRegister.clearShoppingList();
+      items = shoppingListItemRegister.getItems();
+      loadShoppingList();
+    });
+
+    PrimaryButton clearCompletedButton = new PrimaryButton("Clear completed");
+
+    clearCompletedButton.setOnAction(e -> {
+      ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+      shoppingListItemRegister.getAllItems();
+      items = shoppingListItemRegister.getItems();
+
+      shoppingListContainer.getChildren().forEach(node -> {
+        ShoppingListItemPane shoppingListItemPane = (ShoppingListItemPane) node;
+
+        if (shoppingListItemPane.isSelected()) {
+          shoppingListItemRegister.deleteFromShoppingList(
+                  shoppingListItemRegister.getShoppingListItemById(
+                          shoppingListItemPane.getShoppingListItemId()).getId());
+        }
+        shoppingListItemRegister.getAllItems();
+        items = shoppingListItemRegister.getItems();
+      });
+      loadShoppingList();
+    });
+
+    clearButtonsContainer.getChildren().addAll(clearAllButton, clearCompletedButton);
+
     // Add the containers to the content container
-    innerContentContainer.getChildren().addAll(staticListTopBar, shoppingListScrollPane, staticListBottomBar);
+    innerContentContainer.getChildren().addAll(clearButtonsContainer, staticListTopBar, shoppingListScrollPane, staticListBottomBar);
     contentContainer.getChildren().add(innerContentContainer);
 
     // Create the list header and add to the page
     ListHeader shoppingListHeader = new ListHeader();
     shoppingListHeader.setOnSearch(this::fullSearch);
     shoppingListHeader.setOnSearchQueryChange(this::search);
+    shoppingListHeader.setOnAdd(this::addItem);
 
 
     super.getChildren().addAll(shoppingListHeader, contentContainer);
@@ -97,7 +132,7 @@ public class ShoppingList extends VBox {
     ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
     shoppingListItemRegister.getAllItems();
     items = shoppingListItemRegister.getItems();
-    items.values().forEach(this::addItemToList);
+    loadShoppingList();
 
 
     // CSS styling
@@ -106,64 +141,114 @@ public class ShoppingList extends VBox {
     innerContentContainer.getStyleClass().add("shopping-list");
     staticListTopBar.getStyleClass().addAll("static-label-container", "rounded-top");
     staticListBottomBar.getStyleClass().addAll("static-bottom-label-container", "rounded-bottom");
+    clearButtonsContainer.getStyleClass().add("clear-button-container");
 
     // Labels
-    topBarItemName.getStyleClass().add("static-label-container-label");
-    topBarItemCategory.getStyleClass().add("static-label-container-label");
-    topBarItemQuantity.getStyleClass().add("static-label-container-label");
-    topBarItemUnit.getStyleClass().add("static-label-container-label");
-    topBarItemCheckBox.getStyleClass().add("static-label-container-label");
-    bottomBarTotalPrice.getStyleClass().add("static-label-container-label");
-    bottomBarTotalQuantity.getStyleClass().add("static-label-container-label");
+    topBarItemName.getStyleClass().add("static-label");
+    topBarItemCategory.getStyleClass().add("static-label");
+    topBarItemQuantity.getStyleClass().add("static-label");
+    topBarItemUnit.getStyleClass().add("static-label");
+    topBarItemCheckBox.getStyleClass().add("static-label");
+    bottomBarTotalPrice.getStyleClass().add("static-label");
+    bottomBarTotalQuantity.getStyleClass().add("static-label");
+
+    // Buttons
+    clearAllButton.getStyleClass().addAll("red-button", "clear-button");
+    clearCompletedButton.getStyleClass().addAll("red-button", "clear-button");
   }
 
-  /**
-   * This method adds an item to the shopping list.
-   * @param item the item to be added
-   */
-  public void addItemToList(ShoppingListItem item) {
-    // Item Container
-    HBox shoppingListItemContainer = new HBox();
-
-    // item Labels
-    Label itemName = new Label(item.getName());
-    Label itemCategory = new Label(item.getCategory());
-    Label itemQuantity = new Label(Integer.toString(item.getQuantity()));
-    Label itemUnit = new Label(item.getUnit());
-
-    // Create the checkbox button
-    CheckBoxButton checkBoxButton = new CheckBoxButton(new Icon("checkboxUnSelected"));
-    checkBoxButton.setScaleX(0.6);
-    checkBoxButton.setScaleY(0.6);
-
-    // Add the labels and the checkbox button to the container
-    shoppingListItemContainer.getChildren().addAll(itemName, itemCategory, itemQuantity, itemUnit, checkBoxButton);
-
-    // CSS styling
-    shoppingListItemContainer.getStyleClass().add("shopping-list-item-container");
-    // Labels
-    itemName.getStyleClass().add("shopping-list-text");
-    itemCategory.getStyleClass().add("shopping-list-text");
-    itemQuantity.getStyleClass().add("shopping-list-text");
-    itemUnit.getStyleClass().add("shopping-list-text");
-
-    // Add the item to the shopping list
-    Logger.debug("Adding item to shopping list");
-    shoppingListContainer.getChildren().add(shoppingListItemContainer);
-  }
 
   /**
    * Method to add a new shoppingList item to the database and the shopping list.
    * <p>Uses the {@link ShoppingListItemRegister#addToShoppingList(int, int, String) addToShoppingList} method to add the item to the database.</p>
-   * <p>Uses the {@link ShoppingList#addItemToList(ShoppingListItem) addItemToList} method to add the item to the shopping list.</p>
-   * @param item the item to be added
+xs   * @param item the item to be added
    */
-  public void addItem(ShoppingListItem item) {
-    ShoppingListItemRegister register = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
-    register.addToShoppingList(item.getItemId(), item.getQuantity(), item.getUnit());
-    addItemToList(item);
+  public void addItem() {
+    AddPopup addPopup = new AddPopup("ShoppingListItem");
+    addPopup.show(this.getScene().getWindow());
+
+    ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
+    itemRegister.getAllItems();
+
+    addPopup.addField(Field.ofMap("Item", itemRegister.getItems()));
+    addPopup.addField(Field.ofNumber("Quantity"));
+    addPopup.addField(Field.ofString("Unit"));
+
+    addPopup.setOnAdd((Object[] o) -> {
+      Object[] item_id_as_list = (Object[]) o[0];
+
+      itemRegister.getAllItems();
+      int item_id = (int) item_id_as_list[0];
+      int quantity = (int) o[1];
+      String unit = (String) o[2];
+      try {
+        ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+        shoppingListItemRegister.addToShoppingList(item_id, quantity, unit);
+        shoppingListItemRegister.getAllItems();
+        items = shoppingListItemRegister.getItems();
+      } catch (Exception e) {
+        Logger.fatal("Failed to add item");
+        e.printStackTrace();
+      }
+      loadShoppingList();
+    });
   }
 
+  public void updateShoppingListItem(Object[] values) {
+    // get the register
+    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+    // get all items
+    shoppingListItemRegister.getAllItems();
+
+    // get the values
+    int shoppingListItemId = (int) values[0]; // id of the shopping list item
+    ShoppingListItem shoppingListItem = shoppingListItemRegister.getShoppingListItemById(shoppingListItemId); // shopping list item
+
+    // Item id
+    Object[] item_id_as_list = (Object[]) values[1]; // id of the item as a list
+    int item_id = -1; // id of the item
+
+    if (item_id_as_list == null) {
+      item_id = shoppingListItem.getItemId();
+    } else item_id = (int) item_id_as_list[0];
+
+    // Unit
+    Object[] unit_as_list = (Object[]) values[3]; // unit as a list
+    String unit = null; // unit of the item
+
+    if (unit_as_list == null) {
+      unit = shoppingListItem.getUnit();
+    } else unit = (String) unit_as_list[0];
+
+    // Quantity
+    int quantity = -1; // quantity of the item
+
+    if (values[2] == null) {
+      quantity = shoppingListItem.getQuantity();
+    } else quantity = (int) values[2];
+
+    shoppingListItemRegister.updateShoppingListItem(
+            shoppingListItemId,
+            item_id,
+            shoppingListItem.getName(),
+            shoppingListItem.getCategory(),
+            shoppingListItem.getAllergy(),
+            quantity,
+            unit
+    );
+    shoppingListItemRegister.getAllItems();
+    items = shoppingListItemRegister.getItems();
+    loadShoppingList();
+  }
+
+  public void deleteShoppingListItem(int shoppingListItemId) {
+    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+    shoppingListItemRegister.getAllItems();
+    shoppingListItemRegister.deleteFromShoppingList(shoppingListItemId);
+    shoppingListItemRegister.getAllItems();
+    items = shoppingListItemRegister.getItems();
+    loadShoppingList();
+  }
 
   /**
    * Method to search for items in the shopping list.
@@ -183,13 +268,13 @@ public class ShoppingList extends VBox {
     ShoppingListItemRegister register = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
     register.searchItemsByName(query);
     items = register.getItems();
-    if(!query.isEmpty()) {
-      updatePage();
-    }
-    else {
+    if(query.isEmpty()) {
       register.getAllItems();
       items = register.getItems();
-      updatePage();
+      loadShoppingList();
+    }
+    else {
+      loadShoppingList();
     }
   }
 
@@ -197,10 +282,37 @@ public class ShoppingList extends VBox {
    * Method to update the page.
    * <p>Clears the displayed list and fills it with new items</p>
    */
-  private void updatePage() {
+  private void loadShoppingList() {
     shoppingListContainer.getChildren().clear();
-    items.values().forEach(this::addItemToList);
-  }
 
+    items.values().forEach(item -> {
+      ShoppingListItemPane shoppingListItemPane = new ShoppingListItemPane(item);
+      shoppingListItemPane.setOnMouseClicked(v -> {
+        ShoppingListItemPopup shoppingListItemPopup = new ShoppingListItemPopup(item);
+        shoppingListItemPopup.setOnSave(this::updateShoppingListItem);
+        shoppingListItemPopup.setOnDelete(this::deleteShoppingListItem);
+        shoppingListItemPopup.show(this.getScene().getWindow());
+      });
+
+
+      shoppingListItemPane.getStyleClass().add("shopping-list-item-pane");
+      shoppingListContainer.getChildren().add(shoppingListItemPane);
+//      shoppingListScrollPane.setContent(shoppingListContainer);
+    });
+
+
+    staticListBottomBar.getChildren().clear();
+    int itemCount = items.size();
+    int totalPrice = 0;
+
+    Label bottomBarTotalQuantity = new Label("Total quantity: " + itemCount);
+    Label bottomBarTotalPrice = new Label("Total price: " + totalPrice);
+
+    bottomBarTotalQuantity.getStyleClass().add("static-label");
+    bottomBarTotalPrice.getStyleClass().add("static-label");
+
+    staticListBottomBar.getChildren().addAll(bottomBarTotalQuantity, bottomBarTotalPrice);
+
+  }
 }
 
