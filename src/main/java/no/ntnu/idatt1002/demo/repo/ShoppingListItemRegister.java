@@ -75,7 +75,7 @@ public class ShoppingListItemRegister {
    * @param unit the unit of the item
    */
   public void addToShoppingList(int item_id,  int quantity, String unit) {
-    dao.addToDatabase(new ShoppingListItem(item_id, null, null, null, quantity, unit));
+    dao.addToDatabase(new ShoppingListItem(item_id, "dummy", "dummy", "dummy", quantity, unit));
     Logger.info("Added item to shopping list with id "
         + item_id + ", quantity " + quantity + " and unit " + unit + "."); //TODO remove
   }
@@ -103,6 +103,10 @@ public class ShoppingListItemRegister {
       }
     }
     return -1;
+  }
+
+  public ShoppingListItem getShoppingListItemById(int id) {
+    return shoppingListItems.get(getShoppingListItemFromId(id));
   }
 
   /**
@@ -134,5 +138,10 @@ public class ShoppingListItemRegister {
     List<List<String>> items = dao.searchFromTable("ShoppingListItem", name, "Item", "item_id");
     items.forEach(item -> Logger.warning("Searched Item: " + item.toString()));
     packageToShoppingListItem(items);
+  }
+
+  public void clearShoppingList() {
+    shoppingListItems.forEach(dao::deleteFromDatabase);
+    shoppingListItems.clear();
   }
 }
