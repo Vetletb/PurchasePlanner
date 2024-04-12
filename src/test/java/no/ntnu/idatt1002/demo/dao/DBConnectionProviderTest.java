@@ -24,8 +24,8 @@ class DBConnectionProviderTest {
 
     @BeforeEach
     public void setUp() {
+      DBConnectionProvider.setDbPath("src/main/resources/no/ntnu/idatt1002/database/database.sqlite");
       dbConnectionProvider = new DBConnectionProvider();
-      dbConnectionProvider.setDbPath("src/main/resources/no/ntnu/idatt1002/database/database.sqlite");
     }
 
     @Test
@@ -84,8 +84,8 @@ class DBConnectionProviderTest {
     @Test
     @DisplayName("getConnection throws exception")
     public void GetConnectionThrowsException() {
+        DBConnectionProvider.setDbPath("src/test/resources/test");
         DBConnectionProvider dbConnectionProvider = new DBConnectionProvider();
-        dbConnectionProvider.setDbPath("test");
         dbConnectionProvider.getConnection();
     }
   }
