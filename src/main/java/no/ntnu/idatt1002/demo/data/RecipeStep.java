@@ -86,7 +86,6 @@ public class RecipeStep implements Storable {
   @Override
   public List<String> getAttributes() {
     List<String> attributes = new ArrayList<>();
-    attributes.add(String.valueOf(step_id));
     attributes.add(String.valueOf(recipe_id));
     attributes.add(String.valueOf(step_number));
     attributes.add(instruction);
@@ -101,10 +100,9 @@ public class RecipeStep implements Storable {
   @Override
   public List<String> getAttributeNames() {
     List<String> attributeNames = new ArrayList<>();
-    attributeNames.add("step_id");
     attributeNames.add("recipe_id");
     attributeNames.add("step_number");
-    attributeNames.add("instruction");
+    attributeNames.add("instructions");
     return attributeNames;
   }
 
