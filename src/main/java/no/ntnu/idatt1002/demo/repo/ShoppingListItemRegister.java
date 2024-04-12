@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.ShoppingListItem;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class represents a register for shopping list items.
@@ -17,6 +18,7 @@ public class ShoppingListItemRegister {
   private final DAO dao;
 
   public ShoppingListItemRegister(DAO dao) {
+    VerifyInput.verifyNotNull(dao, "dao");
     this.dao = dao;
     this.shoppingListItems =  new ArrayList<>();
   }
@@ -75,7 +77,7 @@ public class ShoppingListItemRegister {
    * @param unit the unit of the item
    */
   public void addToShoppingList(int item_id,  int quantity, String unit) {
-    dao.addToDatabase(new ShoppingListItem(item_id, null, null, null, quantity, unit));
+    dao.addToDatabase(new ShoppingListItem(item_id, "dummy", "dummy", "dummy", quantity, unit));
     Logger.info("Added item to shopping list with id "
         + item_id + ", quantity " + quantity + " and unit " + unit + "."); //TODO remove
   }
@@ -84,9 +86,13 @@ public class ShoppingListItemRegister {
    * Method for deleting a shopping list item from the database.
    *
    * @param id the id of the shopping list item to delete
+   * @throws IllegalArgumentException if the shopping list item with the given id does not exist
    */
   public void deleteFromShoppingList(int id) {
-    int index = getShoppingListItemFromId(id);
+    int index = getIndexFromId(id);
+    if (index == -1) {
+      throw new IllegalArgumentException("Shopping list item with id " + id + " does not exist.");
+    }
     dao.deleteFromDatabase(shoppingListItems.get(index));
   }
 
@@ -95,8 +101,10 @@ public class ShoppingListItemRegister {
    *
    * @param id the id of the shopping list item
    * @return the index of the shopping list item with the given id
+   * @throws IllegalArgumentException if the id is less than 1
    */
-  private int getShoppingListItemFromId(int id) {
+  private int getIndexFromId(int id) {
+    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(id, "id");
     for (ShoppingListItem item : shoppingListItems) {
       if (item.getId() == id) {
         return shoppingListItems.indexOf(item);
@@ -109,16 +117,16 @@ public class ShoppingListItemRegister {
    * Method for updating a shopping list item in the database.
    *
    * @param id the id of the shopping list item to update
-   * @param item_id the id of the item
-   * @param name the name of the item
-   * @param category the category of the item
-   * @param allergy the allergy of the item
    * @param quantity the quantity of the item
    * @param unit the unit of the item
+   * @throws IllegalArgumentException if the shopping list item with the given id does not exist
    */
-  public void updateShoppingListItem(int id, int item_id, String name, String category,
-                                     String allergy, int quantity, String unit) {
-    dao.updateDatabase(new ShoppingListItem(id, item_id, name, category, allergy, quantity, unit));
+  public void updateShoppingListItem(int id, int quantity, String unit) {
+    if (getIndexFromId(id) == -1) {
+      throw new IllegalArgumentException("Shopping list item with id " + id + " does not exist.");
+    }
+    dao.updateDatabase(new ShoppingListItem(
+        id, "dummy", "dummy", "dummy", quantity, unit));
   }
 
   /**
@@ -128,8 +136,10 @@ public class ShoppingListItemRegister {
    * {@link DAO#searchFromTable(String, String, String, String) DAO.searchFromTable}</p>
    *
    * @param name the name of the item to search for
+   * @throws IllegalArgumentException if the name is empty
    */
   public void searchItemsByName(String name) {
+    VerifyInput.verifyNotEmpty(name, "name");
     shoppingListItems = new ArrayList<>();
     List<List<String>> items = dao.searchFromTable("ShoppingListItem", name, "Item", "item_id");
     items.forEach(item -> Logger.warning("Searched Item: " + item.toString()));
