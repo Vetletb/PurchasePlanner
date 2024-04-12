@@ -162,16 +162,19 @@ Red button
 */
 
 .red-button {
-    -fx-background-color: #df2c2c;
+    /*-fx-background-color: #df2c2c;*/
+    -fx-background-color: #FF5555FF;
 }
 
 .red-button:hover {
-    -fx-background-color: #d22020;
+    /*-fx-background-color: #d22020;*/
+    -fx-background-color: #dc4747;
     -fx-cursor: hand;
 }
 
 .red-button:pressed {
-    -fx-background-color: #d81e1e;
+    /*-fx-background-color: #d81e1e;*/
+    -fx-background-color: #c53a3a;
     -fx-cursor: hand;
 }
 
@@ -465,7 +468,7 @@ Red button
 }
 
 .clear-button {
-    -fx-background-color: #df2c2c;
+    -fx-background-color: #ff5555;
     -fx-font-size: 15px;
     -fx-padding: 10px;
     -fx-spacing: 10px;
