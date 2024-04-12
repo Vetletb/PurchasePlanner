@@ -20,6 +20,19 @@ public class VerifyInput {
   }
 
   /**
+   * Checks if an object is null
+   *
+   * @param input     the object to be checked
+   * @param parameter the name of the parameter
+   * @throws IllegalArgumentException if the object is null
+   */
+  public static void verifyNotNull(Object input, String parameter) {
+    if (input == null) {
+      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' cannot be null");
+    }
+  }
+
+  /**
    * Checks if an int is a positive number or minus one
    *
    * @param input     the int to be checked
