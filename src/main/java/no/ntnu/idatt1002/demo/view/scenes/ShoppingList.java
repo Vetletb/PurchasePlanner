@@ -212,20 +212,20 @@ xs   * @param item the item to be added
       item_id = shoppingListItem.getItemId();
     } else item_id = (int) item_id_as_list[0];
 
-    // Unit
-    Object[] unit_as_list = (Object[]) values[3]; // unit as a list
-    String unit = null; // unit of the item
-
-    if (unit_as_list == null) {
-      unit = shoppingListItem.getUnit();
-    } else unit = (String) unit_as_list[0];
-
     // Quantity
     int quantity = -1; // quantity of the item
 
     if (values[2] == null) {
       quantity = shoppingListItem.getQuantity();
     } else quantity = (int) values[2];
+
+    // Unit
+    String unit = null; // unit of the item
+
+    if (values[3] == null) {
+      Logger.info("Unit is null");
+      unit = shoppingListItem.getUnit();
+    } else unit = (String) values[3];
 
     shoppingListItemRegister.updateShoppingListItem(
             shoppingListItemId,
