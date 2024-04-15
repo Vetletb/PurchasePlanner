@@ -47,7 +47,7 @@ class EventRegisterTest {
               List.of("3", "3", "241003", "3", "name", "9", "category"),
               List.of("4", "4", "241003", "4", "name", "3", "category")));
       eventRegister.getAllEvents();
-      assertEquals(4, eventRegister.getEvents().size());
+      assertEquals(4, eventRegister.getEventsAsList().size());
     }
 
     @Test
@@ -60,7 +60,7 @@ class EventRegisterTest {
               List.of("3", "3", "241013", "3", "name", "9", "category"),
               List.of("4", "4", "241013", "4", "name", "3", "category")));
       eventRegister.getEventsByDate(241013);
-      assertEquals(4, eventRegister.getEvents().size());
+      assertEquals(4, eventRegister.getEventsAsList().size());
     }
 
     @Test
@@ -73,6 +73,22 @@ class EventRegisterTest {
     @DisplayName("Test getEvent")
     public void getEventsReturnsCorrectItems() {
       assertNotNull(eventRegister.getEvents());
+    }
+
+    @Test
+    @DisplayName("Test getEventAsList")
+    public void getEventsAsListReturnsCorrectItems() {
+      assertNotNull(eventRegister.getEventsAsList());
+    }
+
+    @Test
+    @DisplayName("Test getEventById")
+    public void getEventsByIdSetsCorrectAmountOfItems() {
+      when(dao.filterFromTable("Event", "event_id", "1", "Recipe", "recipe_id"))
+          .thenReturn(List.of(
+              List.of("1", "1", "241003", "1", "name", "10", "category")));
+      eventRegister.getEventById(1);
+      assertEquals(1, eventRegister.getEventsAsList().size());
     }
 
     @Nested

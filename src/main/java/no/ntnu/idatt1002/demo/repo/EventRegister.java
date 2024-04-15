@@ -2,6 +2,8 @@ package no.ntnu.idatt1002.demo.repo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.Event;
 import no.ntnu.idatt1002.demo.util.VerifyInput;
@@ -77,6 +79,27 @@ public class EventRegister {
   }
 
   /**
+   * This method gets the events by the recipe id.
+   *
+   * @param id the id of the recipe
+   */
+  public void getEventById(int id) {
+    events = new ArrayList<>();
+    List<List<String>> events = dao.filterFromTable(
+        "Event", "event_id", Integer.toString(id), "Recipe", "recipe_id");
+    packageToEvent(events);
+  }
+
+  /**
+   * This method returns the events in the register as a list.
+   *
+   * @return the events in the register as a list
+   */
+  public List<Event> getEventsAsList() {
+    return events;
+  }
+
+  /**
    * This method updates an event in the database.
    *
    * @param event_id the id of the event
@@ -100,18 +123,8 @@ public class EventRegister {
   public void getEventsByDate(int date) {
     VerifyInput.verifyDateLength(date, "date");
     events = new ArrayList<>();
-    List<List<String>> events = dao.filterFromTable("Recipe", "date", Integer.toString(date), "Event", "recipe_id");
-    packageToEvent(events);
-  }
-
-  /**
-   * This method gets the events by the recipe id.
-   *
-   * @param id the id of the recipe
-   */
-  public void getEventById(int id) {
-    events = new ArrayList<>();
-    List<List<String>> events = dao.filterFromTable("Recipe", "event_id", Integer.toString(id), "Event", "recipe_id");
+    List<List<String>> events = dao.filterFromTable(
+        "Event", "date", Integer.toString(date), "recipe", "recipe_id");
     packageToEvent(events);
   }
 
@@ -123,7 +136,6 @@ public class EventRegister {
   private void packageToEvent(List<List<String>> eventList) {
     List<Event> newEvents = new ArrayList<>();
     for (List<String> event : eventList) {
-      Logger.warning(event.toString());
       newEvents.add(new Event(
           Integer.parseInt(event.get(0)),
           Integer.parseInt(event.get(1)),
@@ -137,12 +149,12 @@ public class EventRegister {
   }
 
   /**
-   * This method returns the events.
+   * This method returns the events in the register.
    *
-   * @return the events
+   * @return the events in the register as a Map
    */
-  public List<Event> getEvents() {
-    return events;
+  public Map<Integer, Event> getEvents() {
+    return events.stream().collect(Collectors.toMap(Event::getId, event -> event));
   }
 
   /**
