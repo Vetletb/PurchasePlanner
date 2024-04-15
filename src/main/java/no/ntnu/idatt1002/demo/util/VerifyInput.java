@@ -45,7 +45,7 @@ public class VerifyInput {
   }
 
   public static void verifyPositiveNumberZeroNotAccepted(int input, String parameter) {
-    if(input <= 1) {
+    if(input < 1) {
       throw new IllegalArgumentException("The input for the parameter '" + parameter + "' must be a positive number equal to or greater than 1");
     }
   }
