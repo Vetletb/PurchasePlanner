@@ -1,5 +1,6 @@
 package no.ntnu.idatt1002.demo.view.components;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.data.Recipe;
 import no.ntnu.idatt1002.demo.data.RecipeIngredient;
+import no.ntnu.idatt1002.demo.data.RecipeStep;
 import no.ntnu.idatt1002.demo.repo.ItemRegister;
 
 /**
@@ -30,8 +32,14 @@ public class RecipePopup extends Popup {
    */
   public interface OnSave {
     void cb(int id, String name, String categories, int cookingTime, Map<Integer, Integer> ingredients,
-        Map<Integer, Integer> newIngredients);
+        Map<Integer, Integer> newIngredients, List<RecipeStep> steps, List<RecipeStep> newSteps);
 
+  }
+
+  private enum Page {
+    MAIN,
+    ADD_INGREDIENT,
+    ADD_STEP
   }
 
   /**
@@ -44,6 +52,22 @@ public class RecipePopup extends Popup {
   private OnSave onSave;
   private OnDelete onDelete;
   private Map<Integer, Integer> newIngredients = new java.util.HashMap<>();
+  private Page currentPage = Page.MAIN;
+  private VBox background = new VBox();
+
+  private InputField categoryField = new InputField("Category");
+  private InputField nameField = new InputField("Name");
+  private NumberField timefield = new NumberField();
+  private List<RecipeIngredientField> ingredientsField;
+  private PrimaryButton deleteButton;
+  private PrimaryButton submitButton;
+  private Text title;
+  private PrimaryButton addIngredientButton;
+  private VBox addIngredientBox;
+  private PageSwitcher pageSwitcher;
+  private List<StepField> stepsField;
+  private List<StepField> newSteps;
+  private PrimaryButton addStepButton;
 
   /**
    * Constructor for the AddPopup.
@@ -56,7 +80,6 @@ public class RecipePopup extends Popup {
     StackPane container = new StackPane();
 
     // Create a VBox to hold the content of the popup
-    VBox background = new VBox();
     background.getStyleClass().add("popup-background");
     background.setSpacing(20);
     this.getContent().add(container);
@@ -71,21 +94,16 @@ public class RecipePopup extends Popup {
     StackPane.setAlignment(crossButton, Pos.TOP_RIGHT);
 
     // Add a title to the popup
-    Text title = new Text(recipe.getName());
+    title = new Text(recipe.getName());
     title.getStyleClass().addAll("popup-title", "centered");
 
-    InputField nameField = new InputField("Name");
     nameField.setText(recipe.getName());
-
-    InputField categoryField = new InputField("Category");
     categoryField.setText(recipe.getCategory());
-
-    NumberField timefield = new NumberField();
     timefield.setText(Integer.toString(recipe.getCooking_time()));
 
     List<RecipeIngredient> recipes = recipe.getIngredients();
 
-    List<RecipeIngredientField> ingredientsField = recipes.stream()
+    ingredientsField = recipes.stream()
         .map(RecipeIngredientField::new)
         .collect(Collectors.toList());
 
@@ -96,7 +114,7 @@ public class RecipePopup extends Popup {
       });
     });
 
-    VBox addIngredientBox = new VBox();
+    addIngredientBox = new VBox();
     Text addIngredientTitle = new Text("Added ingredients:");
     HBox box = new HBox();
     box.setSpacing(2);
@@ -108,7 +126,7 @@ public class RecipePopup extends Popup {
       addIngredientBox.getChildren().addAll(addIngredientTitle, box);
     }
 
-    PrimaryButton addIngredientButton = new PrimaryButton("Add Ingredient");
+    addIngredientButton = new PrimaryButton("Add Ingredient");
     addIngredientButton.setOnAction(e -> {
       AddPopup addPopup = new AddPopup("Ingredient");
 
@@ -116,13 +134,11 @@ public class RecipePopup extends Popup {
       itemRegister.getAllItems();
       Map<Integer, Item> items = itemRegister.getItems();
 
-      items.forEach((k, v) -> {
-        // Remove the items that are already in the recipe
-        if (recipe.getIngredients().stream()
-            .anyMatch(ingredient -> ingredient.getId() == k)) {
-          items.remove(k);
-        }
-      });
+      // Remove the items that are already in the recipe
+      items = items.entrySet().stream()
+          .filter(entry -> recipe.getIngredients().stream()
+              .noneMatch(ingredient -> ingredient.getItemId() == entry.getKey()))
+          .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
       addPopup.addField(Field.ofMap("Ingredients", items));
       addPopup.setOnAdd((Object[] o) -> {
@@ -141,8 +157,43 @@ public class RecipePopup extends Popup {
       addPopup.show(this.getScene().getWindow());
     });
 
+    stepsField = recipe.getInstructions().stream()
+        .map(StepField::new)
+        .collect(Collectors.toList());
+
+    stepsField.forEach(field -> field.setOnDelete(() -> {
+      stepsField.remove(field);
+      background.getChildren().remove(field);
+    }));
+
+    newSteps = new ArrayList<>();
+
+    addStepButton = new PrimaryButton("Add Step");
+
+    addStepButton.setOnAction(e -> {
+      AddPopup addPopup = new AddPopup("Step");
+      addPopup.addField(Field.ofString("Instruction"));
+      addPopup.setOnAdd((Object[] o) -> {
+        String instruction = (String) o[0];
+        RecipeStep step = new RecipeStep(
+            recipe.getId(),
+            recipe.getInstructions().size() + newSteps.size() + 1,
+            instruction);
+
+        StepField field = new StepField(step);
+        newSteps.add(field);
+        switchPopupPage(currentPage);
+      });
+      addPopup.show(this.getScene().getWindow());
+    });
+
+    newSteps.forEach(field -> field.setOnDelete(() -> {
+      stepsField.remove(field);
+      background.getChildren().remove(field);
+    }));
+
     // Add a button to submit the form
-    PrimaryButton submitButton = new PrimaryButton(
+    submitButton = new PrimaryButton(
         "Save");
     submitButton.setButtonType(PrimaryButton.Type.SECONDARY);
     submitButton.setOnAction(e -> {
@@ -156,7 +207,11 @@ public class RecipePopup extends Popup {
                 .collect(Collectors.toMap(
                     RecipeIngredientField::getRecipeId,
                     RecipeIngredientField::getRecipeAmount)),
-            this.newIngredients);
+            this.newIngredients,
+            stepsField.stream()
+                .map(StepField::getStep)
+                .collect(Collectors.toList()),
+            newSteps.stream().map(StepField::getStep).collect(Collectors.toList()));
       }
       this.hide();
     });
@@ -165,7 +220,7 @@ public class RecipePopup extends Popup {
     submitButton.setPrefHeight(50);
 
     // Add a button to delete the item
-    PrimaryButton deleteButton = new PrimaryButton(
+    deleteButton = new PrimaryButton(
         "Delete");
     deleteButton.setButtonType(PrimaryButton.Type.RED);
     deleteButton.setOnAction(e -> {
@@ -178,10 +233,52 @@ public class RecipePopup extends Popup {
     deleteButton.setPrefWidth(300);
     deleteButton.setPrefHeight(50);
 
-    // Add the contents to the VBox
-    background.getChildren().addAll(title, nameField, categoryField, timefield);
-    background.getChildren().addAll(ingredientsField);
-    background.getChildren().addAll(addIngredientButton, addIngredientBox, submitButton, deleteButton);
+    pageSwitcher = new PageSwitcher();
+    pageSwitcher.setOnSwitch(i -> {
+      int currentPageIndex = currentPage.ordinal();
+      currentPageIndex += i;
+
+      if (Page.values().length <= currentPageIndex) {
+        currentPageIndex = 0;
+      } else if (currentPageIndex < 0) {
+        currentPageIndex = Page.values().length - 1;
+      }
+
+      currentPage = Page.values()[currentPageIndex];
+      switchPopupPage(currentPage);
+    });
+
+    switchPopupPage(currentPage);
+  }
+
+  private void switchPopupPage(Page page) {
+    background.getChildren().clear();
+    background.getChildren().add(title);
+    switch (page) {
+      case MAIN:
+        background.getChildren().addAll(nameField, categoryField, timefield);
+        break;
+      case ADD_INGREDIENT:
+        Text subtitle = new Text("Ingredients");
+        background.getChildren().add(subtitle);
+        background.getChildren().addAll(ingredientsField);
+        background.getChildren().addAll(addIngredientButton, addIngredientBox);
+        break;
+      case ADD_STEP:
+        Text stepTitle = new Text("Steps");
+        background.getChildren().addAll(stepTitle);
+        background.getChildren().addAll(stepsField);
+        Text newStepTitle = new Text("New Steps");
+        background.getChildren().add(newStepTitle);
+        background.getChildren().addAll(newSteps);
+        background.getChildren().add(addStepButton);
+        break;
+
+      default:
+        Logger.fatal("Unknown page: " + page);
+        break;
+    }
+    background.getChildren().addAll(submitButton, deleteButton, pageSwitcher);
   }
 
   public RecipePopup setOnSave(OnSave onSave) {

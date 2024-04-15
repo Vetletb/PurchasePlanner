@@ -15,6 +15,7 @@ import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.data.Recipe;
 import no.ntnu.idatt1002.demo.data.RecipeIngredient;
+import no.ntnu.idatt1002.demo.data.RecipeStep;
 import no.ntnu.idatt1002.demo.repo.ItemRegister;
 import no.ntnu.idatt1002.demo.repo.RecipeRegister;
 import no.ntnu.idatt1002.demo.view.components.AddPopup;
@@ -104,6 +105,7 @@ public class CookBook extends VBox {
       if (id == -1) {
         recipeRegister.getAllRecipes();
         this.recipes = recipeRegister.getRecipes();
+
         Logger.fatal("Could not determine ID of new recipe. Recipe added, but not ingredients.");
         return;
       }
@@ -210,10 +212,28 @@ public class CookBook extends VBox {
   }
 
   private void updateItem(int id, String name, String category, Integer cookingTime,
-      Map<Integer, Integer> ingredients, Map<Integer, Integer> newIngredients) {
+      Map<Integer, Integer> ingredients, Map<Integer, Integer> newIngredients, List<RecipeStep> steps,
+      List<RecipeStep> newSteps) {
     RecipeRegister register = new RecipeRegister(new DAO(new DBConnectionProvider()));
     register.getAllRecipes();
     register.updateRecipe(id, name, cookingTime, category);
+
+    steps.forEach(step -> register.updateInstrucution(
+        step.getId(),
+        step.getStepNumber(),
+        step.getInstruction()));
+
+    register.getRecipes().get(id).getInstructions().forEach(step -> {
+      if (steps.stream().noneMatch(s -> s.getId() == step.getId())) {
+        register.deleteInstruction(step.getId());
+      }
+    });
+
+    newSteps.forEach(step -> register.addInstruction(
+        id,
+        step.getStepNumber(),
+        step.getInstruction()));
+
     List<RecipeIngredient> oldIngredients = register.getRecipes().get(id).getIngredients();
 
     // Add all new ingredients
