@@ -100,8 +100,18 @@ public class EventRegister {
   public void getEventsByDate(int date) {
     VerifyInput.verifyDateLength(date, "date");
     events = new ArrayList<>();
-    List<List<String>> events = dao.filterFromTable(
-        "Event", "date", Integer.toString(date), "recipe", "recipe_id");
+    List<List<String>> events = dao.filterFromTable("Recipe", "date", Integer.toString(date), "Event", "recipe_id");
+    packageToEvent(events);
+  }
+
+  /**
+   * This method gets the events by the recipe id.
+   *
+   * @param id the id of the recipe
+   */
+  public void getEventById(int id) {
+    events = new ArrayList<>();
+    List<List<String>> events = dao.filterFromTable("Recipe", "event_id", Integer.toString(id), "Event", "recipe_id");
     packageToEvent(events);
   }
 
@@ -113,6 +123,7 @@ public class EventRegister {
   private void packageToEvent(List<List<String>> eventList) {
     List<Event> newEvents = new ArrayList<>();
     for (List<String> event : eventList) {
+      Logger.warning(event.toString());
       newEvents.add(new Event(
           Integer.parseInt(event.get(0)),
           Integer.parseInt(event.get(1)),
