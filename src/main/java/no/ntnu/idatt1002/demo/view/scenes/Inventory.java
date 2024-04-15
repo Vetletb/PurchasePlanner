@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.UpdateableScene;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.Item;
@@ -25,7 +26,7 @@ import no.ntnu.idatt1002.demo.view.components.ViewModeButton.ViewMode;
 /**
  * The inventory page.
  */
-public class Inventory extends VBox {
+public class Inventory extends VBox implements UpdateableScene {
   private VBox inventoryContainer = new VBox();
   private ScrollPane scrollPane;
   private Map<Integer, Item> items;
@@ -190,5 +191,13 @@ public class Inventory extends VBox {
     itemRegister.getAllItems();
     items = itemRegister.getItems();
     loadInventory(mode);
+  }
+
+  public void updateScene() {
+    loadInventory(mode);
+  }
+
+  public VBox createScene() {
+    return this;
   }
 }

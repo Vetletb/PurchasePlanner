@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.UpdateableScene;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.Item;
@@ -32,7 +33,7 @@ import no.ntnu.idatt1002.demo.view.components.ViewModeButton.ViewMode;
 /**
  * The inventory page.
  */
-public class CookBook extends VBox {
+public class CookBook extends VBox implements UpdateableScene {
   private VBox inventoryContainer = new VBox();
   private ScrollPane scrollPane;
   private Map<Integer, Recipe> recipes;
@@ -223,16 +224,16 @@ public class CookBook extends VBox {
         step.getStepNumber(),
         step.getInstruction()));
 
+    newSteps.forEach(step -> register.addInstruction(
+        id,
+        step.getStepNumber(),
+        step.getInstruction()));
+
     register.getRecipes().get(id).getInstructions().forEach(step -> {
       if (steps.stream().noneMatch(s -> s.getId() == step.getId())) {
         register.deleteInstruction(step.getId());
       }
     });
-
-    newSteps.forEach(step -> register.addInstruction(
-        id,
-        step.getStepNumber(),
-        step.getInstruction()));
 
     List<RecipeIngredient> oldIngredients = register.getRecipes().get(id).getIngredients();
 
@@ -266,5 +267,13 @@ public class CookBook extends VBox {
     register.getAllRecipes();
     recipes = register.getRecipes();
     loadCookBook(mode);
+  }
+
+  public void updateScene() {
+    loadCookBook(mode);
+  }
+
+  public VBox createScene() {
+    return this;
   }
 }

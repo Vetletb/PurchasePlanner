@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.UpdateableScene;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.Date;
@@ -23,7 +24,7 @@ import java.util.Map;
 /**
  * The inventory page.
  */
-public class Plan extends VBox {
+public class Plan extends VBox implements UpdateableScene {
 
   private final HBox contentContainer;
   private final HBox buttonContainer;
@@ -33,24 +34,23 @@ public class Plan extends VBox {
   private HBox labelContainer;
   private VBox eventContainer;
 
-
   public Plan() {
     super();
     contentContainer = new HBox();
     buttonContainer = new HBox();
     addButton = new PrimaryButton(new Icon("plus").setFillColor(Color.BLACK));
-//    addButton.getStyleClass().add("event-add-button");
+    // addButton.getStyleClass().add("event-add-button");
     addButton.setOnAction(e -> addEvent());
     buttonContainer.getChildren().add(addButton);
     loadPlaner();
 
     super.getChildren().addAll(buttonContainer, contentContainer);
 
-
     // CSS styling
-//    buttonContainer. = HBox.setHgrow(buttonContainer, Priority.ALWAYS); TODO: Fix this
+    // buttonContainer. = HBox.setHgrow(buttonContainer, Priority.ALWAYS); TODO: Fix
+    // this
     buttonContainer.getStyleClass().add("event-add-button-container");
-//    addButton.getStyleClass().add("event-add-button");
+    // addButton.getStyleClass().add("event-add-button");
     contentContainer.getStyleClass().add("centered");
   }
 
@@ -61,15 +61,15 @@ public class Plan extends VBox {
     EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
 
     int dayOfWeekAsInt = nowDate.getDayOfWeek().getValue() - 1;
-    for (int i = - dayOfWeekAsInt; i < 7 - dayOfWeekAsInt; i++) {
+    for (int i = -dayOfWeekAsInt; i < 7 - dayOfWeekAsInt; i++) {
       dayContainer = new VBox();
       labelContainer = new HBox();
       eventContainer = new VBox();
 
       LocalDate date = nowDate.plusDays(i);
       Label dayLabel = new Label(date.getDayOfWeek().toString().substring(0, 3)
-              + " "
-              + date.getDayOfMonth());
+          + " "
+          + date.getDayOfMonth());
 
       if (i == 0) {
         dayLabel.getStyleClass().add("today-label");
@@ -80,8 +80,8 @@ public class Plan extends VBox {
 
       // Format date to match the database
       String dateStr = Integer.toString(date.getYear() - 2000)
-              + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
-              + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth());
+          + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
+          + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth());
       eventRegister.getEventsByDate(Integer.parseInt(dateStr));
 
       Map<Integer, Event> events = eventRegister.getEvents();
@@ -120,25 +120,24 @@ public class Plan extends VBox {
 
     LocalDate nowDate = LocalDate.now();
     int dayOfWeekAsInt = nowDate.getDayOfWeek().getValue() - 1;
-    for (int i = - dayOfWeekAsInt; i < 7 - dayOfWeekAsInt; i++) {
+    for (int i = -dayOfWeekAsInt; i < 7 - dayOfWeekAsInt; i++) {
       LocalDate date = nowDate.plusDays(i);
       String dateStr = Integer.toString(date.getYear() - 2000)
-              + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
-              + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth());
+          + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
+          + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth());
       dates.put(Integer.parseInt(dateStr), new Date(date));
     }
     addPopup.addField(Field.ofMap("Date", dates));
-
 
     addPopup.setOnAdd((Object[] o) -> {
       for (Object object : o) {
         Logger.debug(object.getClass().getName());
 
       }
-      Object[] recipe_id_As_List = (Object[])o[0];
-      Object[] date_As_List = (Object[])o[1];
-      int recipe_id = (int)recipe_id_As_List[0];
-      int date = (int)date_As_List[0];
+      Object[] recipe_id_As_List = (Object[]) o[0];
+      Object[] date_As_List = (Object[]) o[1];
+      int recipe_id = (int) recipe_id_As_List[0];
+      int date = (int) date_As_List[0];
 
       EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
       eventRegister.getAllEvents();
@@ -151,22 +150,24 @@ public class Plan extends VBox {
   private void updateEvent(Object[] values) {
     EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
     eventRegister.getAllEvents();
-    Object[] recipe_id_As_List = (Object[])values[1];
-    Object[] date_As_List = (Object[])values[2];
-    int event_id =  (int)values[0];
+    Object[] recipe_id_As_List = (Object[]) values[1];
+    Object[] date_As_List = (Object[]) values[2];
+    int event_id = (int) values[0];
     int recipe_id = -1;
     int date = -1;
     if (recipe_id_As_List == null) {
       eventRegister.getEventById(event_id);
       Event event = eventRegister.getEvents().get(event_id);
       recipe_id = Integer.parseInt(event.getAttributes().get(0));
-    } else recipe_id = (int)recipe_id_As_List[0];
+    } else
+      recipe_id = (int) recipe_id_As_List[0];
 
     if (date_As_List == null) {
       eventRegister.getEventById(event_id);
       Event event = eventRegister.getEvents().get(event_id);
       date = Integer.parseInt(event.getAttributes().get(1));
-    } else date = (int)date_As_List[0];
+    } else
+      date = (int) date_As_List[0];
 
     eventRegister.updateEvent(event_id, recipe_id, date);
     eventRegister.getAllEvents();
@@ -179,6 +180,14 @@ public class Plan extends VBox {
     eventRegister.deleteEvent(event_id);
     eventRegister.getAllEvents();
     loadPlaner();
+  }
+
+  public void updateScene() {
+    loadPlaner();
+  }
+
+  public VBox createScene() {
+    return this;
   }
 
 }

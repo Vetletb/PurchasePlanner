@@ -13,7 +13,7 @@ import no.ntnu.idatt1002.demo.view.scenes.ShoppingList;
  * The scene loader for the application.
  */
 public class SceneLoader extends VBox {
-  private final HashMap<String, VBox> scenes = new HashMap<>();
+  private final HashMap<String, UpdateableScene> scenes = new HashMap<>();
 
   /**
    * Constructor for the scene loader.
@@ -33,7 +33,7 @@ public class SceneLoader extends VBox {
     scenes.put("cookingmode", new CookingMode());
     scenes.put("settings", new Settings());
 
-    super.getChildren().add(scenes.get("inventory"));
+    super.getChildren().add(scenes.get("inventory").createScene());
   }
 
   /**
@@ -45,7 +45,8 @@ public class SceneLoader extends VBox {
   public boolean switchScene(String scene) {
     if (scenes.containsKey(scene)) {
       super.getChildren().clear();
-      super.getChildren().add(scenes.get(scene));
+      super.getChildren().add(scenes.get(scene).createScene());
+      scenes.get(scene).updateScene();
 
       return true;
     }
