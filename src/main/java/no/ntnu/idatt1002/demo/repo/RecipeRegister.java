@@ -203,7 +203,10 @@ public class RecipeRegister {
    * @param instruction the instruction of the step
    */
   public void addInstruction(int recipe_id, int step_number, String instruction) {
+    List<Recipe> currentRecipes = recipes;
+    getAllRecipes();
     instructionNumbering(recipe_id, step_number, true);
+    recipes = currentRecipes;
     dao.addToDatabase(new RecipeStep(recipe_id, step_number, instruction));
   }
 
@@ -216,8 +219,11 @@ public class RecipeRegister {
     for (Recipe recipe : recipes) {
       if (recipe.getInstructionById(id) != null) {
         dao.deleteFromDatabase(recipe.getInstructionById(id));
+        List<Recipe> currentRecipes = recipes;
+        getAllRecipes();
         instructionNumbering(
             recipe.getRecipe_id(), recipe.getInstructionById(id).getStepNumber(), false);
+        recipes = currentRecipes;
         break;
       }
     }
