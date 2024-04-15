@@ -3,6 +3,8 @@ package no.ntnu.idatt1002.demo.dao;
 import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.data.Storable;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -50,116 +52,222 @@ class DAOTest {
     when(preparedStatement.executeQuery()).thenReturn(resultSet);
   }
 
-  @Test
-  public void testAddToDatabase() throws SQLException {
-    when(storable.getAttributeNames()).thenReturn(Arrays.asList("name", "category", "allergy"));
-    when(storable.getAttributes()).thenReturn(Arrays.asList("item1", "category1", "allergy1"));
+  @Nested
+  @DisplayName("Positive tests")
+  class PositiveTests {
 
-    dao.addToDatabase(storable);
+    @Test
+    public void testAddToDatabase() throws SQLException {
+      when(storable.getAttributeNames()).thenReturn(Arrays.asList("name", "category", "allergy"));
+      when(storable.getAttributes()).thenReturn(Arrays.asList("item1", "category1", "allergy1"));
 
-    verify(dbConnectionProvider, times(1)).getConnection();
-    verify(connection, times(1)).prepareStatement(anyString());
-    verify(preparedStatement, times(1)).setString(1, "item1");
-    verify(preparedStatement, times(1)).setString(2, "category1");
-    verify(preparedStatement, times(1)).setString(3, "allergy1");
-    verify(preparedStatement, times(1)).executeUpdate();
+      dao.addToDatabase(storable);
+
+      verify(dbConnectionProvider, times(1)).getConnection();
+      verify(connection, times(1)).prepareStatement(anyString());
+      verify(preparedStatement, times(1)).setString(1, "item1");
+      verify(preparedStatement, times(1)).setString(2, "category1");
+      verify(preparedStatement, times(1)).setString(3, "allergy1");
+      verify(preparedStatement, times(1)).executeUpdate();
+    }
+
+    @Test
+    public void testDeleteFromDatabase() throws SQLException {
+      when(storable.getId()).thenReturn(1);
+
+      dao.deleteFromDatabase(storable);
+
+      verify(dbConnectionProvider, times(1)).getConnection();
+      verify(connection, times(1)).prepareStatement(anyString());
+      verify(preparedStatement, times(1)).setInt(1, 1);
+      verify(preparedStatement, times(1)).executeUpdate();
+    }
+
+    @Test
+    public void testUpdateDatabase() throws SQLException {
+      when(storable.getId()).thenReturn(1);
+      when(storable.getAttributeNames()).thenReturn(Arrays.asList("name", "category", "allergy"));
+      when(storable.getAttributes()).thenReturn(Arrays.asList("item1", "category1", "allergy1"));
+
+      dao.updateDatabase(storable);
+
+      verify(dbConnectionProvider, times(1)).getConnection();
+      verify(connection, times(1)).prepareStatement(anyString());
+      verify(preparedStatement, times(1)).setString(1, "item1");
+      verify(preparedStatement, times(1)).setString(2, "category1");
+      verify(preparedStatement, times(1)).setString(3, "allergy1");
+      verify(preparedStatement, times(1)).setInt(4, 1);
+      verify(preparedStatement, times(1)).executeUpdate();
+    }
+
+    @Test
+    public void testGetAllFromTable() throws SQLException {
+      when(dbConnectionProvider.getConnection()).thenReturn(connection);
+      when(connection.getMetaData()).thenReturn(metaData);
+      when(metaData.getColumns(null, null, "table", null)).thenReturn(resultSet);
+      when(resultSet.next()).thenReturn(true, true, true, false, true,  false);
+      when(resultSet.getString("COLUMN_NAME")).thenReturn("column1", "column2", "column3");
+      when(resultSet.getString("column1")).thenReturn("value1");
+      when(resultSet.getString("column2")).thenReturn("value2");
+      when(resultSet.getString("column3")).thenReturn("value3");
+
+      List<List<String>> items = dao.getAllFromTable("table", null, null);
+
+      verify(dbConnectionProvider, times(2)).getConnection();
+      verify(connection, times(1)).prepareStatement(anyString());
+      verify(preparedStatement, times(1)).executeQuery();
+      verify(resultSet, times(6)).next();
+      verify(resultSet, times(6)).getString(anyString());
+
+      assertEquals(1, items.size());
+      assertEquals(Arrays.asList("value1", "value2", "value3"), items.get(0));
+    }
+
+    @Test
+    public void testSearchFromTable() throws SQLException {
+      when(dbConnectionProvider.getConnection()).thenReturn(connection);
+      when(connection.getMetaData()).thenReturn(metaData);
+      when(metaData.getColumns(null, null, "table", null)).thenReturn(resultSet);
+      when(resultSet.next()).thenReturn(true, true, true, false, true,  false);
+      when(resultSet.getString("COLUMN_NAME")).thenReturn("column1", "column2", "column3");
+      when(resultSet.getString("column1")).thenReturn("value1");
+      when(resultSet.getString("column2")).thenReturn("value2");
+      when(resultSet.getString("column3")).thenReturn("value3");
+
+      List<List<String>> items = dao.searchFromTable("table", "name", null, null);
+
+      verify(dbConnectionProvider, times(2)).getConnection();
+      verify(connection, times(1)).prepareStatement(anyString());
+      verify(preparedStatement, times(1)).executeQuery();
+      verify(resultSet, times(6)).next();
+      verify(resultSet, times(6)).getString(anyString());
+
+      assertEquals(1, items.size());
+      assertEquals(Arrays.asList("value1", "value2", "value3"), items.get(0));
+    }
+
+    @Test
+    public void testFilterFromTable() throws SQLException {
+      when(dbConnectionProvider.getConnection()).thenReturn(connection);
+      when(connection.getMetaData()).thenReturn(metaData);
+      when(metaData.getColumns(null, null, "table", null)).thenReturn(resultSet);
+      when(resultSet.next()).thenReturn(true, true, true, false, true,  false);
+      when(resultSet.getString("COLUMN_NAME")).thenReturn("column1", "column2", "column3");
+      when(resultSet.getString("column1")).thenReturn("value1");
+      when(resultSet.getString("column2")).thenReturn("value2");
+      when(resultSet.getString("column3")).thenReturn("value3");
+
+      List<List<String>> items = dao.filterFromTable("table", "name", "value", null, null);
+
+      verify(dbConnectionProvider, times(2)).getConnection();
+      verify(connection, times(1)).prepareStatement(anyString());
+      verify(preparedStatement, times(1)).executeQuery();
+      verify(resultSet, times(6)).next();
+      verify(resultSet, times(6)).getString(anyString());
+
+      assertEquals(1, items.size());
+      assertEquals(Arrays.asList("value1", "value2", "value3"), items.get(0));
+    }
   }
 
-  @Test
-  public void testDeleteFromDatabase() throws SQLException {
-    when(storable.getId()).thenReturn(1);
+  @Nested
+  @DisplayName("Negative tests")
+  class NegativeTests {
 
-    dao.deleteFromDatabase(storable);
+    @Test
+    @DisplayName("Test add to database throws exception")
+    public void testAddToDatabaseThrowsException() throws SQLException {
+      when(storable.getAttributeNames()).thenReturn(Arrays.asList("name", "category", "allergy"));
+      when(storable.getAttributes()).thenReturn(Arrays.asList("item1", "category1", "allergy1"));
+      when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-    verify(dbConnectionProvider, times(1)).getConnection();
-    verify(connection, times(1)).prepareStatement(anyString());
-    verify(preparedStatement, times(1)).setInt(1, 1);
-    verify(preparedStatement, times(1)).executeUpdate();
-  }
+      assertThrows(RuntimeException.class, () -> dao.addToDatabase(storable));
 
-  @Test
-  public void testUpdateDatabase() throws SQLException {
-    when(storable.getId()).thenReturn(1);
-    when(storable.getAttributeNames()).thenReturn(Arrays.asList("name", "category", "allergy"));
-    when(storable.getAttributes()).thenReturn(Arrays.asList("item1", "category1", "allergy1"));
+      verify(dbConnectionProvider, times(1)).getConnection();
+      verify(connection, times(1)).prepareStatement(anyString());
+    }
 
-    dao.updateDatabase(storable);
+    @Test
+    @DisplayName("Test delete from database throws exception")
+    public void testDeleteFromDatabaseThrowsException() throws SQLException {
+        when(storable.getId()).thenReturn(1);
+        when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-    verify(dbConnectionProvider, times(1)).getConnection();
-    verify(connection, times(1)).prepareStatement(anyString());
-    verify(preparedStatement, times(1)).setString(1, "item1");
-    verify(preparedStatement, times(1)).setString(2, "category1");
-    verify(preparedStatement, times(1)).setString(3, "allergy1");
-    verify(preparedStatement, times(1)).setInt(4, 1);
-    verify(preparedStatement, times(1)).executeUpdate();
-  }
+        assertThrows(RuntimeException.class, () -> dao.deleteFromDatabase(storable));
 
-  @Test
-  public void testGetAllFromTable() throws SQLException {
-    when(dbConnectionProvider.getConnection()).thenReturn(connection);
-    when(connection.getMetaData()).thenReturn(metaData);
-    when(metaData.getColumns(null, null, "table", null)).thenReturn(resultSet);
-    when(resultSet.next()).thenReturn(true, true, true, false, true,  false);
-    when(resultSet.getString("COLUMN_NAME")).thenReturn("column1", "column2", "column3");
-    when(resultSet.getString("column1")).thenReturn("value1");
-    when(resultSet.getString("column2")).thenReturn("value2");
-    when(resultSet.getString("column3")).thenReturn("value3");
+        verify(dbConnectionProvider, times(1)).getConnection();
+        verify(connection, times(1)).prepareStatement(anyString());
+    }
 
-    List<List<String>> items = dao.getAllFromTable("table", null, null);
+    @Test
+    @DisplayName("Test update database throws exception")
+    public void testUpdateDatabaseThrowsException() throws SQLException {
+        when(storable.getId()).thenReturn(1);
+        when(storable.getAttributeNames()).thenReturn(Arrays.asList("name", "category", "allergy"));
+        when(storable.getAttributes()).thenReturn(Arrays.asList("item1", "category1", "allergy1"));
+        when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-    verify(dbConnectionProvider, times(2)).getConnection();
-    verify(connection, times(1)).prepareStatement(anyString());
-    verify(preparedStatement, times(1)).executeQuery();
-    verify(resultSet, times(6)).next();
-    verify(resultSet, times(6)).getString(anyString());
+        assertThrows(RuntimeException.class, () -> dao.updateDatabase(storable));
 
-    assertEquals(1, items.size());
-    assertEquals(Arrays.asList("value1", "value2", "value3"), items.get(0));
-  }
+        verify(dbConnectionProvider, times(1)).getConnection();
+        verify(connection, times(1)).prepareStatement(anyString());
+    }
 
-  @Test
-  public void testSearchFromTable() throws SQLException {
-    when(dbConnectionProvider.getConnection()).thenReturn(connection);
-    when(connection.getMetaData()).thenReturn(metaData);
-    when(metaData.getColumns(null, null, "table", null)).thenReturn(resultSet);
-    when(resultSet.next()).thenReturn(true, true, true, false, true,  false);
-    when(resultSet.getString("COLUMN_NAME")).thenReturn("column1", "column2", "column3");
-    when(resultSet.getString("column1")).thenReturn("value1");
-    when(resultSet.getString("column2")).thenReturn("value2");
-    when(resultSet.getString("column3")).thenReturn("value3");
+    @Test
+    @DisplayName("Test get all from table throws exception")
+    public void testGetAllFromTableThrowsException() throws SQLException {
+        when(dbConnectionProvider.getConnection()).thenReturn(connection);
+        when(connection.getMetaData()).thenReturn(metaData);
+        when(metaData.getColumns(null, null, "table", null)).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true, true, true, false, true,  false);
+        when(resultSet.getString("COLUMN_NAME")).thenReturn("column1", "column2", "column3");
+        when(resultSet.getString("column1")).thenReturn("value1");
+        when(resultSet.getString("column2")).thenReturn("value2");
+        when(resultSet.getString("column3")).thenReturn("value3");
+        when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-    List<List<String>> items = dao.searchFromTable("table", "name", null, null);
+        assertThrows(RuntimeException.class, () -> dao.getAllFromTable("table", null, null));
 
-    verify(dbConnectionProvider, times(2)).getConnection();
-    verify(connection, times(1)).prepareStatement(anyString());
-    verify(preparedStatement, times(1)).executeQuery();
-    verify(resultSet, times(6)).next();
-    verify(resultSet, times(6)).getString(anyString());
+        verify(dbConnectionProvider, times(1)).getConnection();
+        verify(connection, times(1)).prepareStatement(anyString());
+    }
 
-    assertEquals(1, items.size());
-    assertEquals(Arrays.asList("value1", "value2", "value3"), items.get(0));
-  }
+    @Test
+    @DisplayName("Test search from table throws exception")
+    public void testSearchFromTableThrowsException() throws SQLException {
+        when(dbConnectionProvider.getConnection()).thenReturn(connection);
+        when(connection.getMetaData()).thenReturn(metaData);
+        when(metaData.getColumns(null, null, "table", null)).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true, true, true, false, true,  false);
+        when(resultSet.getString("COLUMN_NAME")).thenReturn("column1", "column2", "column3");
+        when(resultSet.getString("column1")).thenReturn("value1");
+        when(resultSet.getString("column2")).thenReturn("value2");
+        when(resultSet.getString("column3")).thenReturn("value3");
+        when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-  @Test
-  public void testFilterFromTable() throws SQLException {
-    when(dbConnectionProvider.getConnection()).thenReturn(connection);
-    when(connection.getMetaData()).thenReturn(metaData);
-    when(metaData.getColumns(null, null, "table", null)).thenReturn(resultSet);
-    when(resultSet.next()).thenReturn(true, true, true, false, true,  false);
-    when(resultSet.getString("COLUMN_NAME")).thenReturn("column1", "column2", "column3");
-    when(resultSet.getString("column1")).thenReturn("value1");
-    when(resultSet.getString("column2")).thenReturn("value2");
-    when(resultSet.getString("column3")).thenReturn("value3");
+        assertThrows(RuntimeException.class, () -> dao.searchFromTable("table", "name", null, null));
 
-    List<List<String>> items = dao.filterFromTable("table", "name", "value", null, null);
+        verify(dbConnectionProvider, times(1)).getConnection();
+        verify(connection, times(1)).prepareStatement(anyString());
+    }
 
-    verify(dbConnectionProvider, times(2)).getConnection();
-    verify(connection, times(1)).prepareStatement(anyString());
-    verify(preparedStatement, times(1)).executeQuery();
-    verify(resultSet, times(6)).next();
-    verify(resultSet, times(6)).getString(anyString());
+    @Test
+    @DisplayName("Test filter from table throws exception")
+    public void testFilterFromTableThrowsException() throws SQLException {
+        when(dbConnectionProvider.getConnection()).thenReturn(connection);
+        when(connection.getMetaData()).thenReturn(metaData);
+        when(metaData.getColumns(null, null, "table", null)).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true, true, true, false, true,  false);
+        when(resultSet.getString("COLUMN_NAME")).thenReturn("column1", "column2", "column3");
+        when(resultSet.getString("column1")).thenReturn("value1");
+        when(resultSet.getString("column2")).thenReturn("value2");
+        when(resultSet.getString("column3")).thenReturn("value3");
+        when(connection.prepareStatement(any(String.class))).thenThrow(SQLException.class);
 
-    assertEquals(1, items.size());
-    assertEquals(Arrays.asList("value1", "value2", "value3"), items.get(0));
+        assertThrows(RuntimeException.class, () -> dao.filterFromTable("table", "name", "value", null, null));
+
+        verify(dbConnectionProvider, times(1)).getConnection();
+        verify(connection, times(1)).prepareStatement(anyString());
+    }
   }
 }
