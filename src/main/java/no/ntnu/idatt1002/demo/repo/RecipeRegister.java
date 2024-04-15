@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.Recipe;
 import no.ntnu.idatt1002.demo.data.RecipeIngredient;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class represents a register for recipes.
@@ -45,8 +46,10 @@ public class RecipeRegister {
   private void packagetoRecipe(List<List<String>> recipes) {
     for (List<String> recipe : recipes) {
       Recipe newRecipe = new Recipe(
-          Integer.parseInt(recipe.get(0)), recipe.get(1),
-          Integer.parseInt(recipe.get(2)), recipe.get(3));
+          Integer.parseInt(recipe.get(0)),
+          recipe.get(1),
+          Integer.parseInt(recipe.get(2)),
+          recipe.get(3));
       List<List<String>> ingredients = dao.filterFromTable(
           "RecipeIngredient", "recipe_id", Integer.toString(newRecipe.getId()), "Item", "item_id");
       for (List<String> ingredient : ingredients) {
@@ -65,6 +68,7 @@ public class RecipeRegister {
    * @param category the category to filter by
    */
   public void filterRecipesByCategory(String category) {
+    VerifyInput.verifyNotEmpty(category, "category");
     recipes = new ArrayList<>();
     List<List<String>> recipes = dao.filterFromTable("Recipe", "category", category, null, null);
     packagetoRecipe(recipes);
@@ -76,6 +80,7 @@ public class RecipeRegister {
    * @param name the name to search by
    */
   public void searchRecipesByName(String name) {
+    VerifyInput.verifyNotEmpty(name, "name");
     recipes = new ArrayList<>();
     List<List<String>> recipes = dao.searchFromTable("Recipe", name, null, null);
     packagetoRecipe(recipes);
@@ -108,6 +113,7 @@ public class RecipeRegister {
    * @return the index of the recipe
    */
   public int getRecipesFromId(int id) {
+    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(id, "id");
     for (int i = 0; i < recipes.size(); i++) {
       if (recipes.get(i).getRecipe_id() == id) {
         return i;
@@ -123,6 +129,9 @@ public class RecipeRegister {
    */
   public void deleteRecipe(int id) {
     int index = getRecipesFromId(id);
+    if (index == -1) {
+      throw new IllegalArgumentException("Recipe with id " + id + " does not exist.");
+    }
     Recipe recipe = recipes.get(index);
     List<RecipeIngredient> recipeIngredient = recipe.getIngredients();
     for (RecipeIngredient ingredient : recipeIngredient) {
@@ -143,8 +152,16 @@ public class RecipeRegister {
     dao.updateDatabase(recipe);
   }
 
+  /**
+   * This method adds an ingredient to the database.
+   *
+   * @param item_id the id of the item
+   * @param quantity the quantity of the item
+   * @param unit the unit of the item
+   * @param recipe_id the id of the recipe
+   */
   public void addIngredient(int item_id, int quantity, String unit, int recipe_id) {
-    dao.addToDatabase(new RecipeIngredient(item_id, null, null, null, quantity, unit, recipe_id));
+    dao.addToDatabase(new RecipeIngredient(item_id, "dummy", "dummy", "dummy", quantity, unit, recipe_id));
   }
 
   /**
@@ -153,11 +170,16 @@ public class RecipeRegister {
    * @param id the id of the ingredient to delete
    **/
   public void deleteIngredient(int id) {
+    boolean found = false;
     for (Recipe recipe : recipes) {
       if (recipe.getIngredientById(id) != null) {
         dao.deleteFromDatabase(recipe.getIngredientById(id));
+        found = true;
         break;
       }
+    }
+    if (!found) {
+      throw new IllegalArgumentException("Ingredient with id " + id + " does not exist.");
     }
   }
 
@@ -179,7 +201,7 @@ public class RecipeRegister {
     }
     if (recipe_id > 0) {
       RecipeIngredient recipeIngredient =
-          new RecipeIngredient(recipeIngredient_id, item_id, null, null, null, quantity, unit,
+          new RecipeIngredient(recipeIngredient_id, item_id, "dummy", "dummy", "dummy", quantity, unit,
               recipe_id);
       dao.updateDatabase(recipeIngredient);
     }
