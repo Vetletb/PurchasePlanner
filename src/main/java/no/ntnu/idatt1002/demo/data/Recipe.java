@@ -217,11 +217,12 @@ public class Recipe implements Storable {
    */
   @Override
   public String toString() {
-    return
-      "Recipe ID: " + recipe_id
-      + ", Name: " + name
-      + ", Category: " + category
-      + ", Cooking Time: " + cooking_time;
+//    return
+//      "Recipe ID: " + recipe_id
+//      + ", Name: " + name
+//      + ", Category: " + category
+//      + ", Cooking Time: " + cooking_time;
+    return this.getName();
   }
 }
 
