@@ -20,6 +20,19 @@ public class VerifyInput {
   }
 
   /**
+   * Checks if an object is null
+   *
+   * @param input     the object to be checked
+   * @param parameter the name of the parameter
+   * @throws IllegalArgumentException if the object is null
+   */
+  public static void verifyNotNull(Object input, String parameter) {
+    if (input == null) {
+      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' cannot be null");
+    }
+  }
+
+  /**
    * Checks if an int is a positive number or minus one
    *
    * @param input     the int to be checked
@@ -73,12 +86,12 @@ public class VerifyInput {
    *
    * @param input     the int(date) to be checked
    * @param parameter the name of the parameter
-   * @throws IllegalArgumentException if the int(date) does not have six figures
+   * @throws IllegalArgumentException if the int(date) does not have eight figures
    *                                  or is zero or minus one
    */
   public static void verifyDateZeroAndMinusOneAccepted(int input, String parameter) {
     if ((Integer.toString(input).length() != 8) && input != 0 && input != -1) {
-      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' must have six figures");
+      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' must have eight figures");
     }
   }
 }

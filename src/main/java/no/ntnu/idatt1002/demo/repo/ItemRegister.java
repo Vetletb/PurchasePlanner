@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.Item;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class represents a register for items. Allowing for communication
@@ -20,8 +21,10 @@ public class ItemRegister {
    * Constructor for the ItemRegister class.
    *
    * @param dao the data access object
+   * @throws IllegalArgumentException if dao is null
    */
   public ItemRegister(DAO dao) {
+    VerifyInput.verifyNotNull(dao, "dao");
     this.dao = dao;
     this.items = new ArrayList<>();
   }
@@ -39,8 +42,10 @@ public class ItemRegister {
    * This method retrieves filtered items by category from the database.
    *
    * @param category the category to filter by
+   * @throws IllegalArgumentException if category is null or empty
    */
   public void filterItemsByCategory(String category) {
+    VerifyInput.verifyNotEmpty(category, "category");
     items = new ArrayList<>();
     List<List<String>> items = dao.filterFromTable("Item", "category", category, null, null);
     packageToItem(items);
@@ -50,8 +55,10 @@ public class ItemRegister {
    * This method searches for items by name and retrieves them from the database.
    *
    * @param name the name to search by
+   * @throws IllegalArgumentException if name is null or empty
    */
   public void searchItemsByName(String name) {
+    VerifyInput.verifyNotEmpty(name, "name");
     items = new ArrayList<>();
     List<List<String>> items = dao.searchFromTable("Item", name, null, null);
     packageToItem(items);
@@ -91,9 +98,13 @@ public class ItemRegister {
    * This method deletes an item from the database.
    *
    * @param id the id of the item to delete
+   * @throws IllegalArgumentException if the item does not exist
    */
   public void deleteItem(int id) {
-    int index = getItemFromId(id);
+    int index = getIndexFromId(id);
+    if (index == -1) {
+      throw new IllegalArgumentException("Item with id " + id + " does not exist.");
+    }
     dao.deleteFromDatabase(items.get(index));
   }
 
@@ -104,10 +115,12 @@ public class ItemRegister {
   /**
    * This method returns the index of the item with the given id.
    *
-   * @param id the id of the item
+   * @param id the id of the item*
    * @return the index of the item with the given id
+   * @throws IllegalArgumentException if id is less than 1
    */
-  private int getItemFromId(int id) {
+  private int getIndexFromId(int id) {
+    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(id, "id");
     for (int i = 0; i < items.size(); i++) {
       if (items.get(i).getId() == id) {
         return i;
@@ -125,8 +138,12 @@ public class ItemRegister {
    * @param name     the name of the item
    * @param category the category of the item
    * @param allergy  the allergy of the item
+   * @throws IllegalArgumentException if the item does not exist
    */
   public void updateItem(int id, String name, String category, String allergy) {
+    if (getIndexFromId(id) == -1) {
+      throw new IllegalArgumentException("Item with id " + id + " does not exist.");
+    }
     Item item = new Item(id, name, category, allergy);
     dao.updateDatabase(item);
   }

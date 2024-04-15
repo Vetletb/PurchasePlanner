@@ -45,7 +45,7 @@ public class Item implements Storable {
 
   /**
    * This method returns the attributes of the item.
-   * 
+   *
    * @return the attribute names of the item
    */
   @Override
@@ -59,7 +59,7 @@ public class Item implements Storable {
 
   /**
    * This method returns the attribute names of the item.
-   * 
+   *
    * @return the attribute names of the item
    */
   @Override
@@ -73,7 +73,7 @@ public class Item implements Storable {
 
   /**
    * This method returns the id of the item.
-   * 
+   *
    * @return the id of the item
    */
   @Override
@@ -83,7 +83,7 @@ public class Item implements Storable {
 
   /**
    * This method returns the name of the id.
-   * 
+   *
    * @return the name of the id
    */
   @Override
@@ -93,7 +93,7 @@ public class Item implements Storable {
 
   /**
    * This method returns the id of the item.
-   * 
+   *
    * @return the id of the item
    */
   public int getItemId() {
@@ -102,7 +102,7 @@ public class Item implements Storable {
 
   /**
    * This method returns the name of the item.
-   * 
+   *
    * @return the name of the item
    */
   public String getName() {
@@ -111,7 +111,7 @@ public class Item implements Storable {
 
   /**
    * This method returns the category of the item.
-   * 
+   *
    * @return the category of the item
    */
   public String getCategory() {
@@ -120,7 +120,7 @@ public class Item implements Storable {
 
   /**
    * This method returns the allergy of the item.
-   * 
+   *
    * @return the allergy of the item
    */
   public String getAllergy() {
@@ -129,7 +129,7 @@ public class Item implements Storable {
 
   /**
    * This method returns a string representation of the item.
-   * 
+   *
    * @return a string representation of the item
    */
   @Override

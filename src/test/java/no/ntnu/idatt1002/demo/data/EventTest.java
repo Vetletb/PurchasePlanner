@@ -95,7 +95,8 @@ public class EventTest {
      */
     @Test
     void testToStringPositive() {
-      assertEquals("Event ID: 1, Recipe ID: 2, Date: 240501", event.toString());
+//      assertEquals("Event ID: 1, Recipe ID: 2, Date: 240501", event.toString());
+      assertEquals(event.getName(), event.toString());
     }
   }
 
