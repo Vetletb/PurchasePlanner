@@ -120,7 +120,7 @@ class ShoppingListItemRegisterTest {
       @Test
       @DisplayName("Test updateShoppingListItem")
       public void updateShoppingListItemDoesNotThrowExceptionOnValidParameters() {
-        assertDoesNotThrow(() -> shoppingListItemRegister.updateShoppingListItem(1, 2, "unit"));
+        assertDoesNotThrow(() -> shoppingListItemRegister.updateShoppingListItem(1, 2, 3, "unit"));
       }
     }
   }
@@ -144,7 +144,7 @@ class ShoppingListItemRegisterTest {
     @Test
     @DisplayName("Test updateShoppingListItem")
     public void updateShoppingListItemThrowsExceptionOnNonExistingId() {
-      assertThrows(IllegalArgumentException.class, () -> shoppingListItemRegister.updateShoppingListItem(4, 2, "unit"));
+      assertThrows(IllegalArgumentException.class, () -> shoppingListItemRegister.updateShoppingListItem(4, 2, 1, "unit"));
     }
 
     @Test

@@ -230,9 +230,6 @@ xs   * @param item the item to be added
     shoppingListItemRegister.updateShoppingListItem(
             shoppingListItemId,
             item_id,
-            shoppingListItem.getName(),
-            shoppingListItem.getCategory(),
-            shoppingListItem.getAllergy(),
             quantity,
             unit
     );
