@@ -148,6 +148,10 @@ public class RecipeRegister {
    * @param category the category of the recipe
    */
   public void updateRecipe(int recipe_id, String name, int cooking_time, String category) {
+    int index = getRecipesFromId(recipe_id);
+    if (index == -1) {
+      throw new IllegalArgumentException("Recipe with id " + recipe_id + " does not exist.");
+    }
     Recipe recipe = new Recipe(recipe_id, name, cooking_time, category);
     dao.updateDatabase(recipe);
   }
