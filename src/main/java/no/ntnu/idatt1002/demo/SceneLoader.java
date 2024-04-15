@@ -46,6 +46,7 @@ public class SceneLoader extends VBox {
     if (scenes.containsKey(scene)) {
       super.getChildren().clear();
       super.getChildren().add(scenes.get(scene));
+
       return true;
     }
     return false;

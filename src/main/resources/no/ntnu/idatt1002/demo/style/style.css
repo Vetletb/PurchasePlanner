@@ -57,6 +57,11 @@ alignment
     -fx-alignment: center-right;
 }
 
+.left-centered {
+    -fx-alignment: center-left;
+
+}
+
 .top-left {
     -fx-alignment: top-left;
 }
@@ -526,7 +531,7 @@ Red button
     -fx-background-radius: 5;
     -fx-scale-x: 1;
     -fx-scale-y: 1;
-    -fx-min-height:50px;
+    -fx-min-height: 50px;
 }
 
 .event-pane:hover {
