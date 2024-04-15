@@ -1,7 +1,5 @@
 package no.ntnu.idatt1002.demo.data;
 
-import no.ntnu.idatt1002.demo.data.Recipe;
-import no.ntnu.idatt1002.demo.data.RecipeIngredient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
