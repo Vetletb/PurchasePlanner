@@ -113,20 +113,24 @@ public class ShoppingListItemRegister {
     return -1;
   }
 
+  public ShoppingListItem getShoppingListItemById(int id) {
+    return shoppingListItems.get(getIndexFromId(id));
+  }
+
   /**
    * Method for updating a shopping list item in the database.
    *
-   * @param id the id of the shopping list item to update
+   * @param shoppingListItem_id the id of the shopping list item to update
    * @param quantity the quantity of the item
    * @param unit the unit of the item
    * @throws IllegalArgumentException if the shopping list item with the given id does not exist
    */
-  public void updateShoppingListItem(int id, int quantity, String unit) {
-    if (getIndexFromId(id) == -1) {
-      throw new IllegalArgumentException("Shopping list item with id " + id + " does not exist.");
+  public void updateShoppingListItem(int shoppingListItem_id, int item_id, int quantity, String unit) {
+    if (getIndexFromId(shoppingListItem_id) == -1) {
+      throw new IllegalArgumentException("Shopping list item with id " + shoppingListItem_id + " does not exist.");
     }
     dao.updateDatabase(new ShoppingListItem(
-        id, "dummy", "dummy", "dummy", quantity, unit));
+        shoppingListItem_id, item_id, "dummy", "dummy", "dummy", quantity, unit));
   }
 
   /**
@@ -144,5 +148,10 @@ public class ShoppingListItemRegister {
     List<List<String>> items = dao.searchFromTable("ShoppingListItem", name, "Item", "item_id");
     items.forEach(item -> Logger.warning("Searched Item: " + item.toString()));
     packageToShoppingListItem(items);
+  }
+
+  public void clearShoppingList() {
+    shoppingListItems.forEach(dao::deleteFromDatabase);
+    shoppingListItems.clear();
   }
 }

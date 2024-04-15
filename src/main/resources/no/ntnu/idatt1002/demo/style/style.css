@@ -162,16 +162,19 @@ Red button
 */
 
 .red-button {
-    -fx-background-color: #df2c2c;
+    /*-fx-background-color: #df2c2c;*/
+    -fx-background-color: #FF5555FF;
 }
 
 .red-button:hover {
-    -fx-background-color: #d22020;
+    /*-fx-background-color: #d22020;*/
+    -fx-background-color: #dc4747;
     -fx-cursor: hand;
 }
 
 .red-button:pressed {
-    -fx-background-color: #d81e1e;
+    /*-fx-background-color: #d81e1e;*/
+    -fx-background-color: #c53a3a;
     -fx-cursor: hand;
 }
 
@@ -323,7 +326,7 @@ Red button
 
 /*
 ###########################################
-                List Header                
+                List Header
 ###########################################
 */
 
@@ -335,7 +338,7 @@ Red button
 .list-item {
     -fx-font-size: 15px;
     -fx-padding: 10px;
-    -fx-background-color: -fx-primary-color-light;
+    -fx-background-color: #eeeeee;
 }
 
 .list-item:hover {
@@ -349,7 +352,7 @@ Red button
 
 /*
 ###########################################
-                Item banner                
+                Item banner
 ###########################################
 */
 
@@ -363,7 +366,7 @@ Red button
 
 /*
 #####################################
-                Popup                
+                Popup
 #####################################
 */
 
@@ -423,10 +426,10 @@ Red button
     -fx-alignment: center-left;
 }
 
-.shopping-list-item-container {
-    -fx-padding: 10px;
-    -fx-spacing: 0px;
+.shopping-list-item-pane {
+    -fx-spacing: 5px;
     -fx-alignment: center;
+    -fx-background-color: -fx-primary-color-light;
     -fx-border-color: #b0b0b0;
     -fx-border-width: 0 0 1 0;
 }
@@ -435,7 +438,9 @@ Red button
     -fx-font-size: 20px;
     -fx-min-width: 150px;
     -fx-max-width: 150px;
+    -fx-padding: 10px;
     -fx-wrap-text: true;
+    /*-fx-alignment: center;*/
 }
 
 .static-label-container {
@@ -444,7 +449,7 @@ Red button
     -fx-alignment: center;
 }
 
-.static-label-container-label {
+.static-label {
     -fx-font-size: 20px;
     -fx-min-width: 150px;
     -fx-max-width: 300px;
@@ -460,6 +465,19 @@ Red button
 .rounded-bottom {
     -fx-background-radius: 0 0 20 20;
     -fx-background-color: #e7e7e7;
+}
+
+.clear-button {
+    -fx-background-color: #ff5555;
+    -fx-font-size: 15px;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-background-radius: 90;
+}
+
+.clear-button-container {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
 }
 
 /*

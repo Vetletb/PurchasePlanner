@@ -108,6 +108,10 @@ public class ItemRegister {
     dao.deleteFromDatabase(items.get(index));
   }
 
+  public Item getItemById(int id) {
+    return items.get(id);
+  }
+
   /**
    * This method returns the index of the item with the given id.
    *
@@ -124,6 +128,8 @@ public class ItemRegister {
     }
     return -1;
   }
+
+
 
   /**
    * This method updates an item in the database.
