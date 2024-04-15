@@ -550,3 +550,46 @@ Red button
     -fx-background-color: -fx-primary-color;
     -fx-min-height: 30px;
 }
+
+/*
+##########################################
+               Cooking mode
+##########################################
+*/
+
+.cooking-mode-header {
+    -fx-font-size: 20px;
+    -fx-padding: 20px;
+    -fx-alignment: center;
+}
+
+.cooking-mode-content {
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
+
+.step-text {
+    -fx-font-size: 30px;
+    -fx-padding: 20px;
+    -fx-alignment: top-center;
+}
+
+.step-number {
+    -fx-font-size: 20px;
+    -fx-padding: 20px;
+    -fx-alignment: center-left;
+}
+
+.one-event-text {
+    -fx-font-size: 25px;
+    -fx-padding: 20px;
+}
+
+.cook-something-box {
+    -fx-padding: 20px;
+}
+
+.or-text {
+    -fx-padding: 50px;
+}
