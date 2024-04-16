@@ -212,7 +212,7 @@ public class RecipeRegister {
   }
 
   /**
-   * This method returns a string representation of the recipe register.
+   * This method returns a string representation of the recipe register
    *
    * @return a string representation of the recipe register
    */
