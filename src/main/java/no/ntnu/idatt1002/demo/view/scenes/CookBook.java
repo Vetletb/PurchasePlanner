@@ -27,6 +27,8 @@ import no.ntnu.idatt1002.demo.view.components.ItemPopup;
 import no.ntnu.idatt1002.demo.view.components.ListHeader;
 import no.ntnu.idatt1002.demo.view.components.ListItem;
 import no.ntnu.idatt1002.demo.view.components.RecipePopup;
+import no.ntnu.idatt1002.demo.view.components.Toast;
+import no.ntnu.idatt1002.demo.view.components.ToastProvider;
 import no.ntnu.idatt1002.demo.view.components.ViewModeButton;
 import no.ntnu.idatt1002.demo.view.components.ViewModeButton.ViewMode;
 
@@ -83,14 +85,26 @@ public class CookBook extends VBox implements UpdateableScene {
 
     addPopup.addField(Field.ofMap("Ingredients", itemRegister.getItems()));
     addPopup.setOnAdd((Object[] o) -> {
-
-      for (Object object : o) {
-        Logger.debug(object.getClass().getName());
-
-      }
       RecipeRegister recipeRegister = new RecipeRegister(new DAO(new DBConnectionProvider()));
       recipeRegister.getAllRecipes();
       Map<Integer, Recipe> recipes = recipeRegister.getRecipes();
+
+      try {
+        String a = (String) o[0];
+        String b = (String) o[1];
+        Integer c = (Integer) o[2];
+
+        if (a.isEmpty() || b.isEmpty() || c == null) {
+          throw new Exception();
+        }
+
+      } catch (Exception e) {
+        Logger.fatal("Could not add recipe");
+        ToastProvider
+            .enqueue(new Toast("Could not add recipe", "One or more fields were empty", Toast.ToastType.ERROR));
+        return;
+      }
+
       recipeRegister.addRecipe((String) o[0], (String) o[1], (Integer) o[2]);
       recipeRegister.getAllRecipes();
       Map<Integer, Recipe> recipesNew = recipeRegister.getRecipes();
@@ -106,19 +120,41 @@ public class CookBook extends VBox implements UpdateableScene {
       if (id == -1) {
         recipeRegister.getAllRecipes();
         this.recipes = recipeRegister.getRecipes();
-
+        ToastProvider.enqueue(new Toast("Error",
+            "Could not determine ID of new recipe. Recipe added, but not ingredients.",
+            Toast.ToastType.ERROR));
         Logger.fatal("Could not determine ID of new recipe. Recipe added, but not ingredients.");
         return;
       }
 
-      Object[] recipeIngredients = (Object[]) o[3];
-      for (Object ingredient : recipeIngredients) {
-        recipeRegister.addIngredient((int) ingredient, 1, "g", id);
+      try {
+        Object[] r = (Object[]) o[3];
+        if (r.length == 0) {
+          throw new Exception();
+        }
+      } catch (Exception e) {
+        Logger.fatal("Could not add recipe");
+        ToastProvider
+            .enqueue(new Toast("Could not add recipe", "No ingredients were selected", Toast.ToastType.ERROR));
+        return;
       }
 
-      recipeRegister.getAllRecipes();
-      this.recipes = recipeRegister.getRecipes();
-      loadCookBook(mode);
+      try {
+        Object[] recipeIngredients = (Object[]) o[3];
+        for (Object ingredient : recipeIngredients) {
+          recipeRegister.addIngredient((int) ingredient, 1, "g", id);
+        }
+
+        recipeRegister.getAllRecipes();
+        this.recipes = recipeRegister.getRecipes();
+        ToastProvider.enqueue(new Toast("Success", "Recipe added", Toast.ToastType.SUCCESS));
+        loadCookBook(mode);
+      } catch (Exception e) {
+        Logger.fatal("Could not add recipe");
+        ToastProvider
+            .enqueue(new Toast("Could not add recipe", "One or more fields were empty", Toast.ToastType.ERROR));
+        return;
+      }
     });
   }
 
@@ -257,6 +293,7 @@ public class CookBook extends VBox implements UpdateableScene {
 
     register.getAllRecipes();
     recipes = register.getRecipes();
+    ToastProvider.enqueue(new Toast("Success", "Recipe updated", Toast.ToastType.SUCCESS));
     loadCookBook(mode);
   }
 
@@ -266,6 +303,7 @@ public class CookBook extends VBox implements UpdateableScene {
     register.deleteRecipe(id);
     register.getAllRecipes();
     recipes = register.getRecipes();
+    ToastProvider.enqueue(new Toast("Success", "Recipe deleted", Toast.ToastType.SUCCESS));
     loadCookBook(mode);
   }
 

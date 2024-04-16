@@ -10,7 +10,7 @@ import no.ntnu.idatt1002.demo.util.VerifyInput;
  * This class represents a register for inventory items.
  * Allowing for communication between the database and the user interface.
  */
-public class Inventory {
+public class InventoryRegister {
   private List<InventoryItem> inventoryItems;
   private final DAO dao;
 
@@ -20,7 +20,7 @@ public class Inventory {
    * @param dao the database access object
    * @throws IllegalArgumentException if the dao is null
    */
-  public Inventory(DAO dao) {
+  public InventoryRegister(DAO dao) {
     VerifyInput.verifyNotNull(dao, "dao");
     this.dao = dao;
     this.inventoryItems = new ArrayList<>();
@@ -59,7 +59,8 @@ public class Inventory {
   }
 
   /**
-   * This method searches for inventory items by name and retrieves them from the database.
+   * This method searches for inventory items by name and retrieves them from the
+   * database.
    *
    * @param name the name to search by
    * @throws IllegalArgumentException if the name is empty
@@ -72,7 +73,8 @@ public class Inventory {
   }
 
   /**
-   * This method packages lists of lists representing inventory items into InventoryItem objects.
+   * This method packages lists of lists representing inventory items into
+   * InventoryItem objects.
    *
    * @param inventoryItems the list of lists representing inventory items
    */
@@ -86,17 +88,16 @@ public class Inventory {
           inventoryItem.get(8),
           Integer.parseInt(inventoryItem.get(3)),
           inventoryItem.get(4),
-          Integer.parseInt(inventoryItem.get(1))
-      ));
+          Integer.parseInt(inventoryItem.get(1))));
     }
   }
 
   /**
    * This method adds a new inventory item to the database.
    *
-   * @param item_id the id of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
+   * @param item_id        the id of the item
+   * @param quantity       the quantity of the item
+   * @param unit           the unit of the item
    * @param expirationDate the expiration date of the item
    */
   public void addInventoryItem(int item_id, int quantity, String unit, int expirationDate) {
@@ -132,15 +133,15 @@ public class Inventory {
     dao.deleteFromDatabase(inventoryItems.get(index));
   }
 
-   /**
+  /**
    * This method updates an inventory item in the database.
    *
-   * @param inventory_id the id of the inventory item
-   * @param item_id the id of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
+   * @param inventory_id   the id of the inventory item
+   * @param item_id        the id of the item
+   * @param quantity       the quantity of the item
+   * @param unit           the unit of the item
    * @param expirationDate the expiration date of the item
-    * @throws IllegalArgumentException if the id does not exist
+   * @throws IllegalArgumentException if the id does not exist
    */
   public void updateInventoryItem(
       int inventory_id, int item_id, int quantity, String unit, int expirationDate) {
@@ -148,7 +149,7 @@ public class Inventory {
       throw new IllegalArgumentException("Inventory item with id" + inventory_id + "does not exist");
     }
     InventoryItem inventoryItem = new InventoryItem(
-    inventory_id, item_id, "dummy", "dummy", "dummy", quantity, unit, expirationDate);
+        inventory_id, item_id, "dummy", "dummy", "dummy", quantity, unit, expirationDate);
     dao.updateDatabase(inventoryItem);
   }
 }

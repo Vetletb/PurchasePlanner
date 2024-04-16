@@ -122,7 +122,7 @@ public class Plan extends VBox implements UpdateableScene {
     int dayOfWeekAsInt = nowDate.getDayOfWeek().getValue() - 1;
     for (int i = -dayOfWeekAsInt; i < 7 - dayOfWeekAsInt; i++) {
       LocalDate date = nowDate.plusDays(i);
-      String dateStr = Integer.toString(date.getYear() - 2000)
+      String dateStr = Integer.toString(date.getYear())
           + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
           + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth());
       dates.put(Integer.parseInt(dateStr), new Date(date));
@@ -130,20 +130,34 @@ public class Plan extends VBox implements UpdateableScene {
     addPopup.addField(Field.ofMap("Date", dates));
 
     addPopup.setOnAdd((Object[] o) -> {
-      for (Object object : o) {
-        Logger.debug(object.getClass().getName());
+      Object[] recipe_id_As_List;
+      Object[] date_As_List;
+      int recipe_id;
+      int date;
 
+      try {
+        recipe_id_As_List = (Object[]) o[0];
+        date_As_List = (Object[]) o[1];
+        recipe_id = (int) recipe_id_As_List[0];
+        date = (Integer) date_As_List[0];
+      } catch (Exception e) {
+        Logger.error(e.getMessage());
+        ToastProvider
+            .enqueue(new Toast("Failed to add event", "One or more of your fields were empty", Toast.ToastType.ERROR));
+        return;
       }
-      Object[] recipe_id_As_List = (Object[]) o[0];
-      Object[] date_As_List = (Object[]) o[1];
-      int recipe_id = (int) recipe_id_As_List[0];
-      int date = (int) date_As_List[0];
 
-      EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
-      eventRegister.getAllEvents();
+      try {
+        EventRegister eventRegister = new EventRegister(new DAO(new DBConnectionProvider()));
+        eventRegister.getAllEvents();
 
-      eventRegister.addEvent(recipe_id, date);
-      loadPlaner();
+        eventRegister.addEvent(recipe_id, date);
+        ToastProvider.enqueue(new Toast("Success", "The event was successfully added", Toast.ToastType.SUCCESS));
+        loadPlaner();
+      } catch (Exception e) {
+        ToastProvider.enqueue(new Toast("Failed to add event", e.getMessage(), Toast.ToastType.ERROR));
+        e.printStackTrace();
+      }
     });
   }
 
@@ -171,6 +185,7 @@ public class Plan extends VBox implements UpdateableScene {
 
     eventRegister.updateEvent(event_id, recipe_id, date);
     eventRegister.getAllEvents();
+    ToastProvider.enqueue(new Toast("Success", "The event was successfully updated", Toast.ToastType.SUCCESS));
     loadPlaner();
   }
 
@@ -179,6 +194,7 @@ public class Plan extends VBox implements UpdateableScene {
     eventRegister.getAllEvents();
     eventRegister.deleteEvent(event_id);
     eventRegister.getAllEvents();
+    ToastProvider.enqueue(new Toast("Success", "The event was successfully deleted", Toast.ToastType.SUCCESS));
     loadPlaner();
   }
 

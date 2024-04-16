@@ -15,6 +15,7 @@ import no.ntnu.idatt1002.demo.ConfigLoader;
 import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.SceneLoader;
 import no.ntnu.idatt1002.demo.view.components.Sidebar;
+import no.ntnu.idatt1002.demo.view.components.ToastProvider;
 
 /**
  * The main application class.
@@ -45,6 +46,7 @@ public class App extends Application {
         .toExternalForm());
     primaryStage.setScene(scene);
     primaryStage.show();
+    primaryStage.setMaximized(true);
 
     HBox mainContainer = new HBox();
 
@@ -57,7 +59,8 @@ public class App extends Application {
     sidebar.setPrefWidth(SIDEBAR_WIDTH);
 
     mainContainer.getChildren().addAll(sidebar, sceneLoader);
-    root.getChildren().add(mainContainer);
+    ToastProvider toastProvider = ToastProvider.getInstance();
+    root.getChildren().addAll(mainContainer, toastProvider);
 
     Logger.info("Application started");
   }

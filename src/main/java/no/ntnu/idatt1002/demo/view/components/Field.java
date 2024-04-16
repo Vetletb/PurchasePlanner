@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.swing.event.ChangeListener;
 
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.SearchableComboBox;
+
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
@@ -63,7 +65,7 @@ public class Field<T> {
    *
    * @return a new field of type list.
    */
-  public static Field<Integer> ofList(String placeholder, String[] options) {
+  public static Field<Integer> ofList(String placeholder, List<? extends Storable> options) {
     return new Field<Integer>(FieldType.LIST, placeholder, options);
   }
 
@@ -75,7 +77,7 @@ public class Field<T> {
   private String placeholder;
   private T value;
   private Map<Integer, ? extends Storable> mapOptions;
-  private String[] options;
+  private List<? extends Storable> options;
   private String name;
   private VBox renderedField;
 
@@ -109,7 +111,7 @@ public class Field<T> {
     render();
   }
 
-  private Field(FieldType type, String name, String[] options) {
+  private Field(FieldType type, String name, List<? extends Storable> options) {
     this.type = type;
     this.name = name;
     this.options = options;
@@ -126,9 +128,11 @@ public class Field<T> {
     renderedField.getChildren().clear();
     switch (type) {
       case NUMBER:
-        renderedField.getChildren().add(new NumberField(v -> {
+        NumberField field = new NumberField(v -> {
           this.value = (T) (Number) v;
-        }));
+        });
+        field.setPromptText(placeholder);
+        renderedField.getChildren().add(field);
 
         break;
       case STRING:
@@ -149,8 +153,24 @@ public class Field<T> {
                 .toArray();
           }
         });
-
         renderedField.getChildren().addAll(new Text(name), dropdown);
+        break;
+      case LIST:
+        SearchableComboBox<Storable> searchableComboBox = new SearchableComboBox<>();
+        searchableComboBox.setPrefSize(200, 35);
+        searchableComboBox.setPromptText(name);
+        searchableComboBox.getItems().addAll(options);
+
+        searchableComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+
+          if (newVal == null) {
+            return;
+          }
+
+          value = (T) (Integer) newVal.getId();
+        });
+
+        renderedField.getChildren().addAll(searchableComboBox);
         break;
       default:
         break;

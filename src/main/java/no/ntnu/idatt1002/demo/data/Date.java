@@ -13,11 +13,11 @@ public class Date implements Storable {
   public Date(int date) {
     String dateStr = Integer.toString(date);
     this.date = LocalDate.of(
-            Integer.parseInt(dateStr.substring(0, 2) + 2000),
-            Integer.parseInt(dateStr.substring(2, 4)),
-            Integer.parseInt(dateStr.substring(4, 6))
-    );
+        Integer.parseInt(dateStr.substring(0, 2) + 2000),
+        Integer.parseInt(dateStr.substring(2, 4)),
+        Integer.parseInt(dateStr.substring(4, 6)));
   }
+
   public Date(LocalDate date) {
     this.date = date;
   }
@@ -27,7 +27,9 @@ public class Date implements Storable {
   }
 
   public int getDateInt() {
-    return Integer.parseInt(Integer.toString(date.getYear()) + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue()) + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()));
+    return Integer.parseInt(Integer.toString(date.getYear())
+        + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
+        + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()));
   }
 
   public void setDate(LocalDate date) {
@@ -41,7 +43,9 @@ public class Date implements Storable {
 
   @Override
   public List<String> getAttributes() {
-    return List.of(Integer.toString(date.getYear()) + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue()) + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()));
+    return List.of(Integer.toString(date.getYear())
+        + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
+        + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()));
   }
 
   @Override
