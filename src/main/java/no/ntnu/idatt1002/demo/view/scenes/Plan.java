@@ -79,7 +79,7 @@ public class Plan extends VBox implements UpdateableScene {
       labelContainer.getChildren().add(dayLabel);
 
       // Format date to match the database
-      String dateStr = Integer.toString(date.getYear() - 2000)
+      String dateStr = Integer.toString(date.getYear())
           + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue())
           + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth());
       eventRegister.getEventsByDate(Integer.parseInt(dateStr));
