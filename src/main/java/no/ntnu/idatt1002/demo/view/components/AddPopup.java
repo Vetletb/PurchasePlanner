@@ -1,10 +1,12 @@
 package no.ntnu.idatt1002.demo.view.components;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -23,6 +25,7 @@ public class AddPopup extends Popup {
   private OnAdd onAdd;
   private ArrayList<Field> fields = new ArrayList<>();
   private String type;
+  private Text specialPrompt = null;
 
   /**
    * A callback for when the form is submitted.
@@ -77,6 +80,10 @@ public class AddPopup extends Popup {
       background.getChildren().add(field.getRenderedField());
     }
 
+    if (specialPrompt != null) {
+      background.getChildren().add(specialPrompt);
+    }
+
     // Add the content to the VBox
     background.getChildren().add(submitButton);
   }
@@ -126,5 +133,25 @@ public class AddPopup extends Popup {
   public AddPopup setOnAdd(OnAdd cb) {
     this.onAdd = cb;
     return this;
+  }
+
+  /**
+   * Set a special prompt at the bottom of the popup.
+   * <p>
+   * This is useful for displaying a clickable text that performs an action.
+   * Closes the popup when clicked.
+   * </p>
+   *
+   * @param text     the text to display
+   * @param onAction the action to perform when the text is clicked
+   */
+  public void setSpecialPrompt(Text text, Consumer<Void> onAction) {
+    this.specialPrompt = text;
+    text.getStyleClass().addAll("centered", "link");
+    text.setOnMouseClicked(e -> {
+      this.hide();
+      onAction.accept(null);
+    });
+    render();
   }
 }

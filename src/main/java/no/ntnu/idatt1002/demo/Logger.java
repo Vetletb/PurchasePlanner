@@ -113,7 +113,9 @@ public class Logger {
    */
   public static void debug(String message) {
     if (Level.DEBUG.getSeverity() == getLogger().getLevelSeverity()) {
-      System.out.println("DEBUG: " + message);
+      StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+      Class<?> caller = walker.getCallerClass();
+      System.out.println("\n" + "DEBUG: " + message + "\n (" + caller.getName() + ")");
     }
   }
 
@@ -124,7 +126,10 @@ public class Logger {
    */
   public static void info(String message) {
     if (Level.INFO.getSeverity() >= getLogger().getLevelSeverity()) {
-      System.out.println(blue + "INFO: " + reset + message);
+      StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+      Class<?> caller = walker.getCallerClass();
+      System.out.println("\n" + blue + "INFO: " + reset + message
+          + "\n (" + caller.getName() + ")");
     }
   }
 
@@ -135,7 +140,9 @@ public class Logger {
    */
   public static void warning(String message) {
     if (Level.WARNING.getSeverity() >= getLogger().getLevelSeverity()) {
-      System.out.println(yellow + "WARNING: " + reset + message);
+      StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+      Class<?> caller = walker.getCallerClass();
+      System.out.println("\n" + yellow + "WARNING: " + reset + message + " \n (" + caller.getName() + ")");
     }
   }
 
@@ -146,7 +153,9 @@ public class Logger {
    */
   public static void error(String message) {
     if (Level.ERROR.getSeverity() >= getLogger().getLevelSeverity()) {
-      System.out.println(red + "ERROR: " + reset + message);
+      StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+      Class<?> caller = walker.getCallerClass();
+      System.out.println("\n" + red + "ERROR: " + reset + message + " \n (" + caller.getName() + ")");
     }
   }
 
@@ -157,7 +166,9 @@ public class Logger {
    */
   public static void fatal(String message) {
     if (Level.FATAL.getSeverity() >= getLogger().getLevelSeverity()) {
-      System.out.println(red + "FATAL: " + reset + message);
+      StackWalker walker = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+      Class<?> caller = walker.getCallerClass();
+      System.out.println("\n" + red + "FATAL: " + reset + message + " \n (" + caller.getName() + ")");
     }
   }
 

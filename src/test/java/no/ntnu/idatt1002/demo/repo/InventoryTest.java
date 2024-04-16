@@ -19,12 +19,12 @@ class InventoryTest {
   @Mock
   private DAO dao;
 
-  private Inventory inventory;
+  private InventoryRegister inventory;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
-    inventory = new Inventory(dao);
+    inventory = new InventoryRegister(dao);
   }
 
   @Nested
@@ -33,7 +33,7 @@ class InventoryTest {
 
     @Test
     void testConstructorDoesNotThrowExceptionOnValidParameters() {
-      assertDoesNotThrow(() -> new Inventory(dao));
+      assertDoesNotThrow(() -> new InventoryRegister(dao));
     }
 
     @Test
@@ -75,7 +75,7 @@ class InventoryTest {
 
     @Test
     void testAddInventoryItemDoesNotTrowExceptionOnValidParameters() {
-      assertDoesNotThrow(() -> inventory.addInventoryItem(11, 1,"Kg", 21012023));
+      assertDoesNotThrow(() -> inventory.addInventoryItem(11, 1, "Kg", 21012023));
     }
   }
 
@@ -112,7 +112,7 @@ class InventoryTest {
     @Test
     @DisplayName("Test constructor")
     public void constructorThrowsExceptionOnNullDAO() {
-      assertThrows(IllegalArgumentException.class, () -> new Inventory(null));
+      assertThrows(IllegalArgumentException.class, () -> new InventoryRegister(null));
     }
 
     @Test

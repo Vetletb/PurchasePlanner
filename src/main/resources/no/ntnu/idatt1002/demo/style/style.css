@@ -389,6 +389,12 @@ Red button
     -fx-font-weight: bold;
 }
 
+.link {
+    -fx-fill: #0404ff;
+    -fx-cursor: hand;
+
+}
+
 
 /*
 ###########################################
@@ -592,4 +598,48 @@ Red button
 
 .or-text {
     -fx-padding: 50px;
+}
+
+/*
+#####################################
+                Toast
+#####################################
+*/
+
+.toast-wrapper {
+    -fx-padding: 5px;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 10, 0, 0, 0);
+}
+
+/* 
+Toast types
+*/
+
+.toast-default {
+    -fx-background-color: -fx-main-background-color-light;
+}
+
+.toast-error {
+    -fx-background-color: #ff5555;
+}
+
+.toast-success {
+    -fx-background-color: #41D37C;
+}
+
+/* toast content */
+
+.toast-content {
+    -fx-padding: 10px;
+
+}
+
+.toast-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 18px;
+}
+
+.toast-message {
+    -fx-font-size: 14px;
 }
