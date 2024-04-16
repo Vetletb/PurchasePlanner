@@ -8,7 +8,7 @@ import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.Recipe;
 import no.ntnu.idatt1002.demo.data.RecipeIngredient;
 import no.ntnu.idatt1002.demo.data.RecipeStep;
-
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 /**
  * This class represents a register for recipes.
  * Allowing for communication between the database and the user interface.
