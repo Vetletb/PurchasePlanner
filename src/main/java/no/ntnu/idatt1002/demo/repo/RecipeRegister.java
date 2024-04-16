@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.Recipe;
 import no.ntnu.idatt1002.demo.data.RecipeIngredient;
-import no.ntnu.idatt1002.demo.util.VerifyInput;
+import no.ntnu.idatt1002.demo.data.RecipeStep;
 
 /**
  * This class represents a register for recipes.
@@ -33,9 +33,9 @@ public class RecipeRegister {
    *
    * @return the recipes in the register as lists of strings
    */
-  public Map<Integer, List<String>> getRecipes() {
+  public Map<Integer, Recipe> getRecipes() {
     return recipes.stream()
-        .collect(Collectors.toMap(Recipe::getId, Recipe::getAttributes));
+        .collect(Collectors.toMap(Recipe::getId, recipe -> recipe));
   }
 
   /**
@@ -58,6 +58,13 @@ public class RecipeRegister {
             ingredient.get(8), Integer.parseInt(ingredient.get(3)), ingredient.get(4),
             Integer.parseInt(ingredient.get(2)));
       }
+      List<List<String>> instructions = dao.filterFromTable(
+          "RecipeStep", "recipe_id", Integer.toString(newRecipe.getId()), null, null);
+      for (List<String> instruction : instructions) {
+        newRecipe.addInstruction(Integer.parseInt(instruction.get(0)),
+            Integer.parseInt(instruction.get(3)), Integer.parseInt(instruction.get(1)),
+            instruction.get(2));
+      }
       this.recipes.add(newRecipe);
     }
   }
@@ -75,7 +82,8 @@ public class RecipeRegister {
   }
 
   /**
-   * This method searches for recipes by name and retrieves them from the database.
+   * This method searches for recipes by name and retrieves them from the
+   * database.
    *
    * @param name the name to search by
    */
@@ -98,8 +106,8 @@ public class RecipeRegister {
   /**
    * This method adds a recipe to the database.
    *
-   * @param name the name of the recipe
-   * @param category the category of the recipe
+   * @param name         the name of the recipe
+   * @param category     the category of the recipe
    * @param cooking_time the cooking time of the recipe
    */
   public void addRecipe(String name, String category, int cooking_time) {
@@ -142,10 +150,11 @@ public class RecipeRegister {
 
   /**
    * This method updates a recipe in the database.
+   * 
    *
-   * @param name the name of the recipe
+   * @param name         the name of the recipe
    * @param cooking_time the cooking time of the recipe
-   * @param category the category of the recipe
+   * @param category     the category of the recipe
    */
   public void updateRecipe(int recipe_id, String name, int cooking_time, String category) {
     int index = getRecipesFromId(recipe_id);
@@ -165,7 +174,7 @@ public class RecipeRegister {
    * @param recipe_id the id of the recipe
    */
   public void addIngredient(int item_id, int quantity, String unit, int recipe_id) {
-    dao.addToDatabase(new RecipeIngredient(item_id, "dummy", "dummy", "dummy", quantity, unit, recipe_id));
+    dao.addToDatabase(new RecipeIngredient(item_id, "d", "d", "d", quantity, unit, recipe_id));
   }
 
   /**
@@ -191,9 +200,9 @@ public class RecipeRegister {
    * This method updates an ingredient in the database.
    *
    * @param recipeIngredient_id the id of the recipe ingredient
-   * @param item_id the id of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
+   * @param item_id             the id of the item
+   * @param quantity            the quantity of the item
+   * @param unit                the unit of the item
    */
   public void updateIngredient(int recipeIngredient_id, int item_id, int quantity, String unit) {
     int recipe_id = -1;
@@ -205,14 +214,100 @@ public class RecipeRegister {
     }
     if (recipe_id > 0) {
       RecipeIngredient recipeIngredient =
-          new RecipeIngredient(recipeIngredient_id, item_id, "dummy", "dummy", "dummy", quantity, unit,
-              recipe_id);
+          new RecipeIngredient(
+              recipeIngredient_id, item_id, "a", "a", "a", quantity, unit, recipe_id);
       dao.updateDatabase(recipeIngredient);
     }
   }
 
   /**
-   * This method returns a string representation of the recipe register
+   * This method adds an instruction to the database.
+   *
+   * @param recipe_id   the id of the recipe
+   * @param step_number the number of the step
+   * @param instruction the instruction of the step
+   */
+  public void addInstruction(int recipe_id, int step_number, String instruction) {
+    List<Recipe> currentRecipes = recipes;
+    getAllRecipes();
+    instructionNumbering(recipe_id, step_number, true);
+    recipes = currentRecipes;
+    dao.addToDatabase(new RecipeStep(recipe_id, step_number, instruction));
+  }
+
+  /**
+   * This method deletes an instruction from the database.
+   *
+   * @param id the id of the instruction to delete
+   */
+  public void deleteInstruction(int id) {
+    for (Recipe recipe : recipes) {
+      if (recipe.getInstructionById(id) != null) {
+        dao.deleteFromDatabase(recipe.getInstructionById(id));
+        List<Recipe> currentRecipes = recipes;
+        getAllRecipes();
+        instructionNumbering(
+            recipe.getRecipe_id(), recipe.getInstructionById(id).getStepNumber(), false);
+        recipes = currentRecipes;
+        break;
+      }
+    }
+  }
+
+  /**
+   * This method updates an instruction in the database.
+   *
+   * @param step_id     the id of the step
+   * @param step_number the number of the step
+   * @param instruction the instruction
+   */
+  public void updateInstrucution(int step_id, int step_number, String instruction) {
+    int recipe_id = -1;
+    int previousStep = -1;
+    for (Recipe recipe : recipes) {
+      if (recipe.getInstructionById(step_id) != null) {
+        recipe_id = recipe.getRecipe_id();
+        previousStep = recipe.getInstructionById(step_id).getStepNumber();
+        break;
+      }
+    }
+    if (recipe_id > 0) {
+      instructionNumbering(recipe_id, previousStep, false);
+      List<Recipe> currentRecipes = recipes;
+      getAllRecipes();
+      instructionNumbering(recipe_id, step_number, true);
+      recipes = currentRecipes;
+      RecipeStep recipeStep = new RecipeStep(step_id, recipe_id, step_number, instruction);
+      dao.updateDatabase(recipeStep);
+    }
+  }
+
+  /**
+   * This method adjusts step numbers when an instruction is changed.
+   *
+   * @param recipe_id the id of the recipe
+   * @param step      the step number
+   * @param add       whether to add or subtract
+   */
+  private void instructionNumbering(int recipe_id, int step, boolean add) {
+    Recipe recipe = recipes.get(getRecipesFromId(recipe_id));
+    List<RecipeStep> instructions = recipe.getInstructions();
+    for (RecipeStep instruction : instructions) {
+      if (instruction.getStepNumber() >= step) {
+        if (add) {
+          dao.updateDatabase(new RecipeStep(instruction.getStepId(), recipe_id,
+              instruction.getStepNumber() + 1, instruction.getInstruction()));
+        } else if (instruction.getStepNumber() != 1) {
+          dao.updateDatabase(new RecipeStep(instruction.getStepId(), recipe_id,
+              instruction.getStepNumber() - 1, instruction.getInstruction()));
+        }
+      }
+    }
+  }
+
+  /**
+   * This method returns a string representation of the recipe register.
+   * 
    *
    * @return a string representation of the recipe register
    */

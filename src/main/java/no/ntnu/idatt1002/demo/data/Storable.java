@@ -5,7 +5,6 @@ import java.util.List;
 /**
  * This interface is used to store objects in the database.
  */
-
 public interface Storable {
 
   /**

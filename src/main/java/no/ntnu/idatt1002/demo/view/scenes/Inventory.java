@@ -8,11 +8,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.UpdateableScene;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.repo.ItemRegister;
 import no.ntnu.idatt1002.demo.view.components.AddPopup;
+import no.ntnu.idatt1002.demo.view.components.Field;
 import no.ntnu.idatt1002.demo.view.components.ItemBanner;
 import no.ntnu.idatt1002.demo.view.components.ItemPane;
 import no.ntnu.idatt1002.demo.view.components.ItemPopup;
@@ -24,7 +26,7 @@ import no.ntnu.idatt1002.demo.view.components.ViewModeButton.ViewMode;
 /**
  * The inventory page.
  */
-public class Inventory extends VBox {
+public class Inventory extends VBox implements UpdateableScene {
   private VBox inventoryContainer = new VBox();
   private ScrollPane scrollPane;
   private Map<Integer, Item> items;
@@ -64,11 +66,22 @@ public class Inventory extends VBox {
   private void addItem() {
     AddPopup addPopup = new AddPopup("Item");
     addPopup.show(this.getScene().getWindow());
-    addPopup.setOnAdd((name, category, allergies) -> {
-      ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
-      itemRegister.addItem(name, category, allergies);
-      itemRegister.getAllItems();
-      items = itemRegister.getItems();
+    addPopup.addField(Field.ofString("Name"));
+    addPopup.addField(Field.ofString("Category"));
+    addPopup.addField(Field.ofString("Allergies"));
+    addPopup.setOnAdd((Object[] o) -> {
+      String name = (String) o[0];
+      String category = (String) o[1];
+      String allergies = (String) o[2];
+      try {
+        ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
+        itemRegister.addItem(name, category, allergies);
+        itemRegister.getAllItems();
+        items = itemRegister.getItems();
+      } catch (Exception e) {
+        Logger.fatal("Failed to add item");
+        e.printStackTrace();
+      }
       loadInventory(mode);
     });
   }
@@ -178,5 +191,13 @@ public class Inventory extends VBox {
     itemRegister.getAllItems();
     items = itemRegister.getItems();
     loadInventory(mode);
+  }
+
+  public void updateScene() {
+    loadInventory(mode);
+  }
+
+  public VBox createScene() {
+    return this;
   }
 }

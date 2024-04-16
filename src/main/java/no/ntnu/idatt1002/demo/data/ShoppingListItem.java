@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is a simple bean for a Shopping list item. This is an item with a quantity and a unit.
+ * This class is a simple bean for a Shopping list item. This is an item with a
+ * quantity and a unit.
  */
 
 public class ShoppingListItem extends Item {
@@ -19,18 +20,18 @@ public class ShoppingListItem extends Item {
    * When creating a new ShoppingListItem, it is required that there is an
    * item in the database with the same name, category and allergy.
    *
-   * @param name the name of the item
+   * @param name     the name of the item
    * @param category the category of the item
-   * @param allergy the allergy of the item
+   * @param allergy  the allergy of the item
    * @param quantity the quantity of the item
-   * @param unit the unit of the item
+   * @param unit     the unit of the item
    */
   public ShoppingListItem(int item_id,
-                          String name,
-                          String category,
-                          String allergy,
-                          int quantity,
-                          String unit) {
+      String name,
+      String category,
+      String allergy,
+      int quantity,
+      String unit) {
     super(item_id, name, category, allergy);
     VerifyInput.verifyPositiveNumberMinusOneNotAccepted(quantity, "quantity");
     VerifyInput.verifyNotEmpty(unit, "unit");
@@ -43,20 +44,20 @@ public class ShoppingListItem extends Item {
    * When creating a ShoppingListItem from the database, the id is known.
    *
    * @param ShoppingListItem_id the id of the ShoppingListItem
-   * @param item_id the id of the item
-   * @param name the name of the item
-   * @param category  the category of the item
-   * @param allergy the allergy of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
+   * @param item_id             the id of the item
+   * @param name                the name of the item
+   * @param category            the category of the item
+   * @param allergy             the allergy of the item
+   * @param quantity            the quantity of the item
+   * @param unit                the unit of the item
    */
   public ShoppingListItem(int ShoppingListItem_id,
-                          int item_id,
-                          String name,
-                          String category,
-                          String allergy,
-                          int quantity,
-                          String unit) {
+      int item_id,
+      String name,
+      String category,
+      String allergy,
+      int quantity,
+      String unit) {
     this(item_id, name, category, allergy, quantity, unit);
     this.ShoppingListItem_id = ShoppingListItem_id;
   }
@@ -69,7 +70,7 @@ public class ShoppingListItem extends Item {
   @Override
   public List<String> getAttributes() {
     List<String> attributes = new ArrayList<>();
-    attributes.add(Integer.toString(super.getItem_id()));
+    attributes.add(Integer.toString(super.getItemId()));
     attributes.add(Integer.toString(quantity));
     attributes.add(unit);
     return attributes;
@@ -105,7 +106,7 @@ public class ShoppingListItem extends Item {
    * @return the id of the item
    */
   public int getItemId() {
-    return super.getItem_id();
+    return super.getItemId();
   }
 
   /**

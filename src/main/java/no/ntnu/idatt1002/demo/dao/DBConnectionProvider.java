@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * This class provides a connection to the database.
@@ -29,7 +30,7 @@ public class DBConnectionProvider {
    *
    * @param dbPath the path to the database
    */
-  public void setDbPath(String dbPath) {
+  public static void setDbPath(String dbPath) {
     DB_PATH = dbPath;
   }
 
@@ -40,6 +41,10 @@ public class DBConnectionProvider {
    */
   Connection getConnection() {
     try {
+      Connection connection = DriverManager.getConnection(url);
+      Statement statement = connection.createStatement();
+      statement.execute("PRAGMA foreign_keys = ON;");
+      statement.close();
       return DriverManager.getConnection(url);
     } catch (SQLException e) {
       throw new RuntimeException("Error connecting to the database", e);

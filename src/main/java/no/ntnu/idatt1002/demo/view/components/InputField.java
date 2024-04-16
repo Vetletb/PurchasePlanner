@@ -26,6 +26,10 @@ public class InputField extends TextField {
     this.getStyleClass().add("input-field");
   }
 
+  public InputField() {
+    this("");
+  }
+
   /**
    * Set the callback for when the form is submitted.
    *

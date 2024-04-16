@@ -57,6 +57,11 @@ alignment
     -fx-alignment: center-right;
 }
 
+.left-centered {
+    -fx-alignment: center-left;
+
+}
+
 .top-left {
     -fx-alignment: top-left;
 }
@@ -162,16 +167,19 @@ Red button
 */
 
 .red-button {
-    -fx-background-color: #df2c2c;
+    /*-fx-background-color: #df2c2c;*/
+    -fx-background-color: #FF5555FF;
 }
 
 .red-button:hover {
-    -fx-background-color: #d22020;
+    /*-fx-background-color: #d22020;*/
+    -fx-background-color: #dc4747;
     -fx-cursor: hand;
 }
 
 .red-button:pressed {
-    -fx-background-color: #d81e1e;
+    /*-fx-background-color: #d81e1e;*/
+    -fx-background-color: #c53a3a;
     -fx-cursor: hand;
 }
 
@@ -200,6 +208,22 @@ Red button
     -fx-border-color: -fx-primary-color-dark;
     -fx-cursor: text;
 }
+
+.text-field-error {
+    -fx-border-color: #df2c2c;
+}
+
+.text-field-error:hover {
+    -fx-border-color: #df2c2c;
+    -fx-cursor: text;
+}
+
+
+.text-field-error:focused {
+    -fx-border-color: #df2c2c;
+    -fx-cursor: text;
+}
+
 
 /*
 #########################################
@@ -307,7 +331,7 @@ Red button
 
 /*
 ###########################################
-                List Header                
+                List Header
 ###########################################
 */
 
@@ -319,7 +343,7 @@ Red button
 .list-item {
     -fx-font-size: 15px;
     -fx-padding: 10px;
-    -fx-background-color: -fx-primary-color-light;
+    -fx-background-color: #eeeeee;
 }
 
 .list-item:hover {
@@ -333,7 +357,7 @@ Red button
 
 /*
 ###########################################
-                Item banner                
+                Item banner
 ###########################################
 */
 
@@ -347,7 +371,7 @@ Red button
 
 /*
 #####################################
-                Popup                
+                Popup
 #####################################
 */
 
@@ -407,10 +431,10 @@ Red button
     -fx-alignment: center-left;
 }
 
-.shopping-list-item-container {
-    -fx-padding: 10px;
-    -fx-spacing: 0px;
+.shopping-list-item-pane {
+    -fx-spacing: 5px;
     -fx-alignment: center;
+    -fx-background-color: -fx-primary-color-light;
     -fx-border-color: #b0b0b0;
     -fx-border-width: 0 0 1 0;
 }
@@ -419,7 +443,9 @@ Red button
     -fx-font-size: 20px;
     -fx-min-width: 150px;
     -fx-max-width: 150px;
+    -fx-padding: 10px;
     -fx-wrap-text: true;
+    /*-fx-alignment: center;*/
 }
 
 .static-label-container {
@@ -428,7 +454,7 @@ Red button
     -fx-alignment: center;
 }
 
-.static-label-container-label {
+.static-label {
     -fx-font-size: 20px;
     -fx-min-width: 150px;
     -fx-max-width: 300px;
@@ -444,4 +470,126 @@ Red button
 .rounded-bottom {
     -fx-background-radius: 0 0 20 20;
     -fx-background-color: #e7e7e7;
+}
+
+.clear-button {
+    -fx-background-color: #ff5555;
+    -fx-font-size: 15px;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-background-radius: 90;
+}
+
+.clear-button-container {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+}
+
+/*
+#####################################
+               Planer
+#####################################
+*/
+
+.day-label {
+    -fx-font-size: 20px;
+    -fx-padding: 10px;
+}
+
+.today-label {
+    -fx-font-size: 20px;
+    -fx-padding: 10px;
+    -fx-text-fill: red;
+}
+
+.label-container {
+    -fx-alignment: center;
+    -fx-background-color: #d9d9d9;
+    -fx-border-color: black;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-radius: 5 5 0 0
+}
+
+.event-container {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+}
+
+.day-container {
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-min-width: 180px;
+    -fx-min-height: 600px;
+    /*-fx-max-height: 600px;*/
+}
+
+.event-pane {
+    -fx-alignment: center;
+    -fx-background-color: -fx-primary-color;
+    -fx-background-radius: 5;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-min-height: 50px;
+}
+
+.event-pane:hover {
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
+.event-add-button-container {
+    -fx-padding: 20px;
+    -fx-alignment: center-right;
+}
+
+.event-add-button {
+    /*-fx-alignment: center;*/
+    -fx-min-width: 100px;
+    -fx-background-color: -fx-primary-color;
+    -fx-min-height: 30px;
+}
+
+/*
+##########################################
+               Cooking mode
+##########################################
+*/
+
+.cooking-mode-header {
+    -fx-font-size: 20px;
+    -fx-padding: 20px;
+    -fx-alignment: center;
+}
+
+.cooking-mode-content {
+    -fx-padding: 20px;
+    -fx-spacing: 20px;
+    -fx-alignment: center;
+}
+
+.step-text {
+    -fx-font-size: 30px;
+    -fx-padding: 20px;
+    -fx-alignment: top-center;
+}
+
+.step-number {
+    -fx-font-size: 20px;
+    -fx-padding: 20px;
+    -fx-alignment: center-left;
+}
+
+.one-event-text {
+    -fx-font-size: 25px;
+    -fx-padding: 20px;
+}
+
+.cook-something-box {
+    -fx-padding: 20px;
+}
+
+.or-text {
+    -fx-padding: 50px;
 }

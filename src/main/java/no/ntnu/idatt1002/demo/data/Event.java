@@ -145,6 +145,7 @@ public class Event implements Storable {
 
   @Override
   public String toString() {
-    return "Event ID: " + event_id + ", Recipe ID: " + recipe_id + ", Date: " + date;
+//    return "Event ID: " + event_id + ", Recipe ID: " + recipe_id + ", Date: " + date;
+    return this.getName();
   }
 }

@@ -16,12 +16,12 @@ public class RecipeIngredient extends ShoppingListItem {
   /**
    * Constructor for the RecipeIngredient class.
    *
-   * @param item_id the id of the item
-   * @param name the name of the item
-   * @param category the category of the item
-   * @param allergy the allergy information of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
+   * @param item_id   the id of the item
+   * @param name      the name of the item
+   * @param category  the category of the item
+   * @param allergy   the allergy information of the item
+   * @param quantity  the quantity of the item
+   * @param unit      the unit of the item
    * @param recipe_id the id of the recipe
    */
   public RecipeIngredient(
@@ -36,13 +36,13 @@ public class RecipeIngredient extends ShoppingListItem {
    * Constructor for the RecipeIngredient class with recipe ingredient id.
    *
    * @param recipeIngredient_id the id of the recipe ingredient
-   * @param item_id the id of the item
-   * @param name the name of the item
-   * @param category the category of the item
-   * @param allergy the allergy information of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
-   * @param recipe_id the id of the recipe
+   * @param item_id             the id of the item
+   * @param name                the name of the item
+   * @param category            the category of the item
+   * @param allergy             the allergy information of the item
+   * @param quantity            the quantity of the item
+   * @param unit                the unit of the item
+   * @param recipe_id           the id of the recipe
    */
   public RecipeIngredient(
       int recipeIngredient_id, int item_id, String name, String category,
@@ -59,7 +59,7 @@ public class RecipeIngredient extends ShoppingListItem {
   @Override
   public List<String> getAttributes() {
     List<String> attributes = new ArrayList<>();
-    attributes.add(Integer.toString(super.getItem_id()));
+    attributes.add(Integer.toString(super.getItemId()));
     attributes.add(Integer.toString(super.getQuantity()));
     attributes.add(super.getUnit());
     attributes.add(Integer.toString(recipe_id));

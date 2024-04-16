@@ -14,11 +14,12 @@ public class Item implements Storable {
   private final String allergy;
 
   /**
-   * Constructor for the Item class. When creating a new item, the id is not known.
-   *
-   * @param name the name of the item
+   * Constructor for the Item class. When creating a new item, the id is not
+   * known.
+   * 
+   * @param name     the name of the item
    * @param category the category of the item
-   * @param allergy the allergy of the item
+   * @param allergy  the allergy of the item
    */
   public Item(String name, String category, String allergy) {
     VerifyInput.verifyNotEmpty(name, "name");
@@ -29,12 +30,13 @@ public class Item implements Storable {
   }
 
   /**
-   * Constructor for the Item class. When creating an item from the database, the id is known.
-   *
-   * @param item_id the id of the item
-   * @param name the name of the item
+   * Constructor for the Item class. When creating an item from the database, the
+   * id is known.
+   * 
+   * @param item_id  the id of the item
+   * @param name     the name of the item
    * @param category the category of the item
-   * @param allergy the allergy of the item
+   * @param allergy  the allergy of the item
    */
   public Item(int item_id, String name, String category, String allergy) {
     this(name, category, allergy);
@@ -76,7 +78,7 @@ public class Item implements Storable {
    */
   @Override
   public int getId() {
-    return getItem_id();
+    return getItemId();
   }
 
   /**
@@ -94,7 +96,7 @@ public class Item implements Storable {
    *
    * @return the id of the item
    */
-  public int getItem_id() {
+  public int getItemId() {
     return item_id;
   }
 
@@ -132,7 +134,6 @@ public class Item implements Storable {
    */
   @Override
   public String toString() {
-    return "Item ID: " + item_id + ", Name: " + name + ", Category: " + category
-        + ", Allergy: " + allergy;
+    return "(" + item_id + "), " + name;
   }
 }

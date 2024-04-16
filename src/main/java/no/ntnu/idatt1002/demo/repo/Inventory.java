@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.InventoryItem;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class represents a register for inventory items.
@@ -17,8 +18,10 @@ public class Inventory {
    * Constructor for the Inventory class.
    *
    * @param dao the database access object
+   * @throws IllegalArgumentException if the dao is null
    */
   public Inventory(DAO dao) {
+    VerifyInput.verifyNotNull(dao, "dao");
     this.dao = dao;
     this.inventoryItems = new ArrayList<>();
   }
@@ -45,8 +48,10 @@ public class Inventory {
    * This method retrieves filtered inventory items by category from the database.
    *
    * @param category the category to filter by
+   * @throws IllegalArgumentException if category is empty
    */
   public void filterInventoryByCategory(String category) {
+    VerifyInput.verifyNotEmpty(category, "category");
     inventoryItems = new ArrayList<>();
     List<List<String>> inventoryItems = dao.filterFromTable(
         "InventoryItem", "category", category, "item", "item_id");
@@ -57,8 +62,10 @@ public class Inventory {
    * This method searches for inventory items by name and retrieves them from the database.
    *
    * @param name the name to search by
+   * @throws IllegalArgumentException if the name is empty
    */
   public void searchInventoryByName(String name) {
+    VerifyInput.verifyNotEmpty(name, "name");
     inventoryItems = new ArrayList<>();
     List<List<String>> items = dao.searchFromTable("InventoryItem", name, "item", "item_id");
     packageToInventoryItems(items);
@@ -93,7 +100,7 @@ public class Inventory {
    * @param expirationDate the expiration date of the item
    */
   public void addInventoryItem(int item_id, int quantity, String unit, int expirationDate) {
-    dao.addToDatabase(new InventoryItem(item_id, null, null, null, quantity, unit, expirationDate));
+    dao.addToDatabase(new InventoryItem(item_id, "dummy", "dummy", "dummy", quantity, unit, expirationDate));
   }
 
   /**
@@ -115,9 +122,13 @@ public class Inventory {
    * This method deletes an inventory item from the database.
    *
    * @param id the id of the inventory item to delete
+   * @throws IllegalArgumentException if the id does not exist
    */
   public void deleteInventoryItem(int id) {
     int index = getIndexFromId(id);
+    if (index == -1) {
+      throw new IllegalArgumentException("Inventory item with id" + id + "does not exist");
+    }
     dao.deleteFromDatabase(inventoryItems.get(index));
   }
 
@@ -129,11 +140,15 @@ public class Inventory {
    * @param quantity the quantity of the item
    * @param unit the unit of the item
    * @param expirationDate the expiration date of the item
+    * @throws IllegalArgumentException if the id does not exist
    */
   public void updateInventoryItem(
       int inventory_id, int item_id, int quantity, String unit, int expirationDate) {
+    if (getIndexFromId(inventory_id) == -1) {
+      throw new IllegalArgumentException("Inventory item with id" + inventory_id + "does not exist");
+    }
     InventoryItem inventoryItem = new InventoryItem(
-    inventory_id, item_id, null, null, null, quantity, unit, expirationDate);
+    inventory_id, item_id, "dummy", "dummy", "dummy", quantity, unit, expirationDate);
     dao.updateDatabase(inventoryItem);
   }
 }
