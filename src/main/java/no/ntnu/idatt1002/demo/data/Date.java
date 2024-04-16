@@ -27,7 +27,7 @@ public class Date implements Storable {
   }
 
   public int getDateInt() {
-    return Integer.parseInt(Integer.toString(date.getYear() - 2000) + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue()) + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()));
+    return Integer.parseInt(Integer.toString(date.getYear()) + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue()) + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()));
   }
 
   public void setDate(LocalDate date) {
@@ -41,7 +41,7 @@ public class Date implements Storable {
 
   @Override
   public List<String> getAttributes() {
-    return List.of(Integer.toString(date.getYear() - 2000) + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue()) + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()));
+    return List.of(Integer.toString(date.getYear()) + (date.getMonthValue() < 10 ? "0" + date.getMonthValue() : date.getMonthValue()) + (date.getDayOfMonth() < 10 ? "0" + date.getDayOfMonth() : date.getDayOfMonth()));
   }
 
   @Override

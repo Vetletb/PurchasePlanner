@@ -5,6 +5,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.UpdateableScene;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.ShoppingListItem;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * The inventory page.
  */
-public class ShoppingList extends VBox {
+public class ShoppingList extends VBox implements UpdateableScene {
 
   // Positioning containers
   private final HBox contentContainer;
@@ -67,7 +68,8 @@ public class ShoppingList extends VBox {
     Label bottomBarTotalPrice = new Label("Total price: 0");
 
     // Add the labels to the top bar
-    staticListTopBar.getChildren().addAll(topBarItemName, topBarItemCategory, topBarItemQuantity, topBarItemUnit, topBarItemCheckBox);
+    staticListTopBar.getChildren().addAll(topBarItemName, topBarItemCategory, topBarItemQuantity, topBarItemUnit,
+            topBarItemCheckBox);
 
     // Add the labels to the bottom bar
     staticListBottomBar.getChildren().addAll(bottomBarTotalQuantity, bottomBarTotalPrice);
@@ -83,7 +85,8 @@ public class ShoppingList extends VBox {
     // Clear all button and clear completed button
     PrimaryButton clearAllButton = new PrimaryButton("Clear all");
     clearAllButton.setOnAction(e -> {
-      ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+      ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
+          new DAO(new DBConnectionProvider()));
       shoppingListItemRegister.getAllItems();
       shoppingListItemRegister.clearShoppingList();
       items = shoppingListItemRegister.getItems();
@@ -93,7 +96,8 @@ public class ShoppingList extends VBox {
     PrimaryButton clearCompletedButton = new PrimaryButton("Clear completed");
 
     clearCompletedButton.setOnAction(e -> {
-      ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+      ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
+          new DAO(new DBConnectionProvider()));
       shoppingListItemRegister.getAllItems();
       items = shoppingListItemRegister.getItems();
 
@@ -102,8 +106,8 @@ public class ShoppingList extends VBox {
 
         if (shoppingListItemPane.isSelected()) {
           shoppingListItemRegister.deleteFromShoppingList(
-                  shoppingListItemRegister.getShoppingListItemById(
-                          shoppingListItemPane.getShoppingListItemId()).getId());
+              shoppingListItemRegister.getShoppingListItemById(
+                  shoppingListItemPane.getShoppingListItemId()).getId());
         }
         shoppingListItemRegister.getAllItems();
         items = shoppingListItemRegister.getItems();
@@ -114,7 +118,8 @@ public class ShoppingList extends VBox {
     clearButtonsContainer.getChildren().addAll(clearAllButton, clearCompletedButton);
 
     // Add the containers to the content container
-    innerContentContainer.getChildren().addAll(clearButtonsContainer, staticListTopBar, shoppingListScrollPane, staticListBottomBar);
+    innerContentContainer.getChildren().addAll(clearButtonsContainer, staticListTopBar, shoppingListScrollPane,
+        staticListBottomBar);
     contentContainer.getChildren().add(innerContentContainer);
 
     // Create the list header and add to the page
@@ -129,19 +134,21 @@ public class ShoppingList extends VBox {
     super.getChildren().addAll(shoppingListHeader, contentContainer);
     // TODO: Create a connection to the database for the add button
     // TODO remove test data after testing
-//    ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
-//    itemRegister.getAllItems();
-//    Map<Integer, Item> inventoryItems = itemRegister.getItems();
-//    // Add the items to the shopping list TODO fix the unit to match the item
-//    inventoryItems.values().forEach(item -> addItem(new ShoppingListItem(item.getId(), item.getName(), item.getCategory(), item.getAllergy(), 1, "kg")));
-
+    // ItemRegister itemRegister = new ItemRegister(new DAO(new
+    // DBConnectionProvider()));
+    // itemRegister.getAllItems();
+    // Map<Integer, Item> inventoryItems = itemRegister.getItems();
+    // // Add the items to the shopping list TODO fix the unit to match the item
+    // inventoryItems.values().forEach(item -> addItem(new
+    // ShoppingListItem(item.getId(), item.getName(), item.getCategory(),
+    // item.getAllergy(), 1, "kg")));
 
     // Initialize the itemsList
-    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
+        new DAO(new DBConnectionProvider()));
     shoppingListItemRegister.getAllItems();
     items = shoppingListItemRegister.getItems();
     loadShoppingList();
-
 
     // CSS styling
     contentContainer.getStyleClass().add("centered");
@@ -165,11 +172,13 @@ public class ShoppingList extends VBox {
     clearCompletedButton.getStyleClass().addAll("red-button", "clear-button");
   }
 
-
   /**
    * Method to add a new shoppingList item to the database and the shopping list.
-   * <p>Uses the {@link ShoppingListItemRegister#addToShoppingList(int, int, String) addToShoppingList} method to add the item to the database.</p>
-xs   * @param item the item to be added
+   * <p>
+   * Uses the {@link ShoppingListItemRegister#addToShoppingList(int, int, String)
+   * addToShoppingList} method to add the item to the database.
+   * </p>
+   * xs * @param item the item to be added
    */
   public void addItem() {
     AddPopup addPopup = new AddPopup("ShoppingListItem");
@@ -190,7 +199,8 @@ xs   * @param item the item to be added
       int quantity = (int) o[1];
       String unit = (String) o[2];
       try {
-        ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+        ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
+            new DAO(new DBConnectionProvider()));
         shoppingListItemRegister.addToShoppingList(item_id, quantity, unit);
         shoppingListItemRegister.getAllItems();
         items = shoppingListItemRegister.getItems();
@@ -204,13 +214,16 @@ xs   * @param item the item to be added
 
   public void updateShoppingListItem(Object[] values) {
     // get the register
-    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
+        new DAO(new DBConnectionProvider()));
     // get all items
     shoppingListItemRegister.getAllItems();
 
     // get the values
     int shoppingListItemId = (int) values[0]; // id of the shopping list item
-    ShoppingListItem shoppingListItem = shoppingListItemRegister.getShoppingListItemById(shoppingListItemId); // shopping list item
+    ShoppingListItem shoppingListItem = shoppingListItemRegister.getShoppingListItemById(shoppingListItemId); // shopping
+                                                                                                              // list
+                                                                                                              // item
 
     // Item id
     Object[] item_id_as_list = (Object[]) values[1]; // id of the item as a list
@@ -218,6 +231,7 @@ xs   * @param item the item to be added
 
     if (item_id_as_list == null) {
       item_id = shoppingListItem.getItemId();
+
     } else item_id = (int) item_id_as_list[0];
 
     // Quantity
@@ -225,6 +239,7 @@ xs   * @param item the item to be added
 
     if (values[2] == null) {
       quantity = shoppingListItem.getQuantity();
+
     } else quantity = (int) values[2];
 
     // Unit
@@ -233,21 +248,22 @@ xs   * @param item the item to be added
     if (values[3] == null) {
       Logger.info("Unit is null");
       unit = shoppingListItem.getUnit();
+
     } else unit = (String) values[3];
 
     shoppingListItemRegister.updateShoppingListItem(
-            shoppingListItemId,
-            item_id,
-            quantity,
-            unit
-    );
+        shoppingListItemId,
+        item_id,
+        quantity,
+        unit);
     shoppingListItemRegister.getAllItems();
     items = shoppingListItemRegister.getItems();
     loadShoppingList();
   }
 
   public void deleteShoppingListItem(int shoppingListItemId) {
-    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
+        new DAO(new DBConnectionProvider()));
     shoppingListItemRegister.getAllItems();
     shoppingListItemRegister.deleteFromShoppingList(shoppingListItemId);
     shoppingListItemRegister.getAllItems();
@@ -266,19 +282,20 @@ xs   * @param item the item to be added
   }
 
   /**
-   * Method to search for items in the shopping list updates search on query change.
+   * Method to search for items in the shopping list updates search on query
+   * change.
+   *
    * @param query string to search for
    */
   public void search(String query) {
     ShoppingListItemRegister register = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
     register.searchItemsByName(query);
     items = register.getItems();
-    if(query.isEmpty()) {
+    if (query.isEmpty()) {
       register.getAllItems();
       items = register.getItems();
       loadShoppingList();
-    }
-    else {
+    } else {
       loadShoppingList();
     }
   }
@@ -299,7 +316,9 @@ xs   * @param item the item to be added
 
   /**
    * Method to update the page.
-   * <p>Clears the displayed list and fills it with new items</p>
+   * <p>
+   * Clears the displayed list and fills it with new items
+   * </p>
    */
   private void loadShoppingList() {
 
@@ -362,11 +381,9 @@ xs   * @param item the item to be added
       });
       if(selectedItemsId.contains(item.getId())) shoppingListItemPane.setSelected();
 
-
       shoppingListItemPane.getStyleClass().add("shopping-list-item-pane");
       shoppingListContainer.getChildren().add(shoppingListItemPane);
     });
-
 
     staticListBottomBar.getChildren().clear();
     int itemCount = items.size();
@@ -381,5 +398,12 @@ xs   * @param item the item to be added
     staticListBottomBar.getChildren().addAll(bottomBarTotalQuantity, bottomBarTotalPrice);
 
   }
-}
 
+  public void updateScene() {
+    loadShoppingList();
+  }
+
+  public VBox createScene() {
+    return this;
+  }
+}

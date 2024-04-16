@@ -26,6 +26,8 @@ public class Event implements Storable {
     VerifyInput.verifyPositiveNumberZeroNotAccepted(recipe_id, "recipe_id");
     VerifyInput.verifyPositiveNumberMinusOneNotAccepted(date, "date");
     VerifyInput.verifyDateLength(date, "date");
+    VerifyInput.verifyDateMonth(date, "date");
+    VerifyInput.verifyDateDay(date, "date");
     this.recipe_id = recipe_id;
     this.date = date;
   }
