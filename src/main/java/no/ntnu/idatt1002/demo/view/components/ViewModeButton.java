@@ -1,6 +1,7 @@
 package no.ntnu.idatt1002.demo.view.components;
 
 import javafx.scene.paint.Color;
+import no.ntnu.idatt1002.demo.Logger;
 
 /**
  * A button for changing the view mode of the application.
@@ -20,18 +21,19 @@ public class ViewModeButton extends PrimaryButton {
     LIST("viewmodelist"),
     GRID("viewmodegrid");
 
-    private Icon icon;
+    private String name;
 
     private ViewMode(String name) {
-      this.icon = new Icon(name).setFillColor(Color.BLACK);
-      this.icon.getStyleClass().add("centered");
+      this.name = name;
     }
   }
 
   private ViewMode viewMode;
 
   public ViewModeButton(ViewMode viewMode) {
-    super(Type.TRANSPARENT, viewMode.icon);
+    super(Type.TRANSPARENT, new Icon(viewMode.name).setFillColor(Color.BLACK));
+    this.getGraphic().getStyleClass().add("centered");
+    Logger.warning("ViewModeButton created");
     this.viewMode = viewMode;
   }
 
