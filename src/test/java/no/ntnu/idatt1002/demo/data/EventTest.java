@@ -22,7 +22,7 @@ public class EventTest {
    */
   @BeforeEach
   void setUp() {
-    event = new Event(1, 2, 240501);
+    event = new Event(1, 2, 20240501);
   }
 
   /**
@@ -37,7 +37,7 @@ public class EventTest {
      */
     @Test
     void testGetAttributesPositive() {
-      List<String> expectedAttributes = Arrays.asList("2", "240501");
+      List<String> expectedAttributes = Arrays.asList("2", "20240501");
       assertEquals(expectedAttributes, event.getAttributes());
     }
 
@@ -87,16 +87,7 @@ public class EventTest {
      */
     @Test
     void testGetDatePositive() {
-      assertEquals(240501, event.getDate());
-    }
-
-    /**
-     * This method tests the toString method in the Event class. The result is expected to be true.
-     */
-    @Test
-    void testToStringPositive() {
-//      assertEquals("Event ID: 1, Recipe ID: 2, Date: 240501", event.toString());
-      assertEquals(event.getName(), event.toString());
+      assertEquals(20240501, event.getDate());
     }
   }
 
@@ -113,7 +104,7 @@ public class EventTest {
     @Test
     void testVerifyRecipe_idIntegerException() {
       try {
-        new Event(1, 0, 240501);
+        new Event(1, 0, 20240501);
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
         assertEquals("The input for the parameter 'recipe_id' must be a positive number equal to or greater than 1", e.getMessage());
@@ -126,7 +117,7 @@ public class EventTest {
     @Test
     void testVerifyDateIntegerException() {
       try {
-        new Event(1, 2, -12345);
+        new Event(1, 2, -1234567);
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
         assertEquals("The input for the parameter 'date' must be a positive number", e.getMessage());
@@ -139,13 +130,61 @@ public class EventTest {
     @Test
     void testVerifyDateLengthException() {
       try {
-        new Event(1, 2, 24050);
+        new Event(1, 2, 2024050);
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("The input for the parameter 'date' must have six figures", e.getMessage());
+        assertEquals("The input for the parameter 'date' must have eight figures", e.getMessage());
       }
     }
 
+    @Test
+    void testVerifyDateMonthException() {
+      try {
+        new Event(1, 2, 20241413);
+        fail("This test failed, since it should have thrown an exception");
+      } catch (IllegalArgumentException e) {
+        assertEquals("In the input for the parameter 'date', the 3rd and 4th figure must be a number between 01 and 12", e.getMessage());
+      }
+    }
 
+    @Test
+    void testVerifyDateDay31Exception() {
+      try {
+        new Event(1, 2, 20240532);
+        fail("This test failed, since it should have thrown an exception");
+      } catch (IllegalArgumentException e) {
+        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 31", e.getMessage());
+      }
+    }
+
+    @Test
+    void testVerifyDateDay30Exception() {
+      try {
+        new Event(1, 2, 20240431);
+        fail("This test failed, since it should have thrown an exception");
+      } catch (IllegalArgumentException e) {
+        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 30", e.getMessage());
+      }
+    }
+
+    @Test
+    void testVerifyDateDayFebLeapYearException() {
+      try {
+        new Event(1, 2, 20240230);
+        fail("This test failed, since it should have thrown an exception");
+      } catch (IllegalArgumentException e) {
+        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 29", e.getMessage());
+      }
+    }
+
+    @Test
+    void testVerifyDateDayFebNotLeapYearException() {
+      try {
+        new Event(1, 2, 20250231);
+        fail("This test failed, since it should have thrown an exception");
+      } catch (IllegalArgumentException e) {
+        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 28", e.getMessage());
+      }
+    }
   }
 }

@@ -42,10 +42,10 @@ class EventRegisterTest {
     public void getAllEventsSetsCorrectAmountOfItems() {
       when(dao.getAllFromTable("Event", "Recipe", "recipe_id"))
           .thenReturn(List.of(
-              List.of("1", "1", "241003", "1", "name", "10", "category"),
-              List.of("2", "2", "241003", "2", "name", "12", "category"),
-              List.of("3", "3", "241003", "3", "name", "9", "category"),
-              List.of("4", "4", "241003", "4", "name", "3", "category")));
+              List.of("1", "1", "20241003", "1", "name", "10", "category"),
+              List.of("2", "2", "20241003", "2", "name", "12", "category"),
+              List.of("3", "3", "20241003", "3", "name", "9", "category"),
+              List.of("4", "4", "20241003", "4", "name", "3", "category")));
       eventRegister.getAllEvents();
       assertEquals(4, eventRegister.getEventsAsList().size());
     }
@@ -53,20 +53,20 @@ class EventRegisterTest {
     @Test
     @DisplayName("Test getEventsByDate")
     public void getEventsByDateSetsCorrectAmountOfItems() {
-      when(dao.filterFromTable("Event", "date", "241013", "recipe", "recipe_id"))
+      when(dao.filterFromTable("Event", "date", "20241013", "recipe", "recipe_id"))
           .thenReturn(List.of(
-              List.of("1", "1", "241013", "1", "name", "10", "category"),
-              List.of("2", "2", "241013", "2", "name", "12", "category"),
-              List.of("3", "3", "241013", "3", "name", "9", "category"),
-              List.of("4", "4", "241013", "4", "name", "3", "category")));
-      eventRegister.getEventsByDate(241013);
+              List.of("1", "1", "20241013", "1", "name", "10", "category"),
+              List.of("2", "2", "20241013", "2", "name", "12", "category"),
+              List.of("3", "3", "20241013", "3", "name", "9", "category"),
+              List.of("4", "4", "20241013", "4", "name", "3", "category")));
+      eventRegister.getEventsByDate(20241013);
       assertEquals(4, eventRegister.getEventsAsList().size());
     }
 
     @Test
     @DisplayName("Test addEvent")
     public void addEventDoesNotThrowExceptionOnValidParameters() {
-      assertDoesNotThrow(() -> eventRegister.addEvent(1, 111111));
+      assertDoesNotThrow(() -> eventRegister.addEvent(1, 11111111));
     }
 
     @Test
@@ -86,7 +86,7 @@ class EventRegisterTest {
     public void getEventsByIdSetsCorrectAmountOfItems() {
       when(dao.filterFromTable("Event", "event_id", "1", "Recipe", "recipe_id"))
           .thenReturn(List.of(
-              List.of("1", "1", "241003", "1", "name", "10", "category")));
+              List.of("1", "1", "20241003", "1", "name", "10", "category")));
       eventRegister.getEventById(1);
       assertEquals(1, eventRegister.getEventsAsList().size());
     }
@@ -98,10 +98,10 @@ class EventRegisterTest {
       void setUp() {
         when(dao.getAllFromTable("Event", "Recipe", "recipe_id"))
             .thenReturn(List.of(
-                List.of("1", "1", "241003", "1", "name", "10", "category"),
-                List.of("2", "2", "241003", "2", "name", "12", "category"),
-                List.of("3", "3", "241003", "3", "name", "9", "category"),
-                List.of("4", "4", "241003", "4", "name", "3", "category")));
+                List.of("1", "1", "20241003", "1", "name", "10", "category"),
+                List.of("2", "2", "20241003", "2", "name", "12", "category"),
+                List.of("3", "3", "20241003", "3", "name", "9", "category"),
+                List.of("4", "4", "20241003", "4", "name", "3", "category")));
         eventRegister.getAllEvents();
       }
 
@@ -114,7 +114,7 @@ class EventRegisterTest {
       @Test
       @DisplayName("Test updateEvent")
       public void updateEventDoesNotThrowExceptionOnValidParameters() {
-        assertDoesNotThrow(() -> eventRegister.updateEvent(3, 2, 240808));
+        assertDoesNotThrow(() -> eventRegister.updateEvent(3, 2, 20240808));
       }
     }
   }
