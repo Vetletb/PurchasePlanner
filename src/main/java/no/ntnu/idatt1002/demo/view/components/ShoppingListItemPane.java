@@ -14,6 +14,7 @@ public class ShoppingListItemPane extends HBox {
   private int quantity;
   private String unit;
   private boolean isSelected;
+  CheckBoxButton checkBoxButton;
 
   public ShoppingListItemPane(int shoppingListItemId,String name, String category, int quantity, String unit) {
     this.shoppingListItemId = shoppingListItemId;
@@ -31,14 +32,10 @@ public class ShoppingListItemPane extends HBox {
     Label categoryLabel = new Label(this.category);
     Label quantityLabel = new Label(Integer.toString(this.quantity));
     Label unitLabel = new Label(this.unit);
-    CheckBoxButton checkBoxButton = new CheckBoxButton(new Icon("checkboxUnSelected"));
+    checkBoxButton = new CheckBoxButton(new Icon("checkboxUnSelected"));
     checkBoxButton.setOnAction(e -> {
       isSelected = !isSelected;
-      if (isSelected) {
-        checkBoxButton.setIcon(new Icon("checkboxSelected"));
-      } else {
-        checkBoxButton.setIcon(new Icon("checkboxUnSelected"));
-      }
+      switchIcon();
     });
     checkBoxButton.setScaleX(0.6);
     checkBoxButton.setScaleY(0.6);
@@ -59,4 +56,32 @@ public class ShoppingListItemPane extends HBox {
   public boolean isSelected() {
     return isSelected;
   }
+
+  public void setSelected() {
+    this.isSelected = !isSelected;
+    switchIcon();
+  }
+  public String getName() {
+    return name;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void update(ShoppingListItem item) {
+    this.name = item.getName();
+    this.category = item.getCategory();
+    this.quantity = item.getQuantity();
+    this.unit = item.getUnit();
+  }
+
+  private void switchIcon(){
+    if (isSelected) {
+      checkBoxButton.setIcon(new Icon("checkboxSelected"));
+    } else {
+      checkBoxButton.setIcon(new Icon("checkboxUnSelected"));
+    }
+  }
 }
+

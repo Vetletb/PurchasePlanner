@@ -7,13 +7,13 @@ import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
-import no.ntnu.idatt1002.demo.data.Item;
 import no.ntnu.idatt1002.demo.data.ShoppingListItem;
 import no.ntnu.idatt1002.demo.repo.ItemRegister;
 import no.ntnu.idatt1002.demo.repo.ShoppingListItemRegister;
 import no.ntnu.idatt1002.demo.view.components.*;
 
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The inventory page.
@@ -34,6 +34,12 @@ public class ShoppingList extends VBox {
 
   // Items list
   private Map<Integer, ShoppingListItem> items;
+
+  // List of selected items
+  List<Integer> selectedItemsId = new ArrayList<>();
+  // List header sort
+  String sortBy = "Name";
+  String filterBy = "All";
 
   /**
    * Constructor for the ShoppingList class.
@@ -57,8 +63,8 @@ public class ShoppingList extends VBox {
     Label topBarItemCheckBox = new Label("Done");
 
     // Bottom bar labels TODO: Implement the functionality
-    Label bottomBarTotalQuantity = new Label("Total quantity: 100");
-    Label bottomBarTotalPrice = new Label("Total price: 1200");
+    Label bottomBarTotalQuantity = new Label("Total quantity: 0");
+    Label bottomBarTotalPrice = new Label("Total price: 0");
 
     // Add the labels to the top bar
     staticListTopBar.getChildren().addAll(topBarItemName, topBarItemCategory, topBarItemQuantity, topBarItemUnit, topBarItemCheckBox);
@@ -116,6 +122,8 @@ public class ShoppingList extends VBox {
     shoppingListHeader.setOnSearch(this::fullSearch);
     shoppingListHeader.setOnSearchQueryChange(this::search);
     shoppingListHeader.setOnAdd(this::addItem);
+    shoppingListHeader.setOnSortChange(this::sortBy);
+    shoppingListHeader.setOnFilterChange(this::filterBy);
 
 
     super.getChildren().addAll(shoppingListHeader, contentContainer);
@@ -275,14 +283,76 @@ xs   * @param item the item to be added
     }
   }
 
+  private void sortBy(String sortBy) {
+    this.sortBy = sortBy;
+    loadShoppingList();
+  }
+
+  /**
+   * Method to switch the filter by.
+   * @param filterBy the filter to switch by
+   */
+  private void filterBy(String filterBy) {
+    this.filterBy = filterBy;
+    loadShoppingList();
+  }
+
   /**
    * Method to update the page.
    * <p>Clears the displayed list and fills it with new items</p>
    */
   private void loadShoppingList() {
+
+    // Filter the items based on the filter by
+    if (!filterBy.equals("All")) {
+      // get items that are selected
+      shoppingListContainer.getChildren().forEach(node -> {
+        ShoppingListItemPane shoppingListItemPane = (ShoppingListItemPane) node;
+        if (shoppingListItemPane.isSelected()
+                && !selectedItemsId.contains(shoppingListItemPane.getShoppingListItemId())) {
+          selectedItemsId.add(shoppingListItemPane.getShoppingListItemId());
+        }
+      });
+
+//      shoppingListContainer.getChildren().clear();
+      Logger.warning("Selected item: " + selectedItemsId.toString());
+      Logger.warning("filterBy" + filterBy);
+
+      // get the items that are not selected
+      items = items.entrySet().stream()
+              .filter(entry -> {
+                if (filterBy.equals("Active")) {
+                  return !selectedItemsId.contains(entry.getKey());
+                } else {
+                  return selectedItemsId.contains(entry.getKey());
+                }
+              })
+              .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+    else {
+      ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+      shoppingListItemRegister.getAllItems();
+      items = shoppingListItemRegister.getItems();
+    }
+
+    // Sort the items based on the sort by
+    List<ShoppingListItem> sortedItems = new ArrayList<>(items.values());
+    switch (sortBy) {
+      case "Name":
+        sortedItems.sort(Comparator.comparing(ShoppingListItem::getName));
+        break;
+      case "Date":
+        sortedItems.sort(Comparator.comparing(ShoppingListItem::getQuantity));
+        break;
+      case "Type":
+        sortedItems.sort(Comparator.comparing(ShoppingListItem::getCategory));
+        break;
+    }
+
+    // Clear the shopping list container
     shoppingListContainer.getChildren().clear();
 
-    items.values().forEach(item -> {
+    sortedItems.forEach(item -> {
       ShoppingListItemPane shoppingListItemPane = new ShoppingListItemPane(item);
       shoppingListItemPane.setOnMouseClicked(v -> {
         ShoppingListItemPopup shoppingListItemPopup = new ShoppingListItemPopup(item);
@@ -290,11 +360,11 @@ xs   * @param item the item to be added
         shoppingListItemPopup.setOnDelete(this::deleteShoppingListItem);
         shoppingListItemPopup.show(this.getScene().getWindow());
       });
+      if(selectedItemsId.contains(item.getId())) shoppingListItemPane.setSelected();
 
 
       shoppingListItemPane.getStyleClass().add("shopping-list-item-pane");
       shoppingListContainer.getChildren().add(shoppingListItemPane);
-//      shoppingListScrollPane.setContent(shoppingListContainer);
     });
 
 
