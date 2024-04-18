@@ -21,7 +21,7 @@ import no.ntnu.idatt1002.demo.view.components.ToastProvider;
  * The main application class.
  */
 public class App extends Application {
-  private static Properties p = ConfigLoader.load();
+  private Properties p;
 
   private static final int SIDEBAR_WIDTH = 200;
 
@@ -31,6 +31,8 @@ public class App extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
+    p = ConfigLoader.load(
+        this.getClass().getResource("/no/ntnu/idatt1002/demo/config/app.config").getFile());
 
     loadFonts();
 

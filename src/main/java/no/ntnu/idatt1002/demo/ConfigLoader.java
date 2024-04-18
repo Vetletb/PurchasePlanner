@@ -1,6 +1,7 @@
 package no.ntnu.idatt1002.demo;
 
 import java.io.FileInputStream;
+import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -14,13 +15,14 @@ public class ConfigLoader {
   /**
    * Loads properties from the config file.
    *
+   * @param path The path to the config file.
    * @return The properties.
    */
-  public static Properties load() {
-    String configFileName = "src/main/resources/no/ntnu/idatt1002/demo/config/app.config";
+  public static Properties load(String path) {
     Properties properties = new Properties();
+    System.out.println(path);
 
-    try (FileInputStream fileInputStream = new FileInputStream(configFileName)) {
+    try (FileInputStream fileInputStream = new FileInputStream(path)) {
       properties.load(fileInputStream);
     } catch (Exception e) {
       e.printStackTrace();
@@ -42,7 +44,7 @@ public class ConfigLoader {
       Logger.fatal("Could not set logger level");
     }
 
-    Logger.info("Loaded properties from " + configFileName);
+    Logger.info("Loaded properties from " + path);
 
     return properties;
   }
