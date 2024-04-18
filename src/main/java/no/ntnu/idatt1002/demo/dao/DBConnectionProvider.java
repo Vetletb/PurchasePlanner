@@ -1,6 +1,6 @@
 package no.ntnu.idatt1002.demo.dao;
 
-
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,14 +15,20 @@ public class DBConnectionProvider {
   private final String url;
   private static DBConnectionProvider databaseConnectionProvider;
 
-  private static String DB_PATH =
-      "src/main/resources/no/ntnu/idatt1002/database/database.sqlite";
+  private static String DB_PATH = "/no/ntnu/idatt1002/database/database.sqlite";
 
   /**
    * Constructor for the DBConnectionProvider class.
    */
   public DBConnectionProvider() {
-    this.url = "jdbc:sqlite:" + DB_PATH;
+    URL relativePath = this.getClass().getResource(DB_PATH);
+
+    if (relativePath == null) {
+      this.url = null;
+      return;
+    }
+
+    this.url = "jdbc:sqlite:" + relativePath.toExternalForm();
   }
 
   /**
