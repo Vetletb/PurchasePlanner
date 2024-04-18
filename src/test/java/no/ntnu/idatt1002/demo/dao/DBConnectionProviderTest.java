@@ -24,20 +24,20 @@ class DBConnectionProviderTest {
 
     @BeforeEach
     public void setUp() {
-      DBConnectionProvider.setDbPath("src/main/resources/no/ntnu/idatt1002/database/database.sqlite");
+      DBConnectionProvider.setDbPath("/no/ntnu/idatt1002/database/database.sqlite");
       dbConnectionProvider = new DBConnectionProvider();
     }
 
     @Test
     @DisplayName("getConnection does not return null")
     public void GetConnectionDoesNotReturnNull() {
-    assertNotNull(dbConnectionProvider.getConnection());
+      assertNotNull(dbConnectionProvider.getConnection());
     }
 
     @Test
     @DisplayName("getInstance does not return null")
     public void GetInstanceDoesNotReturnNull() {
-    assertNotNull(DBConnectionProvider.getInstance());
+      assertNotNull(DBConnectionProvider.getInstance());
     }
 
     @Nested
@@ -46,9 +46,9 @@ class DBConnectionProviderTest {
       Connection connection;
 
       @BeforeEach
-        public void setUp() {
-          connection = dbConnectionProvider.getConnection();
-        }
+      public void setUp() {
+        connection = dbConnectionProvider.getConnection();
+      }
 
       @Test
       @DisplayName("closeConnection closes the database connection")
@@ -84,9 +84,9 @@ class DBConnectionProviderTest {
     @Test
     @DisplayName("getConnection throws exception")
     public void GetConnectionThrowsException() {
-        DBConnectionProvider.setDbPath("src/test/resources/test");
-        DBConnectionProvider dbConnectionProvider = new DBConnectionProvider();
-        dbConnectionProvider.getConnection();
+      DBConnectionProvider.setDbPath("src/test/resources/test");
+      DBConnectionProvider dbConnectionProvider = new DBConnectionProvider();
+      assertThrows(RuntimeException.class, () -> dbConnectionProvider.getConnection());
     }
   }
 }
