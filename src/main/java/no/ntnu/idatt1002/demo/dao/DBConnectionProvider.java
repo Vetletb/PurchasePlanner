@@ -7,6 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.prefs.Preferences;
+
+import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.Main;
+import no.ntnu.idatt1002.demo.view.App;
+import no.ntnu.idatt1002.demo.view.Installer;
 
 /**
  * This class provides a connection to the database.
@@ -21,14 +27,29 @@ public class DBConnectionProvider {
    * Constructor for the DBConnectionProvider class.
    */
   public DBConnectionProvider() {
-    URL relativePath = this.getClass().getResource(DB_PATH);
+    Preferences preferences = Preferences.userNodeForPackage(Main.class);
+    String installedPath = preferences.get("install_path", null);
+    Logger.fatal(installedPath);
+    String relativePath;
 
-    if (relativePath == null) {
-      this.url = null;
-      return;
+    // If the application is not installed, the database is located in the resources
+    // folder
+    if (installedPath == null) {
+      URL url = this.getClass().getResource(DB_PATH);
+
+      if (url == null) {
+        this.url = null;
+        return;
+      }
+
+      relativePath = url.getPath();
+
+    } else {
+      relativePath = installedPath + "/database/database.sqlite";
+      Logger.fatal(relativePath);
     }
 
-    this.url = "jdbc:sqlite:" + relativePath.toExternalForm();
+    this.url = "jdbc:sqlite:" + relativePath;
   }
 
   /**
@@ -47,6 +68,7 @@ public class DBConnectionProvider {
    */
   Connection getConnection() {
     try {
+      Logger.fatal(url);
       Connection connection = DriverManager.getConnection(url);
       Statement statement = connection.createStatement();
       statement.execute("PRAGMA foreign_keys = ON;");

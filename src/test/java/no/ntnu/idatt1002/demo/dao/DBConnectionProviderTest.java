@@ -6,10 +6,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.prefs.Preferences;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import net.bytebuddy.agent.Installer;
 
 /**
  * Positive and negative tests for the DBConnectionProvider class.
@@ -24,6 +28,13 @@ class DBConnectionProviderTest {
 
     @BeforeEach
     public void setUp() {
+
+      // Clear preferences to use the default database path
+      try {
+        Preferences.userNodeForPackage(Installer.class).clear();
+      } catch (Exception e) {
+      }
+
       DBConnectionProvider.setDbPath("/no/ntnu/idatt1002/database/database.sqlite");
       dbConnectionProvider = new DBConnectionProvider();
     }

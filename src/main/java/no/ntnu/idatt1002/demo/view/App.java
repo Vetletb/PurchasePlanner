@@ -1,6 +1,8 @@
 package no.ntnu.idatt1002.demo.view;
 
 import java.util.Properties;
+import java.util.prefs.Preferences;
+
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import no.ntnu.idatt1002.demo.ConfigLoader;
 import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.Main;
 import no.ntnu.idatt1002.demo.SceneLoader;
 import no.ntnu.idatt1002.demo.view.components.Sidebar;
 import no.ntnu.idatt1002.demo.view.components.ToastProvider;
@@ -22,6 +25,8 @@ import no.ntnu.idatt1002.demo.view.components.ToastProvider;
  */
 public class App extends Application {
   private Properties p;
+  private StackPane root;
+  private Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
 
   private static final int SIDEBAR_WIDTH = 200;
 
@@ -31,18 +36,15 @@ public class App extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    p = ConfigLoader.load(
-        this.getClass().getResource("/no/ntnu/idatt1002/demo/config/app.config").getFile());
+    p = ConfigLoader.load("/no/ntnu/idatt1002/demo/config/app.config");
 
     loadFonts();
 
-    Screen screen = Screen.getPrimary();
-    Rectangle2D bounds = screen.getVisualBounds();
     primaryStage.setX(bounds.getMinX());
     primaryStage.setY(bounds.getMinY());
 
     primaryStage.setTitle(p.getProperty("app_name"));
-    StackPane root = new StackPane();
+    root = new StackPane();
     Scene scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
     scene.getStylesheets().add(getClass().getResource("/no/ntnu/idatt1002/demo/style/style.css")
         .toExternalForm());
@@ -50,6 +52,35 @@ public class App extends Application {
     primaryStage.show();
     primaryStage.setMaximized(true);
 
+    Preferences preferences = Preferences.userNodeForPackage(Main.class);
+    String installedPath = preferences.get("install_path", null);
+    Logger.fatal(installedPath);
+
+    String protocol = this.getClass().getResource("").getProtocol();
+    Logger.info("Protocol: " + protocol);
+
+    if (installedPath == null && protocol.equals("jar")) {
+      startInstallApp();
+      return;
+    }
+
+    // If the application is not installed, the database is located in the resources
+    // Therefore we clear the preferences
+    if (protocol.equals("file")) {
+      preferences.clear();
+    }
+
+    startMainApp();
+  }
+
+  private void startInstallApp() {
+    root.getChildren().clear();
+    root.getChildren().add(new Installer(() -> startMainApp()));
+
+  }
+
+  private void startMainApp() {
+    root.getChildren().clear();
     HBox mainContainer = new HBox();
 
     SceneLoader sceneLoader = new SceneLoader();

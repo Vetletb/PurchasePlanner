@@ -1,7 +1,7 @@
 package no.ntnu.idatt1002.demo;
 
-import java.io.FileInputStream;
-import java.net.URL;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -9,7 +9,19 @@ import java.util.Properties;
  */
 public class ConfigLoader {
 
+  private static ConfigLoader instance;
+  private Properties properties;
+  private String path;
+
   private ConfigLoader() {
+  }
+
+  private static ConfigLoader getInstance() {
+    if (instance == null) {
+      instance = new ConfigLoader();
+    }
+
+    return instance;
   }
 
   /**
@@ -20,10 +32,11 @@ public class ConfigLoader {
    */
   public static Properties load(String path) {
     Properties properties = new Properties();
-    System.out.println(path);
 
-    try (FileInputStream fileInputStream = new FileInputStream(path)) {
-      properties.load(fileInputStream);
+    try {
+      InputStream inputStream = ConfigLoader.class.getResourceAsStream(path);
+      properties.load(inputStream);
+
     } catch (Exception e) {
       e.printStackTrace();
       return new Properties();
@@ -46,6 +59,27 @@ public class ConfigLoader {
 
     Logger.info("Loaded properties from " + path);
 
+    getInstance().properties = properties;
+
     return properties;
+  }
+
+  /**
+   * Returns the properties.
+   *
+   * @return The properties.
+   */
+  public static Properties getProperties() {
+    return getInstance().properties;
+  }
+
+  /**
+   * Sets a specified property.
+   *
+   * @param key   The key of the property.
+   * @param value The value of the property.
+   */
+  public static void setProperty(String key, String value) {
+    getInstance().properties.setProperty(key, value);
   }
 }
