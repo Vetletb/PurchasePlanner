@@ -57,7 +57,6 @@ public class App extends Application {
     Logger.fatal(installedPath);
 
     String protocol = this.getClass().getResource("").getProtocol();
-    Logger.info("Protocol: " + protocol);
 
     if (installedPath == null && protocol.equals("jar")) {
       startInstallApp();

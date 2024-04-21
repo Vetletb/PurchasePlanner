@@ -6,9 +6,14 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.shape.SVGPath;
 import no.ntnu.idatt1002.demo.Logger;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import org.apache.commons.io.FileUtils;
+
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -22,7 +27,7 @@ public class Icon extends VBox {
   // In addition make the icon get all the properties defined within the svg file
   // such as strokewidth, fill and so on.
 
-  private final String filePath = "src/main/resources/no/ntnu/idatt1002/icons/";
+  private final String filePath = "/no/ntnu/idatt1002/icons/";
   private final SVGPath svgPath;
   public static final int DEFAULT_SIZE = 10;
   // private static final float DEFAULT_SCALE = 0.1f;
@@ -31,6 +36,7 @@ public class Icon extends VBox {
   private int x;
   private int y;
   private int size;
+
   /**
    * Constructor for the Icon class.
    *
@@ -125,8 +131,8 @@ public class Icon extends VBox {
    */
   private String readSvgFromFile(String filePath) {
     try {
-      return Files.readString(Paths.get(filePath));
-    } catch (IOException e) {
+      return new String(getClass().getResourceAsStream(filePath).readAllBytes());
+    } catch (Exception e) {
       Logger.debug(e.getMessage());
       return ""; // Return empty string if there's an error reading the file
     }
@@ -143,7 +149,9 @@ public class Icon extends VBox {
   }
 
   /**
-   * Splits the provided line from the SVG file and returns the Rectangle that the SVG is describing.
+   * Splits the provided line from the SVG file and returns the Rectangle that the
+   * SVG is describing.
+   * 
    * @param svgContent Content of the SVG file
    * @return The Rectangle described in the SVG file
    */
@@ -160,7 +168,9 @@ public class Icon extends VBox {
   }
 
   /**
-   * Splits the provided line from the SVG file and returns the Circle that the SVG is describing.
+   * Splits the provided line from the SVG file and returns the Circle that the
+   * SVG is describing.
+   * 
    * @param svgContent Content of the SVG file
    * @return The Circle described in the SVG file
    */
@@ -171,7 +181,8 @@ public class Icon extends VBox {
     double r = Double.parseDouble(circleData.split("r=\"")[1].split("\"")[0]);
 
     SVGPath svgCircle = new SVGPath();
-    svgCircle.setContent("M" + cx + " " + cy + "m" + -r + " 0a" + r + " " + r + " 0 1,0 " + r * 2 + " 0a" + r + " " + r + " 0 1,0 " + -r * 2 + " 0");
+    svgCircle.setContent("M" + cx + " " + cy + "m" + -r + " 0a" + r + " " + r + " 0 1,0 " + r * 2 + " 0a" + r + " " + r
+        + " 0 1,0 " + -r * 2 + " 0");
 
     if (circleData.contains("stroke=\"")) {
       String stroke = circleData.split("stroke=\"")[1].split("\"")[0];
@@ -192,7 +203,6 @@ public class Icon extends VBox {
   public void setStrokeColor(Color color) {
     svgPath.setStroke(color);
   }
-
 
   /**
    * Splits the SVG content and returns the value of the attribute.
