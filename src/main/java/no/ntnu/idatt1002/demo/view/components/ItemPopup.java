@@ -1,23 +1,23 @@
 package no.ntnu.idatt1002.demo.view.components;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.prefs.Preferences;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Popup;
-import no.ntnu.idatt1002.demo.Logger;
-import no.ntnu.idatt1002.demo.dao.DAO;
-import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
+import javax.imageio.ImageIO;
+
+import no.ntnu.idatt1002.demo.Main;
 import no.ntnu.idatt1002.demo.data.InventoryItem;
-import no.ntnu.idatt1002.demo.data.Item;
-import no.ntnu.idatt1002.demo.data.Storable;
-import no.ntnu.idatt1002.demo.repo.ItemRegister;
+import no.ntnu.idatt1002.demo.view.components.Toast.ToastType;
 
 /**
  * A popup for adding items to the inventory.
@@ -92,6 +92,65 @@ public class ItemPopup extends Popup {
     expirationField.setPromptText("Expiration date");
     expirationField.setText(Integer.toString(inventoryItem.getExpirationDate()));
 
+    PrimaryButton imageButton = new PrimaryButton("Change image");
+    imageButton.setButtonType(PrimaryButton.Type.SECONDARY);
+    imageButton.setPrefWidth(200);
+    imageButton.setPrefHeight(50);
+    imageButton.getStyleClass().add("centered");
+    imageButton.setOnAction(e -> {
+      FileChooser fileChooser = new FileChooser();
+      fileChooser.getExtensionFilters()
+          .add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+      fileChooser.setTitle("Choose an image for " + inventoryItem.getName());
+      File file = fileChooser.showOpenDialog(null);
+
+      if (file != null) {
+        try {
+          BufferedImage image = ImageIO.read(file);
+
+          String installPath = Preferences.userNodeForPackage(Main.class).get("install_path", null);
+          File outoutFile;
+
+          if (installPath == null) {
+            outoutFile = new File(
+                "src" + File.separator + "main"
+                    + File.separator + "resources"
+                    + File.separator + "no"
+                    + File.separator + "ntnu"
+                    + File.separator + "idatt1002"
+                    + File.separator + "images"
+                    + File.separator + "items"
+                    + File.separator + inventoryItem.getItemId() + ".png");
+
+          } else {
+            outoutFile = new File(
+                installPath
+                    + File.separator + "images"
+                    + File.separator + "items"
+                    + File.separator + inventoryItem.getItemId() + ".png");
+          }
+
+          if (!outoutFile.exists()) {
+            outoutFile.mkdirs();
+            outoutFile.createNewFile();
+          }
+
+          ImageIO.write(
+              image,
+              "png",
+              outoutFile);
+
+          ToastProvider.enqueue(
+              new Toast("Image saved",
+                  "Next time you enter the page, the image will be updated",
+                  ToastType.SUCCESS));
+
+        } catch (Exception ex) {
+          ToastProvider.enqueue(new Toast("error", "Could not save image", ToastType.ERROR));
+        }
+      }
+    });
+
     // Add a button to submit the form
     PrimaryButton submitButton = new PrimaryButton("Save");
     submitButton.setButtonType(PrimaryButton.Type.SECONDARY);
@@ -139,6 +198,7 @@ public class ItemPopup extends Popup {
         createField(unitField, "Unit"),
         createField(amountField, "Amount"),
         createField(expirationField, "Expiration date"),
+        imageButton,
         submitButton,
         deleteButton);
   }

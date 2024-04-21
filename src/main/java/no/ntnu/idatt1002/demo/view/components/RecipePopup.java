@@ -1,10 +1,15 @@
 package no.ntnu.idatt1002.demo.view.components;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
+
+import javax.imageio.ImageIO;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -12,8 +17,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import no.ntnu.idatt1002.demo.Logger;
+import no.ntnu.idatt1002.demo.Main;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
 import no.ntnu.idatt1002.demo.data.Item;
@@ -21,6 +28,7 @@ import no.ntnu.idatt1002.demo.data.Recipe;
 import no.ntnu.idatt1002.demo.data.RecipeIngredient;
 import no.ntnu.idatt1002.demo.data.RecipeStep;
 import no.ntnu.idatt1002.demo.repo.ItemRegister;
+import no.ntnu.idatt1002.demo.view.components.Toast.ToastType;
 
 /**
  * A popup for adding items to the inventory.
@@ -68,6 +76,7 @@ public class RecipePopup extends Popup {
   private List<StepField> stepsField;
   private List<StepField> newSteps;
   private PrimaryButton addStepButton;
+  private PrimaryButton imageButton;
 
   /**
    * Constructor for the AddPopup.
@@ -216,6 +225,66 @@ public class RecipePopup extends Popup {
       this.hide();
     });
 
+    imageButton = new PrimaryButton("Change image");
+    imageButton.setButtonType(PrimaryButton.Type.SECONDARY);
+    imageButton.setPrefWidth(300);
+    imageButton.setPrefHeight(50);
+    imageButton.getStyleClass().add("centered");
+    imageButton.setOnAction(e -> {
+
+      FileChooser fileChooser = new FileChooser();
+      fileChooser.getExtensionFilters()
+          .add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+      fileChooser.setTitle("Choose an image for " + recipe.getName());
+      File file = fileChooser.showOpenDialog(null);
+
+      if (file != null) {
+        try {
+          BufferedImage image = ImageIO.read(file);
+
+          String installPath = Preferences.userNodeForPackage(Main.class).get("install_path", null);
+          File outoutFile;
+
+          if (installPath == null) {
+            outoutFile = new File(
+                "src" + File.separator + "main"
+                    + File.separator + "resources"
+                    + File.separator + "no"
+                    + File.separator + "ntnu"
+                    + File.separator + "idatt1002"
+                    + File.separator + "images"
+                    + File.separator + "recipes"
+                    + File.separator + recipe.getId() + ".png");
+
+          } else {
+            outoutFile = new File(
+                installPath
+                    + File.separator + "images"
+                    + File.separator + "recipes"
+                    + File.separator + recipe.getId() + ".png");
+          }
+
+          if (!outoutFile.exists()) {
+            outoutFile.mkdirs();
+            outoutFile.createNewFile();
+          }
+
+          ImageIO.write(
+              image,
+              "png",
+              outoutFile);
+
+          ToastProvider.enqueue(
+              new Toast("Image saved",
+                  "Next time you enter the page, the image will be updated",
+                  ToastType.SUCCESS));
+
+        } catch (Exception ex) {
+          ToastProvider.enqueue(new Toast("error", "Could not save image", ToastType.ERROR));
+        }
+      }
+    });
+
     submitButton.setPrefWidth(300);
     submitButton.setPrefHeight(50);
 
@@ -256,7 +325,7 @@ public class RecipePopup extends Popup {
     background.getChildren().add(title);
     switch (page) {
       case MAIN:
-        background.getChildren().addAll(nameField, categoryField, timefield);
+        background.getChildren().addAll(nameField, categoryField, timefield, imageButton);
         break;
       case ADD_INGREDIENT:
         Text subtitle = new Text("Ingredients");

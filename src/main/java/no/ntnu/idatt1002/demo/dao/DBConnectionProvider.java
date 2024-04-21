@@ -1,12 +1,17 @@
 package no.ntnu.idatt1002.demo.dao;
 
-
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.prefs.Preferences;
+
+import no.ntnu.idatt1002.demo.Main;
+import no.ntnu.idatt1002.demo.view.App;
+import no.ntnu.idatt1002.demo.view.Installer;
 
 /**
  * This class provides a connection to the database.
@@ -15,14 +20,33 @@ public class DBConnectionProvider {
   private final String url;
   private static DBConnectionProvider databaseConnectionProvider;
 
-  private static String DB_PATH =
-      "src/main/resources/no/ntnu/idatt1002/database/database.sqlite";
+  private static String DB_PATH = "/no/ntnu/idatt1002/database/database.sqlite";
 
   /**
    * Constructor for the DBConnectionProvider class.
    */
   public DBConnectionProvider() {
-    this.url = "jdbc:sqlite:" + DB_PATH;
+    Preferences preferences = Preferences.userNodeForPackage(Main.class);
+    String installedPath = preferences.get("install_path", null);
+    String relativePath;
+
+    // If the application is not installed, the database is located in the resources
+    // folder
+    if (installedPath == null) {
+      URL temp = this.getClass().getResource(DB_PATH);
+
+      if (temp == null) {
+        this.url = null;
+        return;
+      }
+
+      relativePath = temp.getPath();
+
+    } else {
+      relativePath = installedPath + "/database/database.sqlite";
+    }
+
+    this.url = "jdbc:sqlite:" + relativePath;
   }
 
   /**

@@ -1,6 +1,7 @@
 package no.ntnu.idatt1002.demo;
 
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -8,20 +9,34 @@ import java.util.Properties;
  */
 public class ConfigLoader {
 
+  private static ConfigLoader instance;
+  private Properties properties;
+  private String path;
+
   private ConfigLoader() {
+  }
+
+  private static ConfigLoader getInstance() {
+    if (instance == null) {
+      instance = new ConfigLoader();
+    }
+
+    return instance;
   }
 
   /**
    * Loads properties from the config file.
    *
+   * @param path The path to the config file.
    * @return The properties.
    */
-  public static Properties load() {
-    String configFileName = "src/main/resources/no/ntnu/idatt1002/demo/config/app.config";
+  public static Properties load(String path) {
     Properties properties = new Properties();
 
-    try (FileInputStream fileInputStream = new FileInputStream(configFileName)) {
-      properties.load(fileInputStream);
+    try {
+      InputStream inputStream = ConfigLoader.class.getResourceAsStream(path);
+      properties.load(inputStream);
+
     } catch (Exception e) {
       e.printStackTrace();
       return new Properties();
@@ -42,8 +57,29 @@ public class ConfigLoader {
       Logger.fatal("Could not set logger level");
     }
 
-    Logger.info("Loaded properties from " + configFileName);
+    Logger.info("Loaded properties from " + path);
+
+    getInstance().properties = properties;
 
     return properties;
+  }
+
+  /**
+   * Returns the properties.
+   *
+   * @return The properties.
+   */
+  public static Properties getProperties() {
+    return getInstance().properties;
+  }
+
+  /**
+   * Sets a specified property.
+   *
+   * @param key   The key of the property.
+   * @param value The value of the property.
+   */
+  public static void setProperty(String key, String value) {
+    getInstance().properties.setProperty(key, value);
   }
 }

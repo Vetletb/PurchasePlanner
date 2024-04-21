@@ -643,3 +643,20 @@ Toast types
 .toast-message {
     -fx-font-size: 14px;
 }
+
+/*
+#########################################
+                Installer
+#########################################
+*/
+
+.welcome-text {
+    -fx-font-size: 20px;
+    -fx-padding: 20px;
+    -fx-font-weight: bold;
+}
+
+.welcome-sub-text {
+    -fx-font-size: 15px;
+    -fx-padding: 20px;
+}
