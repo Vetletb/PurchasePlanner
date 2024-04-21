@@ -33,7 +33,6 @@ public class ViewModeButton extends PrimaryButton {
   public ViewModeButton(ViewMode viewMode) {
     super(Type.TRANSPARENT, new Icon(viewMode.name).setFillColor(Color.BLACK));
     this.getGraphic().getStyleClass().add("centered");
-    Logger.warning("ViewModeButton created");
     this.viewMode = viewMode;
   }
 

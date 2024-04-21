@@ -186,10 +186,11 @@ public class Inventory extends VBox implements UpdateableScene {
             .filter(item -> item.getCategory().equals(category))
             .forEach(item -> {
               ItemPane pane = new ItemPane(
-                  item.getId(),
+                  item.getItemId(),
                   item.getName(),
                   0,
-                  0);
+                  0,
+                  "items");
               inventoryBanner.addItem(pane);
               pane.setOnMouseClicked(v -> {
                 ItemPopup itemPopup = new ItemPopup(item);

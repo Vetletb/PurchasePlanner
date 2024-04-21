@@ -1,11 +1,14 @@
 package no.ntnu.idatt1002.demo.view.components;
 
+import java.io.File;
+import java.util.prefs.Preferences;
+
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import no.ntnu.idatt1002.demo.Logger;
-
+import no.ntnu.idatt1002.demo.Main;
 
 /**
  * ItemPane class.
@@ -22,41 +25,32 @@ public class ItemPane extends VBox {
   private static final int DEFAULT_HEIGHT = 200;
 
   /**
-   * Constructor for the ItemPane class. Creates an ItemPane with a default image.
-   * @param itemId id of the item
-   * @param itemName name of the item
-   * @param positionX the position on the x-axis
-   * @param positionY the position on the y-axis
-   */
-  public ItemPane(int itemId, String itemName, int positionX, int positionY) {
-    this(itemId, itemName, "image-not-found", positionX, positionY);
-  }
-
-  /**
    * Constructor for the ItemPane class.
-
-   * @param itemId id of the item
-   * @param itemName name of the item
+   * 
+   * @param itemId    id of the item
+   * @param itemName  name of the item
    * @param imageName name of the image
    * @param positionX the position on the x-axis
    * @param positionY the position on the y-axis
    *                  <p>
-   *                  Uses the {@link #createImageView(String)} method to create the image
+   *                  Uses the {@link #createImageView(String)} method to create
+   *                  the image
    *                  </p>
    *                  <p>
-   *                  Uses the {@link #setPosition(int, int)} method to set the position of the item
+   *                  Uses the {@link #setPosition(int, int)} method to set the
+   *                  position of the item
    *                  </p>
    *                  <p>
-   *                  Uses the {@link #setScale(double, double)} method to set the scale of the item
+   *                  Uses the {@link #setScale(double, double)} method to set the
+   *                  scale of the item
    *                  </p>
    */
-  public ItemPane(int itemId, String itemName, String imageName, int positionX, int positionY) {
+  public ItemPane(int itemId, String itemName, int positionX, int positionY, String imageDir) {
     this.itemId = itemId;
     this.itemName = itemName;
-    this.image = createImageView(imageName);
+    this.image = createImageView(itemId, imageDir);
 
     setPosition(positionX, positionY);
-
 
     Label label = new Label(itemName);
 
@@ -76,21 +70,54 @@ public class ItemPane extends VBox {
   }
 
   /**
-   * Method to create an ImageView.
-
-   * @param imageName name of the image
-   *                  <p>
-   *                  Uses the {@link #filePath} to get the image
-   *                  </p>
-   *                  <p>
-   *                  Uses the {@link #DEFAULT_WIDTH} and {@link #DEFAULT_HEIGHT}
-   *                  to set the size of the image
-   *                  </p>
-   * @return the ImageView
+   * Method for creating an image view.
+   *
+   * @param id       id of the image
+   * @param imageDir the name of the directory the image can be found in
+   * @return The image view
    */
-  private ImageView createImageView(String imageName) {
+  private ImageView createImageView(int id, String imageDir) {
     try {
-      Image img = new Image(this.filePath + imageName + ".png");
+
+      Preferences preferences = Preferences.userNodeForPackage(Main.class);
+      String installedPath = preferences.get("install_path", null);
+
+      String finalFilePath;
+
+      // If the application is not installed (e.g. running from IDE) we use the
+      // project file structure
+      if (installedPath == null) {
+
+        if (getClass().getResource(filePath + imageDir + File.separator + id + ".png") == null) {
+          finalFilePath = this.filePath + "image-not-found.png";
+        } else {
+          finalFilePath = this.filePath + imageDir + File.separator + id + ".png";
+        }
+
+      } else {
+
+        // Get the image as a file
+        File file = new File(
+            installedPath
+                + File.separator + "images"
+                + File.separator + imageDir
+                + File.separator + id + ".png");
+
+        // If the file does not exist, we use the image-not-found image
+        if (!file.exists() && !file.isDirectory()) {
+          finalFilePath = "file:" + installedPath + "/images/image-not-found.png";
+        } else {
+          finalFilePath = "file:"
+              + installedPath
+              + File.separator + "images"
+              + File.separator
+              + imageDir
+              + File.separator + id + ".png";
+        }
+      }
+
+      Image img = new Image(finalFilePath);
+
       ImageView imageView = new ImageView(img);
       imageView.setFitWidth(DEFAULT_WIDTH);
       imageView.setFitHeight(DEFAULT_HEIGHT);
@@ -105,7 +132,7 @@ public class ItemPane extends VBox {
 
   /**
    * Set the x value of the item.
-
+   * 
    * @param x X position
    * @param y Y position
    *
@@ -119,7 +146,7 @@ public class ItemPane extends VBox {
 
   /**
    * Set the scale of the item.
-
+   * 
    * @param x X scale
    * @param y Y scale
    */

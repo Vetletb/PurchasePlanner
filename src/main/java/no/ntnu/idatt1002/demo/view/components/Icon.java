@@ -95,8 +95,6 @@ public class Icon extends VBox {
 
     getChildren().add(svgPath);
 
-    Logger.debug("Icon created: " + iconName);
-
     this.svgPath.getStyleClass().addAll("icon-no-fill", "centered");
     this.getStyleClass().add("icon-container");
   }

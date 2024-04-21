@@ -192,7 +192,8 @@ public class CookBook extends VBox implements UpdateableScene {
                   item.getId(),
                   item.getName(),
                   0,
-                  0);
+                  0,
+                  "recipes");
               inventoryBanner.addItem(pane);
               pane.setOnMouseClicked(v -> {
                 RecipePopup recipePopup = new RecipePopup(item);

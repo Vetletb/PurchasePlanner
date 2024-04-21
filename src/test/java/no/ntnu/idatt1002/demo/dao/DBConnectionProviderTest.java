@@ -8,12 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.prefs.Preferences;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import net.bytebuddy.agent.Installer;
+import no.ntnu.idatt1002.demo.Main;
 
 /**
  * Positive and negative tests for the DBConnectionProvider class.
@@ -31,7 +33,7 @@ class DBConnectionProviderTest {
 
       // Clear preferences to use the default database path
       try {
-        Preferences.userNodeForPackage(Installer.class).clear();
+        Preferences.userNodeForPackage(Main.class).clear();
       } catch (Exception e) {
       }
 
@@ -92,6 +94,16 @@ class DBConnectionProviderTest {
   @Nested
   @DisplayName("Negative tests for DBConnectionProvider")
   class NegativeTests {
+
+    @BeforeAll
+    public static void setUp() {
+      // Clear preferences to use the default database path
+      try {
+        Preferences.userNodeForPackage(Main.class).clear();
+      } catch (Exception e) {
+      }
+    }
+
     @Test
     @DisplayName("getConnection throws exception")
     public void GetConnectionThrowsException() {

@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.prefs.Preferences;
 
-import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.Main;
 import no.ntnu.idatt1002.demo.view.App;
 import no.ntnu.idatt1002.demo.view.Installer;
@@ -29,24 +28,22 @@ public class DBConnectionProvider {
   public DBConnectionProvider() {
     Preferences preferences = Preferences.userNodeForPackage(Main.class);
     String installedPath = preferences.get("install_path", null);
-    Logger.fatal(installedPath);
     String relativePath;
 
     // If the application is not installed, the database is located in the resources
     // folder
     if (installedPath == null) {
-      URL url = this.getClass().getResource(DB_PATH);
+      URL temp = this.getClass().getResource(DB_PATH);
 
-      if (url == null) {
+      if (temp == null) {
         this.url = null;
         return;
       }
 
-      relativePath = url.getPath();
+      relativePath = temp.getPath();
 
     } else {
       relativePath = installedPath + "/database/database.sqlite";
-      Logger.fatal(relativePath);
     }
 
     this.url = "jdbc:sqlite:" + relativePath;
@@ -68,7 +65,6 @@ public class DBConnectionProvider {
    */
   Connection getConnection() {
     try {
-      Logger.fatal(url);
       Connection connection = DriverManager.getConnection(url);
       Statement statement = connection.createStatement();
       statement.execute("PRAGMA foreign_keys = ON;");
