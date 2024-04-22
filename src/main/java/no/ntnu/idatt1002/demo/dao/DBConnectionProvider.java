@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.prefs.Preferences;
 
+import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.Main;
 import no.ntnu.idatt1002.demo.view.App;
 import no.ntnu.idatt1002.demo.view.Installer;
@@ -34,7 +35,6 @@ public class DBConnectionProvider {
     // folder
     if (installedPath == null) {
       URL temp = this.getClass().getResource(DB_PATH);
-
       if (temp == null) {
         this.url = null;
         return;
