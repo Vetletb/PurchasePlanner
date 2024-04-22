@@ -1,6 +1,5 @@
 package no.ntnu.idatt1002.demo.view.scenes;
 
-import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Map;
 import javafx.geometry.Insets;
@@ -9,6 +8,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.util.Pair;
 import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.UpdateableScene;
 import no.ntnu.idatt1002.demo.dao.DAO;
@@ -166,7 +166,6 @@ public class CookBook extends VBox implements UpdateableScene {
    * @param mode The mode to display the inventory in.
    */
   private void loadCookBook(ViewModeButton.ViewMode mode) {
-    Logger.debug("loading inventory");
     this.mode = mode; // save the mode for later use
 
     inventoryContainer.getChildren().clear();
@@ -242,7 +241,6 @@ public class CookBook extends VBox implements UpdateableScene {
   }
 
   private void search(String query) {
-    Logger.debug("search");
     RecipeRegister register = new RecipeRegister(new DAO(new DBConnectionProvider()));
     register.searchRecipesByName(query);
     recipes = register.getRecipes();
@@ -250,7 +248,9 @@ public class CookBook extends VBox implements UpdateableScene {
   }
 
   private void updateItem(int id, String name, String category, Integer cookingTime,
-      Map<Integer, Integer> ingredients, Map<Integer, Integer> newIngredients, List<RecipeStep> steps,
+      Map<Integer, Pair<Integer, String>> ingredients,
+      Map<Integer, Integer> newIngredients,
+      List<RecipeStep> steps,
       List<RecipeStep> newSteps) {
     RecipeRegister register = new RecipeRegister(new DAO(new DBConnectionProvider()));
     register.getAllRecipes();
@@ -285,8 +285,8 @@ public class CookBook extends VBox implements UpdateableScene {
         register.updateIngredient(
             i.getId(),
             i.getItemId(),
-            ingredients.get(i.getId()),
-            i.getUnit());
+            ingredients.get(i.getId()).getKey(),
+            ingredients.get(i.getId()).getValue());
       } else {
         register.deleteIngredient(i.getId());
       }

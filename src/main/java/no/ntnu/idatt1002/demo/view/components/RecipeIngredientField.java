@@ -6,7 +6,6 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.data.RecipeIngredient;
 
 public class RecipeIngredientField extends HBox {
@@ -18,6 +17,7 @@ public class RecipeIngredientField extends HBox {
   private onDelete onDelete;
   private int recipeId;
   private int recipeAmount;
+  private String unit;
 
   public RecipeIngredientField(RecipeIngredient ingredient) {
     super();
@@ -38,9 +38,21 @@ public class RecipeIngredientField extends HBox {
     });
 
     ingredientAmount.setText(Integer.toString(ingredient.getQuantity()));
+    this.unit = ingredient.getUnit();
 
     ingredientAmount.setPrefHeight(35);
     ingredientAmount.setPrefWidth(100);
+
+    TextField unitField = new TextField();
+
+    unitField.setText(ingredient.getUnit());
+
+    unitField.setPrefHeight(35);
+    unitField.setPrefWidth(100);
+
+    unitField.textProperty().addListener((observable, oldValue, newValue) -> {
+      this.unit = newValue;
+    });
 
     PrimaryButton removeButton = new PrimaryButton("Remove", PrimaryButton.Type.RED);
     removeButton.setOnAction(e -> {
@@ -52,7 +64,7 @@ public class RecipeIngredientField extends HBox {
     removeButton.setPrefHeight(35);
     removeButton.setPrefWidth(100);
 
-    this.getChildren().addAll(nameWrapper, ingredientAmount, removeButton);
+    this.getChildren().addAll(nameWrapper, unitField, ingredientAmount, removeButton);
   }
 
   public RecipeIngredientField setOnDelete(onDelete onDelete) {
@@ -66,5 +78,9 @@ public class RecipeIngredientField extends HBox {
 
   public int getRecipeAmount() {
     return recipeAmount;
+  }
+
+  public String getUnit() {
+    return unit;
   }
 }

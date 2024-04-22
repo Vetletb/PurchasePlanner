@@ -480,14 +480,9 @@ public class ShoppingList extends VBox implements UpdateableScene {
     Map<Integer, Event> eventItems = eventRegister.getEvents();
     Map<Integer, Recipe> recipeItems = recipeRegister.getRecipes();
 
-    // Calculate the amount of each item in the inventory and shoppingList
-    //    Map<Integer, Integer> existingItems = inventoryItems.stream()
-    //            .collect(Collectors.toMap(
-    //                    InventoryItem::getItemId,
-    //                    InventoryItem::getQuantity,
-    //                    Integer::sum // Merging function: sums the quantities of duplicate keys
-    //            ));
+    // Calculate the amount of each item in the inventory and shopping list
 
+    // Create a map of the existing items in the inventory
     Map<Integer, QuantityUnit> existingItems = inventoryItems.stream()
           .collect(Collectors.toMap(
                     InventoryItem::getItemId, // Key mapper (Item ID)
@@ -502,6 +497,7 @@ public class ShoppingList extends VBox implements UpdateableScene {
                     }
           ));
 
+    // Add the items from the shopping list to the existing items
     shoppingListItems.values().forEach(item -> {
       if (existingItems.containsKey(item.getItemId())) {
         QuantityUnit existingItem = convertQuantity(item.getUnit(), item.getQuantity());
@@ -512,23 +508,44 @@ public class ShoppingList extends VBox implements UpdateableScene {
       }
     });
 
-    Logger.warning("Existing items: " + existingItems.toString()); // TODO: REMOVE
+    // Create a map of the items needed
     Map<Integer, QuantityUnit> neededItems = new HashMap<>();
-    // Get the items needed from the events TODO: Fix this
-//    eventItems.values().forEach(event -> {
-//      recipeRegister.getRecipes().get(event.getRecipe_id()).getIngredients().forEach(ingredient -> {
-//        if (neededItems.containsKey(ingredient.getItemId())) {
-//          neededItems.get(ingredient.getItemId()).addQuantity(ingredient.getQuantity());
-//        } else {
-//          neededItems.put(ingredient.getItemId(), convertQuantity(ingredient.getUnit(), ingredient.getQuantity()));
-//        }
-//      });
-//    });
-    Logger.warning("Needed items: " + neededItems.toString()); // TODO: REMOVE
+    // Get the items needed from the events
+    eventItems.forEach((id, event) ->
+            recipeItems.get(event.getRecipe_id())
+                    .getIngredients().forEach(item ->
+                            neededItems.put(
+                                    item.getItemId(),
+                                    convertQuantity(item.getUnit(), item.getQuantity())
+                            )
+                    )
+    );
+
+    // Create a map of the items to add
+    Map<Integer, QuantityUnit> itemsToAdd = new HashMap<>();
+    // Calculate the difference between the existing items and the needed items
+    neededItems.forEach((id, quantityUnit) -> {
+      if (existingItems.containsKey(id)) {
+        QuantityUnit existingItem = existingItems.get(id);
+        if (existingItem.getQuantity() < quantityUnit.getQuantity()) {
+          itemsToAdd.put(id, new QuantityUnit(
+                  quantityUnit.getQuantity() - existingItem.getQuantity(),
+                  quantityUnit.getUnit()
+          ));
+        }
+      } else {
+        itemsToAdd.put(id, quantityUnit);
+      }
+    });
+
+    // Add the items to the shopping list
+    itemsToAdd.forEach((id, quantityUnit) -> {
+      shoppingListItemRegister.addToShoppingList(id, quantityUnit.getQuantity(), quantityUnit.getUnit());
+    });
   }
 
   private static QuantityUnit convertQuantity(String unit, int quantity) {
-    return switch (unit) {
+    return switch (unit.toLowerCase()) {
       case "kg" -> new QuantityUnit(quantity * 1000, "g");
       case "hg" -> new QuantityUnit(quantity * 100, "g");
       case "l" -> new QuantityUnit(quantity * 1000, "ml");
