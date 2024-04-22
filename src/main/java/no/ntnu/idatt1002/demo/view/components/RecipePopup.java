@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
+import javafx.util.Pair;
 import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.Main;
 import no.ntnu.idatt1002.demo.dao.DAO;
@@ -34,12 +35,13 @@ import no.ntnu.idatt1002.demo.view.components.Toast.ToastType;
  * A popup for adding items to the inventory.
  */
 public class RecipePopup extends Popup {
+  Pair<Integer, Integer> pair = new Pair<>(1, 1);
 
   /**
    * Interface for when the user saves the form.
    */
   public interface OnSave {
-    void cb(int id, String name, String categories, int cookingTime, Map<Integer, Integer> ingredients,
+    void cb(int id, String name, String categories, int cookingTime, Map<Integer, Pair<Integer, String>> ingredients,
         Map<Integer, Integer> newIngredients, List<RecipeStep> steps, List<RecipeStep> newSteps);
 
   }
@@ -215,7 +217,9 @@ public class RecipePopup extends Popup {
             ingredientsField.stream()
                 .collect(Collectors.toMap(
                     RecipeIngredientField::getRecipeId,
-                    RecipeIngredientField::getRecipeAmount)),
+                    field -> new Pair<Integer, String>(
+                        field.getRecipeAmount(),
+                        field.getUnit()))),
             this.newIngredients,
             stepsField.stream()
                 .map(StepField::getStep)
