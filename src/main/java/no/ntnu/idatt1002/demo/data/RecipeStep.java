@@ -22,7 +22,7 @@ public class RecipeStep implements Storable {
    */
   public RecipeStep(int step_id, int recipe_id, int step_number, String instruction) {
     this(recipe_id, step_number, instruction);
-    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(step_id, "step_id");
+    VerifyInput.verifyPositiveNumberZeroNotAccepted(step_id, "step_id");
     this.step_id = step_id;
   }
 
