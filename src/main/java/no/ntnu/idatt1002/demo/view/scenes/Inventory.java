@@ -269,10 +269,10 @@ public class Inventory extends VBox implements UpdateableScene {
       inventoryRegister.getAllInventroyItems();
       inventoryRegister.deleteInventoryItem(id);
 
-      ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
-      itemRegister.getAllItems();
-      itemRegister.deleteItem(itemId);
-      itemRegister.getAllItems();
+//      ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
+//      itemRegister.getAllItems();
+//      itemRegister.deleteItem(itemId);
+//      itemRegister.getAllItems();
 
       inventoryRegister.getAllInventroyItems();
       inventoryItems = inventoryRegister.getInventoryItems();
@@ -285,6 +285,8 @@ public class Inventory extends VBox implements UpdateableScene {
   }
 
   public void updateScene() {
+    inventoryRegister.getAllInventroyItems();
+    inventoryItems = inventoryRegister.getInventoryItems();
     loadInventory(mode);
   }
 

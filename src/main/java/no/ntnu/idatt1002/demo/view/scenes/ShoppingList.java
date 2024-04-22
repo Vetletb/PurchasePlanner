@@ -1,5 +1,7 @@
 package no.ntnu.idatt1002.demo.view.scenes;
 
+import java.util.*;
+import java.util.stream.Collectors;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
@@ -8,13 +10,14 @@ import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.UpdateableScene;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
-import no.ntnu.idatt1002.demo.data.ShoppingListItem;
-import no.ntnu.idatt1002.demo.repo.ItemRegister;
-import no.ntnu.idatt1002.demo.repo.ShoppingListItemRegister;
-import no.ntnu.idatt1002.demo.view.components.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
+import no.ntnu.idatt1002.demo.data.*;
+import no.ntnu.idatt1002.demo.repo.*;
+import no.ntnu.idatt1002.demo.view.components.AddPopup;
+import no.ntnu.idatt1002.demo.view.components.Field;
+import no.ntnu.idatt1002.demo.view.components.ListHeader;
+import no.ntnu.idatt1002.demo.view.components.PrimaryButton;
+import no.ntnu.idatt1002.demo.view.components.ShoppingListItemPane;
+import no.ntnu.idatt1002.demo.view.components.ShoppingListItemPopup;
 
 /**
  * The inventory page.
@@ -68,7 +71,11 @@ public class ShoppingList extends VBox implements UpdateableScene {
     Label bottomBarTotalPrice = new Label("Total price: 0");
 
     // Add the labels to the top bar
-    staticListTopBar.getChildren().addAll(topBarItemName, topBarItemCategory, topBarItemQuantity, topBarItemUnit,
+    staticListTopBar.getChildren().addAll(
+            topBarItemName,
+            topBarItemCategory,
+            topBarItemQuantity,
+            topBarItemUnit,
             topBarItemCheckBox);
 
     // Add the labels to the bottom bar
@@ -83,7 +90,7 @@ public class ShoppingList extends VBox implements UpdateableScene {
     HBox clearButtonsContainer = new HBox();
 
     // Clear all button and clear completed button
-    PrimaryButton clearAllButton = new PrimaryButton("Clear all");
+    PrimaryButton clearAllButton = new PrimaryButton("Delete all");
     clearAllButton.setOnAction(e -> {
       ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
           new DAO(new DBConnectionProvider()));
@@ -96,30 +103,57 @@ public class ShoppingList extends VBox implements UpdateableScene {
     PrimaryButton clearCompletedButton = new PrimaryButton("Clear completed");
 
     clearCompletedButton.setOnAction(e -> {
+      checkForSelectedItems();
       ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
           new DAO(new DBConnectionProvider()));
       shoppingListItemRegister.getAllItems();
       items = shoppingListItemRegister.getItems();
 
+      Logger.warning("Removing selected items from the shopping list. List length: "
+              + shoppingListContainer.getChildren().size() + " items selected: "
+              + selectedItemsId.size() + " items in the list: " + items.size());
       shoppingListContainer.getChildren().forEach(node -> {
         ShoppingListItemPane shoppingListItemPane = (ShoppingListItemPane) node;
 
         if (shoppingListItemPane.isSelected()) {
-          shoppingListItemRegister.deleteFromShoppingList(
-              shoppingListItemRegister.getShoppingListItemById(
-                  shoppingListItemPane.getShoppingListItemId()).getId());
+          // Get the item
+          ShoppingListItem item = shoppingListItemRegister.getShoppingListItemById(
+                  shoppingListItemPane.getShoppingListItemId());
+
+          Logger.warning("Removing item: " + item.getName() + " from the shopping list");
+          // Add the item to the Inventory
+          InventoryRegister inventoryRegister = new InventoryRegister(
+                  new DAO(new DBConnectionProvider()));
+
+          inventoryRegister.addInventoryItem(
+                  item.getItemId(),
+                  item.getQuantity(),
+                  item.getUnit(),
+                  20240430);
+
+          // Remove the item from the shopping list
+          shoppingListItemRegister.deleteFromShoppingList(item.getId());
+          selectedItemsId.removeIf(id -> id == item.getId());
         }
+
         shoppingListItemRegister.getAllItems();
         items = shoppingListItemRegister.getItems();
       });
       loadShoppingList();
     });
 
-    clearButtonsContainer.getChildren().addAll(clearAllButton, clearCompletedButton);
+    clearButtonsContainer.getChildren().addAll(
+            clearAllButton,
+            clearCompletedButton
+    );
 
     // Add the containers to the content container
-    innerContentContainer.getChildren().addAll(clearButtonsContainer, staticListTopBar, shoppingListScrollPane,
-        staticListBottomBar);
+    innerContentContainer.getChildren().addAll(
+            clearButtonsContainer,
+            staticListTopBar,
+            shoppingListScrollPane,
+            staticListBottomBar);
+
     contentContainer.getChildren().add(innerContentContainer);
 
     // Create the list header and add to the page
@@ -128,8 +162,6 @@ public class ShoppingList extends VBox implements UpdateableScene {
     shoppingListHeader.setOnSearchQueryChange(this::search);
     shoppingListHeader.setOnAdd(this::addItem);
     shoppingListHeader.setOnSortChange(this::sortBy);
-    shoppingListHeader.setOnFilterChange(this::filterBy);
-
 
     super.getChildren().addAll(shoppingListHeader, contentContainer);
     // TODO: Create a connection to the database for the add button
@@ -192,16 +224,16 @@ public class ShoppingList extends VBox implements UpdateableScene {
     addPopup.addField(Field.ofString("Unit"));
 
     addPopup.setOnAdd((Object[] o) -> {
-      Object[] item_id_as_list = (Object[]) o[0];
+      Object[] itemIdAsList = (Object[]) o[0];
 
       itemRegister.getAllItems();
-      int item_id = (int) item_id_as_list[0];
+      int itemId = (int) itemIdAsList[0];
       int quantity = (int) o[1];
       String unit = (String) o[2];
       try {
         ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
             new DAO(new DBConnectionProvider()));
-        shoppingListItemRegister.addToShoppingList(item_id, quantity, unit);
+        shoppingListItemRegister.addToShoppingList(itemId, quantity, unit);
         shoppingListItemRegister.getAllItems();
         items = shoppingListItemRegister.getItems();
       } catch (Exception e) {
@@ -212,6 +244,15 @@ public class ShoppingList extends VBox implements UpdateableScene {
     });
   }
 
+  /**
+   * Method to update a shopping list item.
+   * <p>
+   * Uses the {@link ShoppingListItemRegister#updateShoppingListItem(int, int, int, String)
+   * updateShoppingListItem} method to update the item in the database.
+   * </p>
+   *
+   * @param values the values to update
+   */
   public void updateShoppingListItem(Object[] values) {
     // get the register
     ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
@@ -221,18 +262,19 @@ public class ShoppingList extends VBox implements UpdateableScene {
 
     // get the values
     int shoppingListItemId = (int) values[0]; // id of the shopping list item
-    ShoppingListItem shoppingListItem = shoppingListItemRegister.getShoppingListItemById(shoppingListItemId); // shopping
-                                                                                                              // list
-                                                                                                              // item
+    ShoppingListItem shoppingListItem = shoppingListItemRegister.getShoppingListItemById(
+            shoppingListItemId); // shopping
 
     // Item id
-    Object[] item_id_as_list = (Object[]) values[1]; // id of the item as a list
-    int item_id = -1; // id of the item
+    Object[] itemIdAsList = (Object[]) values[1]; // id of the item as a list
+    int itemId = -1; // id of the item
 
-    if (item_id_as_list == null) {
-      item_id = shoppingListItem.getItemId();
+    if (itemIdAsList == null) {
+      itemId = shoppingListItem.getItemId();
 
-    } else item_id = (int) item_id_as_list[0];
+    } else {
+      itemId = (int) itemIdAsList[0];
+    }
 
     // Quantity
     int quantity = -1; // quantity of the item
@@ -240,7 +282,9 @@ public class ShoppingList extends VBox implements UpdateableScene {
     if (values[2] == null) {
       quantity = shoppingListItem.getQuantity();
 
-    } else quantity = (int) values[2];
+    } else {
+      quantity = (int) values[2];
+    }
 
     // Unit
     String unit = null; // unit of the item
@@ -249,11 +293,13 @@ public class ShoppingList extends VBox implements UpdateableScene {
       Logger.info("Unit is null");
       unit = shoppingListItem.getUnit();
 
-    } else unit = (String) values[3];
+    } else {
+      unit = (String) values[3];
+    }
 
     shoppingListItemRegister.updateShoppingListItem(
         shoppingListItemId,
-        item_id,
+        itemId,
         quantity,
         unit);
     shoppingListItemRegister.getAllItems();
@@ -261,6 +307,11 @@ public class ShoppingList extends VBox implements UpdateableScene {
     loadShoppingList();
   }
 
+  /**
+   * Method to delete a shopping list item.
+
+   * @param shoppingListItemId the id of the shopping list item to delete
+   */
   public void deleteShoppingListItem(int shoppingListItemId) {
     ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
         new DAO(new DBConnectionProvider()));
@@ -288,7 +339,9 @@ public class ShoppingList extends VBox implements UpdateableScene {
    * @param query string to search for
    */
   public void search(String query) {
-    ShoppingListItemRegister register = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
+    ShoppingListItemRegister register = new ShoppingListItemRegister(
+            new DAO(new DBConnectionProvider()));
+
     register.searchItemsByName(query);
     items = register.getItems();
     if (query.isEmpty()) {
@@ -307,11 +360,28 @@ public class ShoppingList extends VBox implements UpdateableScene {
 
   /**
    * Method to switch the filter by.
+
    * @param filterBy the filter to switch by
    */
   private void filterBy(String filterBy) {
     this.filterBy = filterBy;
     loadShoppingList();
+  }
+
+  /**
+   * Method to check for selected items.
+   * <p>
+   *   Clears the selected items list and adds the selected items to the list
+   * </p>
+   */
+  private void checkForSelectedItems() {
+    selectedItemsId.clear();
+    shoppingListContainer.getChildren().forEach(node -> {
+      ShoppingListItemPane shoppingListItemPane = (ShoppingListItemPane) node;
+      if (shoppingListItemPane.isSelected()) {
+        selectedItemsId.add(shoppingListItemPane.getShoppingListItemId());
+      }
+    });
   }
 
   /**
@@ -321,40 +391,14 @@ public class ShoppingList extends VBox implements UpdateableScene {
    * </p>
    */
   private void loadShoppingList() {
-
-    // Filter the items based on the filter by
-    if (!filterBy.equals("All")) {
-      // get items that are selected
-      shoppingListContainer.getChildren().forEach(node -> {
-        ShoppingListItemPane shoppingListItemPane = (ShoppingListItemPane) node;
-        if (shoppingListItemPane.isSelected()
-                && !selectedItemsId.contains(shoppingListItemPane.getShoppingListItemId())) {
-          selectedItemsId.add(shoppingListItemPane.getShoppingListItemId());
-        }
-      });
-
-//      shoppingListContainer.getChildren().clear();
-      Logger.warning("Selected item: " + selectedItemsId.toString());
-      Logger.warning("filterBy" + filterBy);
-
-      // get the items that are not selected
-      items = items.entrySet().stream()
-              .filter(entry -> {
-                if (filterBy.equals("Active")) {
-                  return !selectedItemsId.contains(entry.getKey());
-                } else {
-                  return selectedItemsId.contains(entry.getKey());
-                }
-              })
-              .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-    }
-    else {
-      ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(new DAO(new DBConnectionProvider()));
-      shoppingListItemRegister.getAllItems();
-      items = shoppingListItemRegister.getItems();
-    }
-
+    checkForSelectedItems();
+    shoppingListContainer.getChildren().clear();
     // Sort the items based on the sort by
+    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
+        new DAO(new DBConnectionProvider()));
+    shoppingListItemRegister.getAllItems();
+    items = shoppingListItemRegister.getItems();
+
     List<ShoppingListItem> sortedItems = new ArrayList<>(items.values());
     switch (sortBy) {
       case "Name":
@@ -365,6 +409,8 @@ public class ShoppingList extends VBox implements UpdateableScene {
         break;
       case "Type":
         sortedItems.sort(Comparator.comparing(ShoppingListItem::getCategory));
+        break;
+      default:
         break;
     }
 
@@ -379,7 +425,10 @@ public class ShoppingList extends VBox implements UpdateableScene {
         shoppingListItemPopup.setOnDelete(this::deleteShoppingListItem);
         shoppingListItemPopup.show(this.getScene().getWindow());
       });
-      if(selectedItemsId.contains(item.getId())) shoppingListItemPane.setSelected();
+
+      if (selectedItemsId.contains(item.getId())) {
+        shoppingListItemPane.setSelected();
+      }
 
       shoppingListItemPane.getStyleClass().add("shopping-list-item-pane");
       shoppingListContainer.getChildren().add(shoppingListItemPane);
@@ -400,10 +449,109 @@ public class ShoppingList extends VBox implements UpdateableScene {
   }
 
   public void updateScene() {
+    getItemsToAddToList();
     loadShoppingList();
   }
 
   public VBox createScene() {
     return this;
+  }
+
+  private void getItemsToAddToList() {
+    // Get all the necessary registers
+    InventoryRegister inventoryRegister = new InventoryRegister(
+            new DAO(new DBConnectionProvider()));
+    ShoppingListItemRegister shoppingListItemRegister = new ShoppingListItemRegister(
+            new DAO(new DBConnectionProvider()));
+    EventRegister eventRegister = new EventRegister(
+            new DAO(new DBConnectionProvider()));
+    RecipeRegister recipeRegister = new RecipeRegister(
+            new DAO(new DBConnectionProvider()));
+
+    // Get the items from the database
+    inventoryRegister.getAllInventroyItems();
+    shoppingListItemRegister.getAllItems();
+    eventRegister.getAllEvents();
+    recipeRegister.getAllRecipes();
+
+    // add the items to lists
+    List<InventoryItem> inventoryItems = inventoryRegister.getInventoryItems();
+    Map<Integer, ShoppingListItem> shoppingListItems = shoppingListItemRegister.getItems();
+    Map<Integer, Event> eventItems = eventRegister.getEvents();
+    Map<Integer, Recipe> recipeItems = recipeRegister.getRecipes();
+
+    // Calculate the amount of each item in the inventory and shopping list
+
+    // Create a map of the existing items in the inventory
+    Map<Integer, QuantityUnit> existingItems = inventoryItems.stream()
+          .collect(Collectors.toMap(
+                    InventoryItem::getItemId, // Key mapper (Item ID)
+                    item -> {
+                      // Convert quantity to common unit and create QuantityUnit object
+                      return convertQuantity(item.getUnit(), item.getQuantity());
+                    },
+                    // Merging function: add quantities of duplicate keys and keep the unit
+                    (quantityUnit1, quantityUnit2) -> {
+                      quantityUnit1.addQuantity(quantityUnit2.getQuantity());
+                      return quantityUnit1;
+                    }
+          ));
+
+    // Add the items from the shopping list to the existing items
+    shoppingListItems.values().forEach(item -> {
+      if (existingItems.containsKey(item.getItemId())) {
+        QuantityUnit existingItem = convertQuantity(item.getUnit(), item.getQuantity());
+        existingItems.get(item.getItemId()).addQuantity(existingItem.getQuantity());
+      } else {
+        QuantityUnit newItem = existingItems.put(
+                item.getItemId(), convertQuantity(item.getUnit(), item.getQuantity()));
+      }
+    });
+
+    // Create a map of the items needed
+    Map<Integer, QuantityUnit> neededItems = new HashMap<>();
+    // Get the items needed from the events
+    eventItems.forEach((id, event) ->
+            recipeItems.get(event.getRecipe_id())
+                    .getIngredients().forEach(item ->
+                            neededItems.put(
+                                    item.getItemId(),
+                                    convertQuantity(item.getUnit(), item.getQuantity())
+                            )
+                    )
+    );
+
+    // Create a map of the items to add
+    Map<Integer, QuantityUnit> itemsToAdd = new HashMap<>();
+    // Calculate the difference between the existing items and the needed items
+    neededItems.forEach((id, quantityUnit) -> {
+      if (existingItems.containsKey(id)) {
+        QuantityUnit existingItem = existingItems.get(id);
+        if (existingItem.getQuantity() < quantityUnit.getQuantity()) {
+          itemsToAdd.put(id, new QuantityUnit(
+                  quantityUnit.getQuantity() - existingItem.getQuantity(),
+                  quantityUnit.getUnit()
+          ));
+        }
+      } else {
+        itemsToAdd.put(id, quantityUnit);
+      }
+    });
+
+    // Add the items to the shopping list
+    itemsToAdd.forEach((id, quantityUnit) -> {
+      shoppingListItemRegister.addToShoppingList(id, quantityUnit.getQuantity(), quantityUnit.getUnit());
+    });
+  }
+
+  private static QuantityUnit convertQuantity(String unit, int quantity) {
+    return switch (unit.toLowerCase()) {
+      case "kg" -> new QuantityUnit(quantity * 1000, "g");
+      case "hg" -> new QuantityUnit(quantity * 100, "g");
+      case "l" -> new QuantityUnit(quantity * 1000, "ml");
+      case "dl" -> new QuantityUnit(quantity * 10, "ml");
+      case "pck" -> new QuantityUnit(quantity * 20, "pcs");
+      default -> new QuantityUnit(quantity, unit);
+    };
   }
 }

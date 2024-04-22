@@ -85,8 +85,8 @@ class RecipeStepTest {
   class NegativeTests {
 
     @Test
-    @DisplayName("Test constructor with negative step id")
-    public void constructorThrowsExceptionOnNegativeStepId() {
+    @DisplayName("Test constructor with zero or negative step id")
+    public void constructorThrowsExceptionOnZeroOrLowerStepId() {
       assertThrows(IllegalArgumentException.class, () -> new RecipeStep(0, 1, 1, "Instruction"));
     }
 

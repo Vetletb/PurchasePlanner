@@ -55,7 +55,7 @@ public class VerifyInput {
    * @throws IllegalArgumentException if the int is not a positive number
    */
   public static void verifyPositiveNumberMinusOneNotAccepted(int input, String parameter) {
-    if (input <= 0) {
+    if (input < 0) {
       throw new IllegalArgumentException("The input for the parameter '" + parameter + "' must be a positive number");
     }
   }

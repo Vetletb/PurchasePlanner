@@ -54,8 +54,8 @@ public class ArrowButton extends PrimaryButton {
   }
 
   public void setInactiveColor() {
-    super.getIcon().setFillColor(new Color(0.4, 0.4, 0.4, 1));
-    super.getIcon().setStrokeColor(new Color(0.4, 0.4, 0.4, 1));
+    super.getIcon().setFillColor(new Color(0.4, 0.4, 0.4, 0));
+    super.getIcon().setStrokeColor(new Color(0.4, 0.4, 0.4, 0));
   }
 
   public void setActiveColor() {
