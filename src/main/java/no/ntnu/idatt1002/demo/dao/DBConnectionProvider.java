@@ -1,5 +1,6 @@
 package no.ntnu.idatt1002.demo.dao;
 
+import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -40,7 +41,10 @@ public class DBConnectionProvider {
         return;
       }
 
-      relativePath = temp.getPath();
+      relativePath = "src" +
+          File.separator + "main"
+          + File.separator + "resources"
+          + DB_PATH;
 
     } else {
       relativePath = installedPath + "/database/database.sqlite";
