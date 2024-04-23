@@ -19,6 +19,7 @@ test:
     paths:
       - target/surefire-reports/
     reports:
+      junit: target/surefire-reports/TEST-*.xml
       coverage_report:
         coverage_format: cobertura
         path: target/jacoco/coverage-reports/jacoco.xml
