@@ -1,15 +1,14 @@
 package no.ntnu.idatt1002.demo.data;
 
-import no.ntnu.idatt1002.demo.data.Event;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class is a test class for the Event class.
@@ -33,7 +32,8 @@ public class EventTest {
   class PositiveEventTest {
 
     /**
-     * This method tests the getAttributes method in the Event class. The result is expected to be true.
+     * This method tests the getAttributes method in the Event class. The result is
+     * expected to be true.
      */
     @Test
     void testGetAttributesPositive() {
@@ -42,7 +42,8 @@ public class EventTest {
     }
 
     /**
-     * This method tests the getAttributeNames method in the Event class. The result is expected to be true.
+     * This method tests the getAttributeNames method in the Event class. The result
+     * is expected to be true.
      */
     @Test
     void testGetAttributeNamesPositive() {
@@ -51,7 +52,8 @@ public class EventTest {
     }
 
     /**
-     * This method tests the getId method in the Event class. The result is expected to be true.
+     * This method tests the getId method in the Event class. The result is expected
+     * to be true.
      */
     @Test
     void testGetIdPositive() {
@@ -59,15 +61,17 @@ public class EventTest {
     }
 
     /**
-     * This method tests the getEvent_id method in the Event class. The result is expected to be true.
+     * This method tests the getEvent_id method in the Event class. The result is
+     * expected to be true.
      */
     @Test
     void testGetEvent_id() {
-      assertEquals(1, event.getEvent_id());
+      assertEquals(1, event.getEventId());
     }
 
     /**
-     * This method tests the getRecipe_id method in the Event class. The result is expected to be true.
+     * This method tests the getRecipe_id method in the Event class. The result is
+     * expected to be true.
      */
     @Test
     void testGetIdNamePositive() {
@@ -75,15 +79,17 @@ public class EventTest {
     }
 
     /**
-     * This method tests the getRecipe_id method in the Event class. The result is expected to be true.
+     * This method tests the getRecipe_id method in the Event class. The result is
+     * expected to be true.
      */
     @Test
     void testGetRecipeIdPositive() {
-      assertEquals(2, event.getRecipe_id());
+      assertEquals(2, event.getRecipeId());
     }
 
     /**
-     * This method tests the getDate method in the Event class. The result is expected to be true.
+     * This method tests the getDate method in the Event class. The result is
+     * expected to be true.
      */
     @Test
     void testGetDatePositive() {
@@ -99,7 +105,8 @@ public class EventTest {
   class NegativeEventTest {
 
     /**
-     * This method tests that an IllegalArgumentException is thrown when the recipe_id is a lower integer than 1..
+     * This method tests that an IllegalArgumentException is thrown when the
+     * recipe_id is a lower integer than 1..
      */
     @Test
     void testVerifyRecipe_idIntegerException() {
@@ -107,12 +114,14 @@ public class EventTest {
         new Event(1, 0, 20240501);
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("The input for the parameter 'recipe_id' must be a positive number equal to or greater than 1", e.getMessage());
+        assertEquals("The input for the parameter 'recipe_id' must be a positive number equal to or greater than 1",
+            e.getMessage());
       }
     }
 
     /**
-     * This method tests that an IllegalArgumentException is thrown when the date is a negative number.
+     * This method tests that an IllegalArgumentException is thrown when the date is
+     * a negative number.
      */
     @Test
     void testVerifyDateIntegerException() {
@@ -125,7 +134,8 @@ public class EventTest {
     }
 
     /**
-     * This method tests that an IllegalArgumentException is thrown when the date is not six figures..
+     * This method tests that an IllegalArgumentException is thrown when the date is
+     * not six figures..
      */
     @Test
     void testVerifyDateLengthException() {
@@ -143,7 +153,8 @@ public class EventTest {
         new Event(1, 2, 20241413);
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("In the input for the parameter 'date', the 3rd and 4th figure must be a number between 01 and 12", e.getMessage());
+        assertEquals("In the input for the parameter 'date', the 3rd and 4th figure must be a number between 01 and 12",
+            e.getMessage());
       }
     }
 
@@ -153,7 +164,8 @@ public class EventTest {
         new Event(1, 2, 20240532);
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 31", e.getMessage());
+        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 31",
+            e.getMessage());
       }
     }
 
@@ -163,7 +175,8 @@ public class EventTest {
         new Event(1, 2, 20240431);
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 30", e.getMessage());
+        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 30",
+            e.getMessage());
       }
     }
 
@@ -173,7 +186,8 @@ public class EventTest {
         new Event(1, 2, 20240230);
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 29", e.getMessage());
+        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 29",
+            e.getMessage());
       }
     }
 
@@ -183,7 +197,8 @@ public class EventTest {
         new Event(1, 2, 20250231);
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 28", e.getMessage());
+        assertEquals("In the input for the parameter 'date', the 5th and 6th figure must be a number between 01 and 28",
+            e.getMessage());
       }
     }
   }

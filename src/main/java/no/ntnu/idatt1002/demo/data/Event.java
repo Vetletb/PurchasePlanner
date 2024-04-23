@@ -1,67 +1,65 @@
 package no.ntnu.idatt1002.demo.data;
 
-import no.ntnu.idatt1002.demo.util.VerifyInput;
-
 import java.util.ArrayList;
 import java.util.List;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class represents an event with a recipe id and a date.
  */
 public class Event implements Storable {
-  private int event_id;
-  private final int recipe_id;
+  private int eventId;
+  private final int recipeId;
   private String name;
   private final int date;
   private String category;
-  private int cooking_time;
+  private int cookingTime;
 
   /**
    * Constructor for the Event class.
    *
-   * @param recipe_id the id of the recipe
-   * @param date the date of the event
+   * @param recipeId the id of the recipe
+   * @param date     the date of the event
    */
-  public Event(int recipe_id, int date) {
-    VerifyInput.verifyPositiveNumberZeroNotAccepted(recipe_id, "recipe_id");
+  public Event(int recipeId, int date) {
+    VerifyInput.verifyPositiveNumberZeroNotAccepted(recipeId, "recipe_id");
     VerifyInput.verifyPositiveNumberMinusOneNotAccepted(date, "date");
     VerifyInput.verifyDateLength(date, "date");
     VerifyInput.verifyDateMonth(date, "date");
     VerifyInput.verifyDateDay(date, "date");
-    this.recipe_id = recipe_id;
+    this.recipeId = recipeId;
     this.date = date;
   }
 
   /**
    * Constructor for the Event class.
    *
-   * @param event_id the id of the event
-   * @param recipe_id the id of the recipe
-   * @param date the date of the event
+   * @param eventId  the id of the event
+   * @param recipeId the id of the recipe
+   * @param date     the date of the event
    */
-  public Event(int event_id, int recipe_id, int date) {
-    this(recipe_id, date);
-    this.event_id = event_id;
+  public Event(int eventId, int recipeId, int date) {
+    this(recipeId, date);
+    this.eventId = eventId;
   }
 
   /**
    * Constructor for the Event class.
    *
-   * @param event_id the id of the event
-   * @param recipe_id the id of the recipe
-   * @param name the name of the event
-   * @param date the date of the event
-   * @param category the category of the event
-   * @param cooking_time the cooking time of the event
+   * @param eventId     the id of the event
+   * @param recipeId    the id of the recipe
+   * @param name        the name of the event
+   * @param date        the date of the event
+   * @param category    the category of the event
+   * @param cookingTime the cooking time of the event
    */
   public Event(
-      int event_id, int recipe_id, String name, int date, String category, int cooking_time) {
-    this(event_id, recipe_id, date);
+      int eventId, int recipeId, String name, int date, String category, int cookingTime) {
+    this(eventId, recipeId, date);
     this.name = name;
     this.category = category;
-    this.cooking_time = cooking_time;
+    this.cookingTime = cookingTime;
   }
-
 
   /**
    * Returns the attributes of the event.
@@ -71,7 +69,7 @@ public class Event implements Storable {
   @Override
   public List<String> getAttributes() {
     List<String> attributes = new ArrayList<>();
-    attributes.add(Integer.toString(recipe_id));
+    attributes.add(Integer.toString(recipeId));
     attributes.add(Integer.toString(date));
     return attributes;
   }
@@ -96,7 +94,7 @@ public class Event implements Storable {
    */
   @Override
   public int getId() {
-    return getEvent_id();
+    return getEventId();
   }
 
   /**
@@ -114,8 +112,8 @@ public class Event implements Storable {
    *
    * @return the event id
    */
-  public int getEvent_id() {
-    return event_id;
+  public int getEventId() {
+    return eventId;
   }
 
   /**
@@ -123,8 +121,8 @@ public class Event implements Storable {
    *
    * @return the recipe id of the event
    */
-  public int getRecipe_id() {
-    return recipe_id;
+  public int getRecipeId() {
+    return recipeId;
   }
 
   /**
@@ -147,7 +145,6 @@ public class Event implements Storable {
 
   @Override
   public String toString() {
-//    return "Event ID: " + event_id + ", Recipe ID: " + recipe_id + ", Date: " + date;
     return this.getName();
   }
 }

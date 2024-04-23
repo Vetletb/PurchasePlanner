@@ -2,12 +2,9 @@ package no.ntnu.idatt1002.demo.view;
 
 import java.util.Properties;
 import java.util.prefs.Preferences;
-
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
@@ -54,7 +51,6 @@ public class App extends Application {
 
     Preferences preferences = Preferences.userNodeForPackage(Main.class);
     String installedPath = preferences.get("install_path", null);
-    Logger.fatal(installedPath);
 
     String protocol = this.getClass().getResource("").getProtocol();
 
@@ -74,7 +70,7 @@ public class App extends Application {
 
   private void startInstallApp() {
     root.getChildren().clear();
-    root.getChildren().add(new Installer(() -> startMainApp()));
+    root.getChildren().add(new Installer(this::startMainApp));
 
   }
 

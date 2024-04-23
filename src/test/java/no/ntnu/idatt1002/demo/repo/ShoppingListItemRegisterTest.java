@@ -1,6 +1,9 @@
 package no.ntnu.idatt1002.demo.repo;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -13,7 +16,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 /**
- * Test class for the ShoppingListItemRegister class. Contains positive and negative tests for the methods.
+ * Test class for the ShoppingListItemRegister class. Contains positive and
+ * negative tests for the methods.
  */
 class ShoppingListItemRegisterTest {
   ShoppingListItemRegister shoppingListItemRegister;
@@ -33,19 +37,19 @@ class ShoppingListItemRegisterTest {
 
     @Test
     @DisplayName("Test constructor")
-    public void constructorDoesNotThrowExceptionOnValidParameters() {
+    void constructorDoesNotThrowExceptionOnValidParameters() {
       assertDoesNotThrow(() -> new ShoppingListItemRegister(dao));
     }
 
     @Test
     @DisplayName("Test getItems")
-    public void getItemsReturnsCorrectItems() {
+    void getItemsReturnsCorrectItems() {
       assertNotNull(shoppingListItemRegister.getItems());
     }
 
     @Test
     @DisplayName("Test getAllItems")
-    public void getAllItemsReturnsCorrectAmountOfItems() {
+    void getAllItemsReturnsCorrectAmountOfItems() {
       when(dao.getAllFromTable("ShoppingListItem", "Item", "item_id"))
           .thenReturn(List.of(
               List.of("1", "1", "1", "unit"),
@@ -67,13 +71,13 @@ class ShoppingListItemRegisterTest {
 
     @Test
     @DisplayName("Test addToShoppingList")
-    public void addToShoppingListDoesNotThrowExceptionOnValidParameters() {
+    void addToShoppingListDoesNotThrowExceptionOnValidParameters() {
       assertDoesNotThrow(() -> shoppingListItemRegister.addToShoppingList(1, 2, "unit"));
     }
 
     @Test
     @DisplayName("Test searchShoppingListByName")
-    public void searchShoppingListByNameSetsCorrectAmountOfItems() {
+    void searchShoppingListByNameSetsCorrectAmountOfItems() {
       when(dao.searchFromTable("ShoppingListItem", "cucumber", "Item", "item_id"))
           .thenReturn(List.of(
               List.of("1", "1", "1", "unit"),
@@ -113,13 +117,13 @@ class ShoppingListItemRegisterTest {
 
       @Test
       @DisplayName("Test deleteFromShoppingList")
-      public void deleteFromShoppingListDoesNotThrowExceptionOnValidParameters() {
+      void deleteFromShoppingListDoesNotThrowExceptionOnValidParameters() {
         assertDoesNotThrow(() -> shoppingListItemRegister.deleteFromShoppingList(1));
       }
 
       @Test
       @DisplayName("Test updateShoppingListItem")
-      public void updateShoppingListItemDoesNotThrowExceptionOnValidParameters() {
+      void updateShoppingListItemDoesNotThrowExceptionOnValidParameters() {
         assertDoesNotThrow(() -> shoppingListItemRegister.updateShoppingListItem(1, 2, 3, "unit"));
       }
     }
@@ -131,26 +135,29 @@ class ShoppingListItemRegisterTest {
 
     @Test
     @DisplayName("Test constructor")
-    public void constructorThrowsExceptionOnNullDAO() {
+    void constructorThrowsExceptionOnNullDAO() {
       assertThrows(IllegalArgumentException.class, () -> new ShoppingListItemRegister(null));
     }
 
     @Test
     @DisplayName("Test deleteFromShoppingList")
-    public void deleteFromShoppingListThrowsExceptionOnNonExistingId() {
-      assertThrows(IllegalArgumentException.class, () -> shoppingListItemRegister.deleteFromShoppingList(4));
+    void deleteFromShoppingListThrowsExceptionOnNonExistingId() {
+      assertThrows(IllegalArgumentException.class,
+          () -> shoppingListItemRegister.deleteFromShoppingList(4));
     }
 
     @Test
     @DisplayName("Test updateShoppingListItem")
-    public void updateShoppingListItemThrowsExceptionOnNonExistingId() {
-      assertThrows(IllegalArgumentException.class, () -> shoppingListItemRegister.updateShoppingListItem(4, 2, 1, "unit"));
+    void updateShoppingListItemThrowsExceptionOnNonExistingId() {
+      assertThrows(IllegalArgumentException.class,
+          () -> shoppingListItemRegister.updateShoppingListItem(4, 2, 1, "unit"));
     }
 
     @Test
     @DisplayName("Test searchShoppingListByName")
-    public void searchShoppingListByNameThrowsExceptionOnEmptyName() {
-      assertThrows(IllegalArgumentException.class, () -> shoppingListItemRegister.searchItemsByName(""));
+    void searchShoppingListByNameThrowsExceptionOnEmptyName() {
+      assertThrows(IllegalArgumentException.class,
+          () -> shoppingListItemRegister.searchItemsByName(""));
     }
   }
 }

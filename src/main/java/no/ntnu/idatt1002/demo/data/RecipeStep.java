@@ -8,37 +8,39 @@ import no.ntnu.idatt1002.demo.util.VerifyInput;
  * This class is representing an instruction for a recipe.
  */
 public class RecipeStep implements Storable {
-  private int step_id;
-  private int recipe_id;
-  private int step_number;
+  private int stepId;
+  private int recipeId;
+  private int stepNumber;
   private String instruction;
 
   /**
-   * Constructor for the RecipeStep class. When creating a new recipe step, the id is not known.
+   * Constructor for the RecipeStep class. When creating a new recipe step, the id
+   * is not known.
    *
-   * @param recipe_id the id of the recipe
-   * @param step_number the number of the step
+   * @param recipeId    the id of the recipe
+   * @param stepNumber  the number of the step
    * @param instruction the instruction of the step
    */
-  public RecipeStep(int step_id, int recipe_id, int step_number, String instruction) {
-    this(recipe_id, step_number, instruction);
-    VerifyInput.verifyPositiveNumberZeroNotAccepted(step_id, "step_id");
-    this.step_id = step_id;
+  public RecipeStep(int stepId, int recipeId, int stepNumber, String instruction) {
+    this(recipeId, stepNumber, instruction);
+    VerifyInput.verifyPositiveNumberZeroNotAccepted(stepId, "step_id");
+    this.stepId = stepId;
   }
 
   /**
-   * Constructor for the RecipeStep class. When creating a new recipe step, the id is not known.
+   * Constructor for the RecipeStep class. When creating a new recipe step, the id
+   * is not known.
    *
-   * @param recipe_id the id of the recipe
-   * @param step_number the number of the step
+   * @param recipeId    the id of the recipe
+   * @param stepNumber  the number of the step
    * @param instruction the instruction of the step
    */
-  public RecipeStep(int recipe_id, int step_number, String instruction) {
+  public RecipeStep(int recipeId, int stepNumber, String instruction) {
     VerifyInput.verifyNotEmpty(instruction, "instruction");
-    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(step_number, "step_number");
-    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(recipe_id, "recipe_id");
-    this.recipe_id = recipe_id;
-    this.step_number = step_number;
+    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(stepNumber, "step_number");
+    VerifyInput.verifyPositiveNumberMinusOneNotAccepted(recipeId, "recipe_id");
+    this.recipeId = recipeId;
+    this.stepNumber = stepNumber;
     this.instruction = instruction;
   }
 
@@ -48,7 +50,7 @@ public class RecipeStep implements Storable {
    * @return the step id
    */
   public int getStepId() {
-    return step_id;
+    return stepId;
   }
 
   /**
@@ -57,7 +59,7 @@ public class RecipeStep implements Storable {
    * @return the recipe id
    */
   public int getRecipeId() {
-    return recipe_id;
+    return recipeId;
   }
 
   /**
@@ -66,7 +68,7 @@ public class RecipeStep implements Storable {
    * @return the step number
    */
   public int getStepNumber() {
-    return step_number;
+    return stepNumber;
   }
 
   /**
@@ -79,21 +81,21 @@ public class RecipeStep implements Storable {
   }
 
   /**
-   * This method returns the attributes of the recipe step.
+   * Returns the attributes of the recipe step.
    *
    * @return the attributes of the recipe step
    */
   @Override
   public List<String> getAttributes() {
     List<String> attributes = new ArrayList<>();
-    attributes.add(String.valueOf(recipe_id));
-    attributes.add(String.valueOf(step_number));
+    attributes.add(String.valueOf(recipeId));
+    attributes.add(String.valueOf(stepNumber));
     attributes.add(instruction);
     return attributes;
   }
 
   /**
-   * This method returns the attribute names of the recipe step.
+   * Returns the attribute names of the recipe step.
    *
    * @return the attribute names of the recipe step
    */
@@ -107,7 +109,7 @@ public class RecipeStep implements Storable {
   }
 
   /**
-   * This method returns the id of the recipe step.
+   * Returns the id of the recipe step.
    *
    * @return the id of the recipe step
    */
@@ -117,7 +119,7 @@ public class RecipeStep implements Storable {
   }
 
   /**
-   * This method returns the name of the id.
+   * Returns the name of the id.
    *
    * @return the name of the id
    */

@@ -1,9 +1,8 @@
 package no.ntnu.idatt1002.demo.data;
 
-import no.ntnu.idatt1002.demo.util.VerifyInput;
-
 import java.util.ArrayList;
 import java.util.List;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class is a simple bean for a Shopping list item. This is an item with a
@@ -11,7 +10,7 @@ import java.util.List;
  */
 
 public class ShoppingListItem extends Item {
-  private int ShoppingListItem_id;
+  private int shoppingListItemId;
   private final int quantity;
   private final String unit;
 
@@ -26,13 +25,13 @@ public class ShoppingListItem extends Item {
    * @param quantity the quantity of the item
    * @param unit     the unit of the item
    */
-  public ShoppingListItem(int item_id,
+  public ShoppingListItem(int itemId,
       String name,
       String category,
       String allergy,
       int quantity,
       String unit) {
-    super(item_id, name, category, allergy);
+    super(itemId, name, category, allergy);
     VerifyInput.verifyPositiveNumberMinusOneNotAccepted(quantity, "quantity");
     VerifyInput.verifyNotEmpty(unit, "unit");
     this.quantity = quantity;
@@ -43,23 +42,23 @@ public class ShoppingListItem extends Item {
    * Constructor for the ShoppingListItem class.
    * When creating a ShoppingListItem from the database, the id is known.
    *
-   * @param ShoppingListItem_id the id of the ShoppingListItem
-   * @param item_id             the id of the item
-   * @param name                the name of the item
-   * @param category            the category of the item
-   * @param allergy             the allergy of the item
-   * @param quantity            the quantity of the item
-   * @param unit                the unit of the item
+   * @param shoppingListItemId the id of the ShoppingListItem
+   * @param itemId             the id of the item
+   * @param name               the name of the item
+   * @param category           the category of the item
+   * @param allergy            the allergy of the item
+   * @param quantity           the quantity of the item
+   * @param unit               the unit of the item
    */
-  public ShoppingListItem(int ShoppingListItem_id,
-      int item_id,
+  public ShoppingListItem(int shoppingListItemId,
+      int itemId,
       String name,
       String category,
       String allergy,
       int quantity,
       String unit) {
-    this(item_id, name, category, allergy, quantity, unit);
-    this.ShoppingListItem_id = ShoppingListItem_id;
+    this(itemId, name, category, allergy, quantity, unit);
+    this.shoppingListItemId = shoppingListItemId;
   }
 
   /**
@@ -97,16 +96,7 @@ public class ShoppingListItem extends Item {
    */
   @Override
   public int getId() {
-    return getShoppingListItem_id();
-  }
-
-  /**
-   * Returns the id of the item.
-   *
-   * @return the id of the item
-   */
-  public int getItemId() {
-    return super.getItemId();
+    return getShoppingListItemId();
   }
 
   /**
@@ -119,8 +109,8 @@ public class ShoppingListItem extends Item {
     return "shoppinglistitem_id";
   }
 
-  public int getShoppingListItem_id() {
-    return ShoppingListItem_id;
+  public int getShoppingListItemId() {
+    return shoppingListItemId;
   }
 
   /**

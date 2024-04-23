@@ -1,6 +1,9 @@
 package no.ntnu.idatt1002.demo.repo;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -13,7 +16,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 /**
- * Test class for the ItemRegister class. Contain positive and negative tests for the methods.
+ * Test class for the ItemRegister class. Contain positive and negative tests
+ * for the methods.
  */
 class ItemRegisterTest {
   ItemRegister itemRegister;
@@ -33,42 +37,42 @@ class ItemRegisterTest {
 
     @Test
     @DisplayName("Test constructor")
-    public void constructorDoesNotThrowExceptionOnValidParameters() {
+    void constructorDoesNotThrowExceptionOnValidParameters() {
       assertDoesNotThrow(() -> new ItemRegister(dao));
     }
 
     @Test
     @DisplayName("Test getItems")
-    public void getItemsReturnsCorrectItems() {
+    void getItemsReturnsCorrectItems() {
       assertNotNull(itemRegister.getItems());
     }
 
     @Test
     @DisplayName("Test filterItemsByCategory")
-    public void filterItemsByCategorySetsCorrectAmountOfItems() {
+    void filterItemsByCategorySetsCorrectAmountOfItems() {
       when(dao.filterFromTable("Item", "category", "vegetable", null, null))
           .thenReturn(List.of(
               List.of("1", "name", "vegetable", "allergy"),
               List.of("2", "name", "vegetable", "description"),
               List.of("3", "name", "vegetable", "description")));
       itemRegister.filterItemsByCategory("vegetable");
-        assertEquals(3, itemRegister.getItems().size());
+      assertEquals(3, itemRegister.getItems().size());
     }
 
     @Test
     @DisplayName("Test searchItemsByName")
-    public void searchItemsByNameSetsCorrectAmountOfItems() {
+    void searchItemsByNameSetsCorrectAmountOfItems() {
       when(dao.searchFromTable("Item", "cucumber", null, null))
           .thenReturn(List.of(
               List.of("1", "cucumber", "category", "allergy"),
               List.of("2", "cucumber", "category", "description")));
       itemRegister.searchItemsByName("cucumber");
-        assertEquals(2, itemRegister.getItems().size());
+      assertEquals(2, itemRegister.getItems().size());
     }
 
     @Test
     @DisplayName("Test getAllItems")
-    public void getAllItemsSetsCorrectAmountOfItems() {
+    void getAllItemsSetsCorrectAmountOfItems() {
       when(dao.getAllFromTable("Item", null, null))
           .thenReturn(List.of(
               List.of("1", "name", "category", "allergy"),
@@ -76,12 +80,12 @@ class ItemRegisterTest {
               List.of("3", "name", "category", "allergy"),
               List.of("4", "name", "category", "allergy")));
       itemRegister.getAllItems();
-        assertEquals(4, itemRegister.getItems().size());
+      assertEquals(4, itemRegister.getItems().size());
     }
 
     @Test
     @DisplayName("Test addItem")
-    public void addItemDoesNotThrowExceptionOnValidParameters() {
+    void addItemDoesNotThrowExceptionOnValidParameters() {
       assertDoesNotThrow(() -> itemRegister.addItem("name", "category", "allergy"));
     }
 
@@ -90,24 +94,24 @@ class ItemRegisterTest {
     class SetupItemsBeforeTests {
       @BeforeEach
       void setUp() {
-          when(dao.getAllFromTable("Item", null, null))
-              .thenReturn(List.of(
-                  List.of("1", "name", "category", "allergy"),
-                  List.of("2", "name", "category", "allergy"),
-                  List.of("3", "name", "category", "allergy"),
-                  List.of("4", "name", "category", "allergy")));
-          itemRegister.getAllItems();
+        when(dao.getAllFromTable("Item", null, null))
+            .thenReturn(List.of(
+                List.of("1", "name", "category", "allergy"),
+                List.of("2", "name", "category", "allergy"),
+                List.of("3", "name", "category", "allergy"),
+                List.of("4", "name", "category", "allergy")));
+        itemRegister.getAllItems();
       }
 
       @Test
       @DisplayName("Test deleteItem")
-      public void deleteItemDoesNotThrowExceptionOnValidParameters() {
+      void deleteItemDoesNotThrowExceptionOnValidParameters() {
         assertDoesNotThrow(() -> itemRegister.deleteItem(1));
       }
 
       @Test
       @DisplayName("Test updateItem")
-      public void updateItemDoesNotThrowExceptionOnValidParameters() {
+      void updateItemDoesNotThrowExceptionOnValidParameters() {
         assertDoesNotThrow(() -> itemRegister.updateItem(1, "name2", "category2", "allergy2"));
       }
     }
@@ -119,32 +123,33 @@ class ItemRegisterTest {
 
     @Test
     @DisplayName("Test constructor")
-    public void constructorThrowsExceptionOnNullDAO() {
+    void constructorThrowsExceptionOnNullDAO() {
       assertThrows(IllegalArgumentException.class, () -> new ItemRegister(null));
     }
 
     @Test
     @DisplayName("Test filterItemsByCategory")
-    public void filterItemsByCategoryThrowsExceptionOnEmptyCategory() {
+    void filterItemsByCategoryThrowsExceptionOnEmptyCategory() {
       assertThrows(IllegalArgumentException.class, () -> itemRegister.filterItemsByCategory(" "));
     }
 
     @Test
     @DisplayName("Test searchItemsByName")
-    public void searchItemsByNameThrowsExceptionOnEmptyName() {
+    void searchItemsByNameThrowsExceptionOnEmptyName() {
       assertThrows(IllegalArgumentException.class, () -> itemRegister.searchItemsByName(""));
     }
 
     @Test
     @DisplayName("Test deleteItem")
-    public void deleteItemThrowsExceptionOnNonExistingItem() {
+    void deleteItemThrowsExceptionOnNonExistingItem() {
       assertThrows(IllegalArgumentException.class, () -> itemRegister.deleteItem(5));
     }
 
     @Test
     @DisplayName("Test updateItem")
-    public void updateItemThrowsExceptionOnNonExistingItem() {
-      assertThrows(IllegalArgumentException.class, () -> itemRegister.updateItem(5, "name", "category", "allergy"));
+    void updateItemThrowsExceptionOnNonExistingItem() {
+      assertThrows(IllegalArgumentException.class,
+          () -> itemRegister.updateItem(5, "name", "category", "allergy"));
     }
   }
 }

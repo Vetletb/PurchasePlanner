@@ -1,17 +1,17 @@
 package no.ntnu.idatt1002.demo.data;
 
-import no.ntnu.idatt1002.demo.data.Item;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
- * Test class for the Item class. Contain tests for the constructor and all the getter methods.
+ * Test class for the Item class. Contain tests for the constructor and all the
+ * getter methods.
  * both positive and negative tests.
  */
 public class ItemTest {
@@ -28,39 +28,39 @@ public class ItemTest {
 
     @Test
     @DisplayName("Test getAttributes")
-    public void testGetAttributes() {
+    void testGetAttributes() {
       List<String> expected = List.of("milk", "dairy", "lactose");
       assertEquals(expected, item.getAttributes());
     }
 
     @Test
     @DisplayName("Test getAttributeNames")
-    public void testGetAttributeNames() {
+    void testGetAttributeNames() {
       List<String> expected = List.of("name", "category", "allergy");
       assertEquals(expected, item.getAttributeNames());
     }
 
     @Test
     @DisplayName("Test geId")
-    public void testGetId() {
+    void testGetId() {
       assertEquals(14, item.getId());
     }
 
     @Test
     @DisplayName("Test getName")
-    public void testGetName() {
+    void testGetName() {
       assertEquals("milk", item.getName());
     }
 
     @Test
     @DisplayName("Test getCategory")
-    public void testGetCategory() {
+    void testGetCategory() {
       assertEquals("dairy", item.getCategory());
     }
 
     @Test
     @DisplayName("Test getAllergy")
-    public void testGetAllergy() {
+    void testGetAllergy() {
       assertEquals("lactose", item.getAllergy());
     }
   }
@@ -71,13 +71,13 @@ public class ItemTest {
 
     @Test
     @DisplayName("Test constructor with null name")
-    public void testConstructorNullName() {
+    void testConstructorNullName() {
       assertThrows(IllegalArgumentException.class, () -> new Item(14, null, "dairy", "lactose"));
     }
 
     @Test
     @DisplayName("Test constructor with blank category")
-    public void testConstructorBlankCategory() {
+    void testConstructorBlankCategory() {
       assertThrows(IllegalArgumentException.class, () -> new Item(14, "milk", "   ", "lactose"));
     }
   }

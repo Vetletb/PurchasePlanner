@@ -30,7 +30,7 @@ public class ItemRegister {
   }
 
   /**
-   * This method returns the items in the register in the form of lists.
+   * Returns the items in the register in the form of lists.
    *
    * @return the items in the register as lists of strings
    */
@@ -39,7 +39,7 @@ public class ItemRegister {
   }
 
   /**
-   * This method retrieves filtered items by category from the database.
+   * Retrieves filtered items by category from the database.
    *
    * @param category the category to filter by
    * @throws IllegalArgumentException if category is null or empty
@@ -47,8 +47,9 @@ public class ItemRegister {
   public void filterItemsByCategory(String category) {
     VerifyInput.verifyNotEmpty(category, "category");
     items = new ArrayList<>();
-    List<List<String>> items = dao.filterFromTable("Item", "category", category, null, null);
-    packageToItem(items);
+    List<List<String>> filteredItems = dao.filterFromTable(
+        "Item", "category", category, null, null);
+    packageToItem(filteredItems);
   }
 
   /**
@@ -60,8 +61,9 @@ public class ItemRegister {
   public void searchItemsByName(String name) {
     VerifyInput.verifyNotEmpty(name, "name");
     items = new ArrayList<>();
-    List<List<String>> items = dao.searchFromTable("Item", name, null, null);
-    packageToItem(items);
+    List<List<String>> newItems = dao.searchFromTable(
+        "Item", name, null, null);
+    packageToItem(newItems);
   }
 
   /**
@@ -69,8 +71,9 @@ public class ItemRegister {
    */
   public void getAllItems() {
     items = new ArrayList<>();
-    List<List<String>> items = dao.getAllFromTable("Item", null, null);
-    packageToItem(items);
+    List<List<String>> allItems = dao.getAllFromTable(
+        "Item", null, null);
+    packageToItem(allItems);
   }
 
   /**
@@ -113,7 +116,7 @@ public class ItemRegister {
   }
 
   /**
-   * This method returns the index of the item with the given id.
+   * Returns the index of the item with the given id.
    *
    * @param id the id of the item*
    * @return the index of the item with the given id
@@ -129,10 +132,8 @@ public class ItemRegister {
     return -1;
   }
 
-
-
   /**
-   * This method updates an item in the database.
+   * Updates an item in the database.
    *
    * @param id       the id of the item to update
    * @param name     the name of the item
@@ -149,7 +150,7 @@ public class ItemRegister {
   }
 
   /**
-   * This method returns a string representation of the item register.
+   * Returns a string representation of the item register.
    *
    * @return a string representation of the item register
    */

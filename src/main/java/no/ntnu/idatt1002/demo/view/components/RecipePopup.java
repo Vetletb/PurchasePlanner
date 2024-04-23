@@ -110,7 +110,7 @@ public class RecipePopup extends Popup {
 
     nameField.setText(recipe.getName());
     categoryField.setText(recipe.getCategory());
-    timefield.setText(Integer.toString(recipe.getCooking_time()));
+    timefield.setText(Integer.toString(recipe.getCookingTime()));
 
     List<RecipeIngredient> recipes = recipe.getIngredients();
 
