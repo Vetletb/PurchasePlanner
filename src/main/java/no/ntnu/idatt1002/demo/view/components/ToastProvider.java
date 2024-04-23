@@ -13,6 +13,8 @@ import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.concurrent.Task;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import no.ntnu.idatt1002.demo.Logger;
 
 // TODO: finish this javadoc
@@ -23,6 +25,7 @@ public class ToastProvider extends AnchorPane {
   private static ToastProvider instance;
   private final Queue<Toast> toastQueue = new LinkedList<>();
   private Toast currenToast;
+  private MediaPlayer mediaPlayer;
 
   private ToastProvider() {
     super();
@@ -39,6 +42,20 @@ public class ToastProvider extends AnchorPane {
       AnchorPane.setBottomAnchor(this.currenToast, 25.0);
       AnchorPane.setRightAnchor(this.currenToast, 25.0);
       this.animateIn();
+
+      // Play sound
+      try {
+        Media sound = new Media(
+            getClass().getResource("/no/ntnu/idatt1002/sounds/"
+                + this.currenToast.getType().name().toLowerCase() + ".mp3")
+                .toExternalForm());
+
+        mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+      } catch (Exception e) {
+        Logger.error("Could not play sound "
+            + this.currenToast.getType().name().toLowerCase() + ".mp3");
+      }
 
       this.currenToast.setOnClose(() -> {
         this.next();

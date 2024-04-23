@@ -122,4 +122,8 @@ public class Toast extends StackPane {
       this.onClose.close();
     }
   }
+
+  public ToastType getType() {
+    return this.type;
+  }
 }
