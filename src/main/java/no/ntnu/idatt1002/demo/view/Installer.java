@@ -1,8 +1,11 @@
 package no.ntnu.idatt1002.demo.view;
 
 import java.io.File;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.jar.JarFile;
 import java.util.prefs.Preferences;
 
 import org.apache.commons.io.FileUtils;
@@ -145,9 +148,61 @@ public class Installer extends VBox {
     }
 
     try {
+
+      // Copy image not fund file
       Files.copy(getClass().getResourceAsStream("/no/ntnu/idatt1002/images/image-not-found.png"),
-          new File(imagesDir.getAbsolutePath() + "/image-not-found.png").toPath(),
+          new File(imagesDir.getAbsolutePath() + File.separator + "image-not-found.png").toPath(),
           StandardCopyOption.REPLACE_EXISTING);
+
+      File itemsFolder = new File(imagesDir.getAbsolutePath() + File.separator + "items");
+      if (!itemsFolder.exists()) {
+        itemsFolder.mkdirs();
+      }
+
+      File recipesFolder = new File(imagesDir.getAbsolutePath() + File.separator + "recipes");
+      if (!recipesFolder.exists()) {
+        recipesFolder.mkdirs();
+      }
+
+      // Get all images from resources
+      JarFile jarFile = new JarFile(
+          new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath()));
+
+      // Stream all files in the jar
+      jarFile.stream().forEach(jarEntry -> {
+
+        // Check if the file is an image file
+        if (jarEntry.getName().startsWith("no/ntnu/idatt1002/images/")
+            && !jarEntry.getName().equals("no/ntnu/idatt1002/images/image-not-found.png")
+            && !jarEntry.getName().equals("no/ntnu/idatt1002/images/")
+            && !jarEntry.getName().equals("no/ntnu/idatt1002/images/items/")
+            && !jarEntry.getName().equals("no/ntnu/idatt1002/images/recipes/")) {
+
+          // Copy the image file
+          try {
+            Logger.info("Copying image file: " + jarEntry.getName());
+
+            String imageDirectory = jarEntry.getName().substring(
+                "no/ntnu/idatt1002/images/".length(),
+                jarEntry.getName().lastIndexOf(File.separator));
+
+            Files.copy(getClass().getResourceAsStream("/" + jarEntry.getName()),
+                new File(imagesDir.getAbsolutePath() + File.separator
+                    + imageDirectory + File.separator
+                    + jarEntry.getName().substring(
+                        jarEntry.getName().lastIndexOf("/") + 1))
+                    .toPath(),
+                StandardCopyOption.REPLACE_EXISTING);
+          } catch (Exception e) {
+            Logger.fatal("Error copying image file: " + e.getMessage());
+            System.exit(1);
+          }
+        }
+
+      });
+
+      jarFile.close();
+
     } catch (Exception e) {
       Logger.fatal("Error copying image file: " + e.getMessage());
       System.exit(1);

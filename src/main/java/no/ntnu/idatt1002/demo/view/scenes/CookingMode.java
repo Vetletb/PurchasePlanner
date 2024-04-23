@@ -39,6 +39,7 @@ public class CookingMode extends VBox implements UpdateableScene {
 
   private void selectMenu() {
     this.getChildren().clear();
+    currentStep = 0;
 
     LocalDate nowDate = LocalDate.now();
 

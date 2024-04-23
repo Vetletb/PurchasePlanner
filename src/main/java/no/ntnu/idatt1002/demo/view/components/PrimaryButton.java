@@ -4,6 +4,8 @@ import java.util.List;
 
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import no.ntnu.idatt1002.demo.Logger;
 
@@ -11,6 +13,7 @@ import no.ntnu.idatt1002.demo.Logger;
  * The main button for the application.
  */
 public class PrimaryButton extends Button {
+  private MediaPlayer mediaPlayer;
 
   /**
    * Enum for the different types of primary buttons.
@@ -53,6 +56,18 @@ public class PrimaryButton extends Button {
     this.icon = icon;
     this.setButtonType(type);
     this.getStyleClass().add("centered");
+
+    this.setOnMouseClicked(e -> {
+      try {
+        Media sound = new Media(
+            getClass().getResource("/no/ntnu/idatt1002/sounds/click.mp3").toExternalForm());
+        mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setVolume(0.2);
+        mediaPlayer.play();
+      } catch (Exception ex) {
+        Logger.error("Could not play sound click.mp3");
+      }
+    });
   }
 
   /**

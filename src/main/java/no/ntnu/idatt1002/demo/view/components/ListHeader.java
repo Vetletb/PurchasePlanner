@@ -159,7 +159,7 @@ public class ListHeader extends HBox {
     filter = new Dropdown("Filter", List.of("All", "Active", "Inactive"));
     filter.setOnAction(e -> {
       if (onFilterChange == null) {
-        Logger.error("No filter change callback set");
+        Logger.debug("No filter change callback set");
         return;
       }
       onFilterChange.cb(filter.getValue());
@@ -168,7 +168,7 @@ public class ListHeader extends HBox {
     sort = new Dropdown("Sort", List.of("Name", "Date", "Type"));
     sort.setOnAction(e -> {
       if (onSortChange == null) {
-        Logger.error("No sort change callback set");
+        Logger.debug("No sort change callback set");
         return;
       }
       onSortChange.cb(sort.getValue());
@@ -181,7 +181,7 @@ public class ListHeader extends HBox {
     listButton = new ViewModeButton(ViewModeButton.ViewMode.LIST);
     listButton.setOnAction(e -> {
       if (onViewModeChange == null) {
-        Logger.error("No view mode change callback set");
+        Logger.debug("No view mode change callback set");
         return;
       }
       onViewModeChange.cb(ViewModeButton.ViewMode.LIST);
@@ -190,7 +190,7 @@ public class ListHeader extends HBox {
     gridButton = new ViewModeButton(ViewModeButton.ViewMode.GRID);
     gridButton.setOnAction(e -> {
       if (onViewModeChange == null) {
-        Logger.error("No view mode change callback set");
+        Logger.debug("No view mode change callback set");
         return;
       }
       onViewModeChange.cb(ViewModeButton.ViewMode.GRID);
