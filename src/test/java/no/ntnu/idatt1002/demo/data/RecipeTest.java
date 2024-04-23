@@ -1,14 +1,16 @@
 package no.ntnu.idatt1002.demo.data;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This class is a test class for the Recipe class.
@@ -79,8 +81,8 @@ public class RecipeTest {
      */
     @Test
     void testGetRecipe_idPositive() {
-      int expectedRecipe_id = 1;
-      assertEquals(expectedRecipe_id, recipe.getRecipe_id());
+      int expectedRecipeId = 1;
+      assertEquals(expectedRecipeId, recipe.getRecipeId());
     }
 
     /**
@@ -109,8 +111,8 @@ public class RecipeTest {
      */
     @Test
     void testGetCooking_timePositive() {
-      int expectedCooking_time = 30;
-      assertEquals(expectedCooking_time, recipe.getCooking_time());
+      int expectedCookingTime = 30;
+      assertEquals(expectedCookingTime, recipe.getCookingTime());
     }
 
     /**
@@ -119,23 +121,24 @@ public class RecipeTest {
      */
     @Test
     void testAddIngredientPositive() {
-      int recipeIngredient_id = 1;
-      int item_id = 2;
+      int recipeIngredientId = 1;
+      int itemId = 2;
       String name = "carrot";
       String category = "vegetable";
       String allergy = "";
       int quantity = 1;
       String unit = "kg";
-      int recipe_id = 3;
+      int recipeId = 3;
 
-      recipe.addIngredient(recipeIngredient_id, item_id, name, category, allergy, quantity, unit, recipe_id);
+      recipe.addIngredient(
+          recipeIngredientId, itemId, name, category, allergy, quantity, unit, recipeId);
 
-      RecipeIngredient addedIngredient = recipe.getIngredientById(recipeIngredient_id);
+      RecipeIngredient addedIngredient = recipe.getIngredientById(recipeIngredientId);
 
       assertNotNull(addedIngredient);
 
-      assertEquals(recipeIngredient_id, addedIngredient.getId());
-      assertEquals(item_id, addedIngredient.getItemId());
+      assertEquals(recipeIngredientId, addedIngredient.getId());
+      assertEquals(itemId, addedIngredient.getItemId());
       assertEquals(name, addedIngredient.getName());
       assertEquals(category, addedIngredient.getCategory());
       assertEquals(allergy, addedIngredient.getAllergy());
@@ -171,26 +174,20 @@ public class RecipeTest {
      */
     @Test
     void testGetIngredientByIdPositive() {
-      int recipeIngredient_id = 1;
-      int item_id = 2;
-      String name = "carrot";
-      String category = "vegetable";
-      String allergy = "";
-      int quantity = 1;
-      String unit = "kg";
-      int recipe_id = 3;
+      int recipeIngredientId = 1;
+      int itemId = 2;
 
-      RecipeIngredient addedIngredient = recipe.getIngredientById(recipeIngredient_id);
+      RecipeIngredient addedIngredient = recipe.getIngredientById(recipeIngredientId);
 
       assertNotNull(addedIngredient);
 
-      assertEquals(recipeIngredient_id, addedIngredient.getId());
-      assertEquals(item_id, addedIngredient.getItemId());
-      assertEquals(name, addedIngredient.getName());
-      assertEquals(category, addedIngredient.getCategory());
-      assertEquals(allergy, addedIngredient.getAllergy());
-      assertEquals(quantity, addedIngredient.getQuantity());
-      assertEquals(unit, addedIngredient.getUnit());
+      assertEquals(recipeIngredientId, addedIngredient.getId());
+      assertEquals(itemId, addedIngredient.getItemId());
+      assertEquals("carrot", addedIngredient.getName());
+      assertEquals("vegetable", addedIngredient.getCategory());
+      assertEquals("", addedIngredient.getAllergy());
+      assertEquals(1, addedIngredient.getQuantity());
+      assertEquals("kg", addedIngredient.getUnit());
       // assertEquals(recipe_id, addedIngredient.getRecipe_id());
     }
 
@@ -200,7 +197,8 @@ public class RecipeTest {
      */
     @Test
     void testToStringPositive() {
-//      String expectedString = "Recipe ID: 1, Name: pasta, Category: Italian, Cooking Time: 30";
+      // String expectedString = "Recipe ID: 1, Name: pasta, Category: Italian,
+      // Cooking Time: 30";
       String expectedString = "pasta";
       assertEquals(expectedString, recipe.toString());
     }
@@ -236,7 +234,8 @@ public class RecipeTest {
         new Recipe(1, "pasta", 30, "");
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("The input for the parameter 'category' cannot be null or blank", e.getMessage());
+        assertEquals(
+            "The input for the parameter 'category' cannot be null or blank", e.getMessage());
       }
     }
 
@@ -250,7 +249,8 @@ public class RecipeTest {
         new Recipe(1, "pasta", -1, "Italian");
         fail("This test failed, since it should have thrown an exception");
       } catch (IllegalArgumentException e) {
-        assertEquals("The input for the parameter 'cooking_time' must be a positive number or minus one",
+        assertEquals(
+            "The input for the parameter 'cooking_time' must be a positive number or minus one",
             e.getMessage());
       }
     }

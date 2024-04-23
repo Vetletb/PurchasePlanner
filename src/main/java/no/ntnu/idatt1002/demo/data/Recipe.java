@@ -8,9 +8,9 @@ import no.ntnu.idatt1002.demo.util.VerifyInput;
  * This class represents a recipe with a name, category and cooking time.
  */
 public class Recipe implements Storable {
-  private int recipe_id;
+  private int recipeId;
   private final String name;
-  private final int cooking_time;
+  private final int cookingTime;
   private final String category;
   private final List<RecipeIngredient> ingredients;
   private final List<RecipeStep> instructions;
@@ -18,16 +18,16 @@ public class Recipe implements Storable {
   /**
    * Constructor for the Recipe class.
    *
-   * @param name the name of the recipe
-   * @param category the category of the recipe
-   * @param cooking_time the cooking time of the recipe
+   * @param name        the name of the recipe
+   * @param category    the category of the recipe
+   * @param cookingTime the cooking time of the recipe
    */
-  public Recipe(String name, int cooking_time, String category) {
+  public Recipe(String name, int cookingTime, String category) {
     VerifyInput.verifyNotEmpty(name, "name");
     VerifyInput.verifyNotEmpty(category, "category");
-    VerifyInput.verifyPositiveNumberMinusOneAccepted(cooking_time, "cooking_time");
+    VerifyInput.verifyPositiveNumberMinusOneAccepted(cookingTime, "cooking_time");
     this.name = name;
-    this.cooking_time = cooking_time;
+    this.cookingTime = cookingTime;
     this.category = category;
     this.ingredients = new ArrayList<>();
     this.instructions = new ArrayList<>();
@@ -36,14 +36,14 @@ public class Recipe implements Storable {
   /**
    * Constructor for the Recipe class.
    *
-   * @param recipe_id the id of the recipe
-   * @param name the name of the recipe
-   * @param cooking_time the cooking time of the recipe
-   * @param category the category of the recipe
+   * @param recipeId    the id of the recipe
+   * @param name        the name of the recipe
+   * @param cookingTime the cooking time of the recipe
+   * @param category    the category of the recipe
    */
-  public Recipe(int recipe_id, String name, int cooking_time, String category) {
-    this(name, cooking_time, category);
-    this.recipe_id = recipe_id;
+  public Recipe(int recipeId, String name, int cookingTime, String category) {
+    this(name, cookingTime, category);
+    this.recipeId = recipeId;
   }
 
   /**
@@ -55,7 +55,7 @@ public class Recipe implements Storable {
   public List<String> getAttributes() {
     List<String> attributes = new ArrayList<>();
     attributes.add(name);
-    attributes.add(Integer.toString(cooking_time));
+    attributes.add(Integer.toString(cookingTime));
     attributes.add(category);
     return attributes;
   }
@@ -81,7 +81,7 @@ public class Recipe implements Storable {
    */
   @Override
   public int getId() {
-    return getRecipe_id();
+    return getRecipeId();
   }
 
   /**
@@ -99,8 +99,8 @@ public class Recipe implements Storable {
    *
    * @return the recipe id
    */
-  public int getRecipe_id() {
-    return recipe_id;
+  public int getRecipeId() {
+    return recipeId;
   }
 
   /**
@@ -126,28 +126,28 @@ public class Recipe implements Storable {
    *
    * @return the cooking time of the recipe
    */
-  public int getCooking_time() {
-    return cooking_time;
+  public int getCookingTime() {
+    return cookingTime;
   }
 
   /**
    * Adds an ingredient to the recipe.
    *
-   * @param recipeIngredient_id the id of the recipe ingredient
-   * @param item_id the id of the item
-   * @param name the name of the item
-   * @param category the category of the item
-   * @param allergy the allergy information of the item
-   * @param quantity the quantity of the item
-   * @param unit the unit of the item
-   * @param recipe_id the id of the recipe
+   * @param recipeIngredientId the id of the recipe ingredient
+   * @param itemId             the id of the item
+   * @param name               the name of the item
+   * @param category           the category of the item
+   * @param allergy            the allergy information of the item
+   * @param quantity           the quantity of the item
+   * @param unit               the unit of the item
+   * @param recipeId           the id of the recipe
    */
   public void addIngredient(
-      int recipeIngredient_id, int item_id, String name, String category,
-      String allergy, int quantity, String unit, int recipe_id) {
+      int recipeIngredientId, int itemId, String name, String category,
+      String allergy, int quantity, String unit, int recipeId) {
     ingredients.add(
         new RecipeIngredient(
-            recipeIngredient_id, item_id, name, category, allergy, quantity, unit, recipe_id));
+            recipeIngredientId, itemId, name, category, allergy, quantity, unit, recipeId));
   }
 
   /**
@@ -177,13 +177,13 @@ public class Recipe implements Storable {
   /**
    * Adds an instruction to the recipe.
    *
-   * @param step_id the id of the step
-   * @param recipe_id the id of the recipe
-   * @param step_number the number of the step
+   * @param stepId      the id of the step
+   * @param recipeId    the id of the recipe
+   * @param stepNumber  the number of the step
    * @param instruction the instruction
    */
-  public void addInstruction(int step_id, int recipe_id, int step_number, String instruction) {
-    instructions.add(new RecipeStep(step_id, recipe_id, step_number, instruction));
+  public void addInstruction(int stepId, int recipeId, int stepNumber, String instruction) {
+    instructions.add(new RecipeStep(stepId, recipeId, stepNumber, instruction));
   }
 
   /**
@@ -217,12 +217,6 @@ public class Recipe implements Storable {
    */
   @Override
   public String toString() {
-//    return
-//      "Recipe ID: " + recipe_id
-//      + ", Name: " + name
-//      + ", Category: " + category
-//      + ", Cooking Time: " + cooking_time;
     return this.getName();
   }
 }
-

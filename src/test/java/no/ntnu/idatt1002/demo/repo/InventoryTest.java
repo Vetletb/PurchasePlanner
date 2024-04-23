@@ -1,18 +1,19 @@
 package no.ntnu.idatt1002.demo.repo;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
 import no.ntnu.idatt1002.demo.dao.DAO;
-import no.ntnu.idatt1002.demo.data.InventoryItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 class InventoryTest {
 
@@ -69,7 +70,7 @@ class InventoryTest {
               List.of("2", "21012023", "2", "2", "kg", "1", "potato", "vegetable", "allergy"),
               List.of("3", "21012023", "3", "2", "kg", "1", "onion", "vegetable", "allergy"),
               List.of("4", "21012023", "4", "2", "kg", "1", "apple", "fruit", "allergy")));
-      inventory.getAllInventroyItems();
+      inventory.getAllInventoryItems();
       assertEquals(4, inventory.getInventoryItems().size());
     }
 
@@ -88,7 +89,7 @@ class InventoryTest {
             List.of("2", "21012023", "2", "2", "kg", "1", "potato", "vegetable", "allergy"),
             List.of("3", "21012023", "3", "2", "kg", "1", "onion", "vegetable", "allergy"),
             List.of("4", "21012023", "4", "2", "kg", "1", "apple", "fruit", "allergy")));
-    inventory.getAllInventroyItems();
+    inventory.getAllInventoryItems();
     assertDoesNotThrow(() -> inventory.deleteInventoryItem(1));
   }
 
@@ -101,7 +102,7 @@ class InventoryTest {
             List.of("2", "21012023", "2", "2", "kg", "1", "potato", "vegetable", "allergy"),
             List.of("3", "21012023", "3", "2", "kg", "1", "onion", "vegetable", "allergy"),
             List.of("4", "21012023", "4", "2", "kg", "1", "apple", "fruit", "allergy")));
-    inventory.getAllInventroyItems();
+    inventory.getAllInventoryItems();
     assertDoesNotThrow(() -> inventory.updateInventoryItem(1, 1, 2, "kg", 21012023));
   }
 
@@ -111,32 +112,34 @@ class InventoryTest {
 
     @Test
     @DisplayName("Test constructor")
-    public void constructorThrowsExceptionOnNullDAO() {
+    void constructorThrowsExceptionOnNullDAO() {
       assertThrows(IllegalArgumentException.class, () -> new InventoryRegister(null));
     }
 
     @Test
     @DisplayName("Test filterItemsByCategory")
-    public void filterItemsByCategoryThrowsExceptionOnEmptyCategory() {
+    void filterItemsByCategoryThrowsExceptionOnEmptyCategory() {
       assertThrows(IllegalArgumentException.class, () -> inventory.filterInventoryByCategory(" "));
     }
 
     @Test
     @DisplayName("Test searchItemsByName")
-    public void searchItemsByNameThrowsExceptionOnEmptyName() {
+    void searchItemsByNameThrowsExceptionOnEmptyName() {
       assertThrows(IllegalArgumentException.class, () -> inventory.searchInventoryByName(""));
     }
 
     @Test
     @DisplayName("Test deleteItem")
-    public void deleteItemThrowsExceptionOnNonExistingItem() {
-      assertThrows(IllegalArgumentException.class, () -> inventory.deleteInventoryItem(5));
+    void deleteItemThrowsExceptionOnNonExistingItem() {
+      assertThrows(IllegalArgumentException.class,
+          () -> inventory.deleteInventoryItem(5));
     }
 
     @Test
     @DisplayName("Test updateItem")
-    public void updateItemThrowsExceptionOnNonExistingItem() {
-      assertThrows(IllegalArgumentException.class, () -> inventory.updateInventoryItem(5, 1, 2, "kg", 31022022));
+    void updateItemThrowsExceptionOnNonExistingItem() {
+      assertThrows(IllegalArgumentException.class,
+          () -> inventory.updateInventoryItem(5, 1, 2, "kg", 31022022));
     }
   }
 }

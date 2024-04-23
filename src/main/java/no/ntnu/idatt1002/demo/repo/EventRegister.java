@@ -8,7 +8,6 @@ import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.Event;
 import no.ntnu.idatt1002.demo.util.VerifyInput;
 
-
 /**
  * This class represents a register for events.
  * Allowing for communication between the database and the user interface.
@@ -34,23 +33,23 @@ public class EventRegister {
    */
   public void getAllEvents() {
     events = new ArrayList<>();
-    List<List<String>> events = dao.getAllFromTable("Event", "Recipe", "recipe_id");
-    packageToEvent(events);
+    List<List<String>> allEvents = dao.getAllFromTable("Event", "Recipe", "recipe_id");
+    packageToEvent(allEvents);
   }
 
   /**
-   * This method adds an event to the database.
+   * Adds an event to the database.
    *
-   * @param recipe_id the id of the recipe
-   * @param date the date of the event
+   * @param recipeId the id of the recipe
+   * @param date     the date of the event
    */
-  public void addEvent(int recipe_id, int date) {
-    Event event = new Event(recipe_id, date);
+  public void addEvent(int recipeId, int date) {
+    Event event = new Event(recipeId, date);
     dao.addToDatabase(event);
   }
 
   /**
-   * This method returns the index of the event with the given id.
+   * Returns the index of the event with the given id.
    *
    * @param id the id of the event
    * @return the index of the event
@@ -65,7 +64,7 @@ public class EventRegister {
   }
 
   /**
-   * This method deletes an event from the database.
+   * Deletes an event from the database.
    *
    * @param id the id of the event to be deleted
    * @throws IllegalArgumentException if the event does not exist
@@ -79,19 +78,19 @@ public class EventRegister {
   }
 
   /**
-   * This method gets the events by the recipe id.
+   * Gets the events by the recipe id.
    *
    * @param id the id of the recipe
    */
   public void getEventById(int id) {
     events = new ArrayList<>();
-    List<List<String>> events = dao.filterFromTable(
+    List<List<String>> filteredEvents = dao.filterFromTable(
         "Event", "event_id", Integer.toString(id), "Recipe", "recipe_id");
-    packageToEvent(events);
+    packageToEvent(filteredEvents);
   }
 
   /**
-   * This method returns the events in the register as a list.
+   * Returns the events in the register as a list.
    *
    * @return the events in the register as a list
    */
@@ -102,16 +101,16 @@ public class EventRegister {
   /**
    * This method updates an event in the database.
    *
-   * @param event_id the id of the event
-   * @param recipe_id the id of the recipe
-   * @param date the date of the event
+   * @param eventId  the id of the event
+   * @param recipeId the id of the recipe
+   * @param date     the date of the event
    * @throws IllegalArgumentException if the event does not exist
    */
-  public void updateEvent(int event_id, int recipe_id, int date) {
-    if (getIndexFromEvent(event_id) == -1) {
-      throw new IllegalArgumentException("Event with id " + event_id + " does not exist.");
+  public void updateEvent(int eventId, int recipeId, int date) {
+    if (getIndexFromEvent(eventId) == -1) {
+      throw new IllegalArgumentException("Event with id " + eventId + " does not exist.");
     }
-    Event event = new Event(event_id, recipe_id, date);
+    Event event = new Event(eventId, recipeId, date);
     dao.updateDatabase(event);
   }
 
@@ -123,9 +122,9 @@ public class EventRegister {
   public void getEventsByDate(int date) {
     VerifyInput.verifyDateLength(date, "date");
     events = new ArrayList<>();
-    List<List<String>> events = dao.filterFromTable(
+    List<List<String>> filteredEvents = dao.filterFromTable(
         "Event", "date", Integer.toString(date), "recipe", "recipe_id");
-    packageToEvent(events);
+    packageToEvent(filteredEvents);
   }
 
   /**
@@ -142,14 +141,13 @@ public class EventRegister {
           event.get(4),
           Integer.parseInt(event.get(2)),
           event.get(6),
-          Integer.parseInt(event.get(5))
-      ));
+          Integer.parseInt(event.get(5))));
     }
     this.events = newEvents;
   }
 
   /**
-   * This method returns the events in the register.
+   * Returns the events in the register.
    *
    * @return the events in the register as a Map
    */
@@ -158,7 +156,7 @@ public class EventRegister {
   }
 
   /**
-   * This method returns a string representation of the events.
+   * Returns a string representation of the events.
    *
    * @return a string representation of the events
    */

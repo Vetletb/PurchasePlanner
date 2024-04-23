@@ -6,21 +6,26 @@ package no.ntnu.idatt1002.demo.util;
  */
 public class VerifyInput {
 
+  private VerifyInput() {
+  }
+
   /**
-   * Checks if a string is null or empty
+   * Checks if a string is null or empty.
    *
    * @param input     the string to be checked
    * @param parameter the name of the parameter
    * @throws IllegalArgumentException if the input is null or blank
    */
-  public static void verifyNotEmpty(String input, String parameter) throws IllegalArgumentException {
+  public static void verifyNotEmpty(String input, String parameter)
+      throws IllegalArgumentException {
     if (input == null || input.isBlank()) {
-      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' cannot be null or blank");
+      throw new IllegalArgumentException("The input for the parameter '"
+          + parameter + "' cannot be null or blank");
     }
   }
 
   /**
-   * Checks if an object is null
+   * Checks if an object is null.
    *
    * @param input     the object to be checked
    * @param parameter the name of the parameter
@@ -28,12 +33,13 @@ public class VerifyInput {
    */
   public static void verifyNotNull(Object input, String parameter) {
     if (input == null) {
-      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' cannot be null");
+      throw new IllegalArgumentException("The input for the parameter '"
+          + parameter + "' cannot be null");
     }
   }
 
   /**
-   * Checks if an int is a positive number or minus one
+   * Checks if an int is a positive number or minus one.
    *
    * @param input     the int to be checked
    * @param parameter the name of the parameter
@@ -48,7 +54,7 @@ public class VerifyInput {
   }
 
   /**
-   * Checks if an int is a positive number
+   * Checks if an int is a positive number.
    *
    * @param input     the int to be checked
    * @param parameter the name of the parameter
@@ -56,18 +62,26 @@ public class VerifyInput {
    */
   public static void verifyPositiveNumberMinusOneNotAccepted(int input, String parameter) {
     if (input < 0) {
-      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' must be a positive number");
-    }
-  }
-
-  public static void verifyPositiveNumberZeroNotAccepted(int input, String parameter) {
-    if(input < 1) {
-      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' must be a positive number equal to or greater than 1");
+      throw new IllegalArgumentException("The input for the parameter '"
+          + parameter + "' must be a positive number");
     }
   }
 
   /**
-   * Checks if an int(date) has the correct length of six figures
+   * Checks if an int is a positive number equal to or greater than 1.
+   *
+   * @param input     the int to be checked
+   * @param parameter the name of the parameter
+   */
+  public static void verifyPositiveNumberZeroNotAccepted(int input, String parameter) {
+    if (input < 1) {
+      throw new IllegalArgumentException("The input for the parameter '"
+          + parameter + "' must be a positive number equal to or greater than 1");
+    }
+  }
+
+  /**
+   * Checks if an int(date) has the correct length of six figures.
    *
    * @param input     the int(date) to be checked
    * @param parameter the name of the parameter
@@ -75,12 +89,13 @@ public class VerifyInput {
    */
   public static void verifyDateLength(int input, String parameter) {
     if (Integer.toString(input).length() != 8) {
-      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' must have eight figures");
+      throw new IllegalArgumentException("The input for the parameter '"
+          + parameter + "' must have eight figures");
     }
   }
 
   /**
-   * Extracts the year from an int(date)
+   * Extracts the year from an int(date).
    *
    * @param input the int(date) to extract the year from
    * @return the year
@@ -91,7 +106,7 @@ public class VerifyInput {
   }
 
   /**
-   * Extracts the month from an int(date)
+   * Extracts the month from an int(date).
    *
    * @param input the int(date) to extract the month from
    * @return the month
@@ -102,7 +117,7 @@ public class VerifyInput {
   }
 
   /**
-   * Extracts the day from an int(date)
+   * Extracts the day from an int(date).
    *
    * @param input the int(date) to extract the day from
    * @return the day
@@ -113,7 +128,7 @@ public class VerifyInput {
   }
 
   /**
-   * Checks if a year is a leap year
+   * Checks if a year is a leap year.
    *
    * @param year the year to be checked
    * @return true if the year is a leap year, false if not
@@ -123,24 +138,25 @@ public class VerifyInput {
   }
 
   /**
-   * Checks if the month in an int(date) is between 01 and 12
+   * Checks if the month in an int(date) is between 01 and 12.
    *
-   * @param input the int(date) to be checked
+   * @param input     the int(date) to be checked
    * @param parameter the name of the parameter
    * @throws IllegalArgumentException if the month is not between 01 and 12
    */
   public static void verifyDateMonth(int input, String parameter) {
     int month = extractMonth(input);
 
-    if(month < 1 || month > 12) {
-      throw new IllegalArgumentException("In the input for the parameter '" + parameter + "', the 3rd and 4th figure must be a number between 01 and 12");
+    if (month < 1 || month > 12) {
+      throw new IllegalArgumentException("In the input for the parameter '" + parameter
+          + "', the 3rd and 4th figure must be a number between 01 and 12");
     }
   }
 
   /**
-   * Checks if the day in an int(date) is between 01 and 31
+   * Checks if the day in an int(date) is between 01 and 31.
    *
-   * @param input the int(date) to be checked
+   * @param input     the int(date) to be checked
    * @param parameter the name of the parameter
    * @throws IllegalArgumentException if the day is not between 01 and 31
    */
@@ -150,54 +166,64 @@ public class VerifyInput {
     int day = extractDay(input);
 
     // Checks if the day is between 01 and 31
-    if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+    if (month == 1 || month == 3 || month == 5 || month == 7
+        || month == 8 || month == 10 || month == 12) {
       if (day < 1 || day > 31) {
-        throw new IllegalArgumentException("In the input for the parameter '" + parameter + "', the 5th and 6th figure must be a number between 01 and 31");
+        throw new IllegalArgumentException("In the input for the parameter '" + parameter
+            + "', the 5th and 6th figure must be a number between 01 and 31");
       }
       // Checks if the day is between 01 and 30
     } else if (month == 4 || month == 6 || month == 9 || month == 11) {
       if (day < 1 || day > 30) {
-        throw new IllegalArgumentException("In the input for the parameter '" + parameter + "', the 5th and 6th figure must be a number between 01 and 30");
+        throw new IllegalArgumentException("In the input for the parameter '" + parameter
+            + "', the 5th and 6th figure must be a number between 01 and 30");
       }
-      // Checks if the day is between 01 and 29 or 01 and 28 depending on if it is a leap year
+      // Checks if the day is between 01 and 29 or 01 and 28 depending on if it is a
+      // leap year
     } else if (month == 2) {
       verifyDayForFebruary(day, year, parameter);
     }
   }
 
   /**
-   * Checks if the day in an int(date) is between 01 and 29 or 01 and 28 depending on if it is a leap year
+   * Checks if the day in an int(date) is between 01 and 29 or 01 and 28 depending
+   * on if it is a leap year.
    *
-   * @param day the day to be checked
-   * @param year the year to be checked
+   * @param day       the day to be checked
+   * @param year      the year to be checked
    * @param parameter the name of the parameter
-   * @throws IllegalArgumentException if the day is not between 01 and 29 or 01 and 28 depending on if it is a leap year
+   * @throws IllegalArgumentException if the day is not between 01 and 29 or 01
+   *                                  and 28 depending on if it is a leap year
    */
-  private static void verifyDayForFebruary(int day, int year, String parameter) {
+  private static void verifyDayForFebruary(int day, int year, String parameter)
+      throws IllegalArgumentException {
     if (isLeapYear(year)) {
       if (day < 1 || day > 29) {
-        throw new IllegalArgumentException("In the input for the parameter '" + parameter + "', the 5th and 6th figure must be a number between 01 and 29");
+        throw new IllegalArgumentException("In the input for the parameter '" + parameter
+            + "', the 5th and 6th figure must be a number between 01 and 29");
       }
     } else {
       if (day < 1 || day > 28) {
-        throw new IllegalArgumentException("In the input for the parameter '" + parameter + "', the 5th and 6th figure must be a number between 01 and 28");
+        throw new IllegalArgumentException("In the input for the parameter '" + parameter
+            + "', the 5th and 6th figure must be a number between 01 and 28");
       }
     }
   }
 
-
   /**
    * Checks if an int(date) has the correct length of eight figures or is zero or
-   * minus one
+   * minus one.
    *
    * @param input     the int(date) to be checked
    * @param parameter the name of the parameter
    * @throws IllegalArgumentException if the int(date) does not have eight figures
    *                                  or is zero or minus one
    */
-  public static void verifyDateZeroAndMinusOneAccepted(int input, String parameter) {
+  public static void verifyDateZeroAndMinusOneAccepted(int input, String parameter)
+      throws IllegalArgumentException {
     if ((Integer.toString(input).length() != 8) && input != 0 && input != -1) {
-      throw new IllegalArgumentException("The input for the parameter '" + parameter + "' must have eight figures");
+      throw new IllegalArgumentException("The input for the parameter '"
+          + parameter + "' must have eight figures");
     }
   }
 }

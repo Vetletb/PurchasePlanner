@@ -1,20 +1,20 @@
 package no.ntnu.idatt1002.demo.data;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 
-import java.util.function.BooleanSupplier;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class QuantityUnitTest {
 
   private QuantityUnit quantityUnit;
 
- @BeforeEach
+  @BeforeEach
   void setUp() {
     quantityUnit = new QuantityUnit(2, "dl");
   }

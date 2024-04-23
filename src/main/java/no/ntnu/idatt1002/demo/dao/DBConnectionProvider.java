@@ -9,11 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.prefs.Preferences;
-
-import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.Main;
-import no.ntnu.idatt1002.demo.view.App;
-import no.ntnu.idatt1002.demo.view.Installer;
 
 /**
  * This class provides a connection to the database.
@@ -41,8 +37,8 @@ public class DBConnectionProvider {
         return;
       }
 
-      relativePath = "src" +
-          File.separator + "main"
+      relativePath = "src"
+          + File.separator + "main"
           + File.separator + "resources"
           + DB_PATH;
 
@@ -54,7 +50,7 @@ public class DBConnectionProvider {
   }
 
   /**
-   * This method sets the path to the database. Mainly used for testing purposes.
+   * Sets the path to the database. Mainly used for testing purposes.
    *
    * @param dbPath the path to the database
    */
@@ -63,13 +59,12 @@ public class DBConnectionProvider {
   }
 
   /**
-   * This method returns a connection to the database.
+   * Gets a connection to the database.
    *
    * @return a connection to the database
    */
-  Connection getConnection() {
-    try {
-      Connection connection = DriverManager.getConnection(url);
+  public Connection getConnection() {
+    try (Connection connection = DriverManager.getConnection(url)) {
       Statement statement = connection.createStatement();
       statement.execute("PRAGMA foreign_keys = ON;");
       statement.close();
@@ -80,9 +75,9 @@ public class DBConnectionProvider {
   }
 
   /**
-   * This method returns an instance of the DBConnectionProvider.
+   * Gets the instance of the DBConnectionProvider.
    *
-   * @return an instance of the DBConnectionProvider
+   * @return the instance of the DBConnectionProvider
    */
   public static DBConnectionProvider getInstance() {
     if (databaseConnectionProvider == null) {

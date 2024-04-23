@@ -17,26 +17,31 @@ public class DAO {
 
   /**
    * Constructor for the DAO class.
+   * 
+   * <p>
+   * Sets the Database Connection Provider.
+   * </p>
    *
-   * @param connectionProvider the connection provider
+   * @param connectionProvider the {@link DBConnectionProvider} provider
    */
   public DAO(DBConnectionProvider connectionProvider) {
     this.connectionProvider = connectionProvider;
   }
 
   /**
-   * This method adds an object to the database.
+   * This method adds a storable object to the database.
    *
-   * @param obj the object to add
+   * @param obj the {@link Storable} object to add
+   * @throws RuntimeException if an error occurs while storing the object
    */
-  public void addToDatabase(Storable obj) {
+  public void addToDatabase(Storable obj) throws RuntimeException {
     String placeholders = "?,".repeat(obj.getAttributeNames().size());
     placeholders = placeholders.substring(0, placeholders.length() - 1);
     String sql = String.format("INSERT INTO %s(%s) VALUES(%s)",
         obj.getClass().getSimpleName(), String.join(", ", obj.getAttributeNames()), placeholders);
     List<String> attributes = obj.getAttributes();
     try (Connection connection = connectionProvider.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       for (int i = 0; i < attributes.size(); i++) {
         preparedStatement.setString(i + 1, attributes.get(i));
       }
@@ -46,17 +51,16 @@ public class DAO {
     }
   }
 
-
   /**
-   * This method deletes an item from the database.
+   * This method deletes a stoable object from the database.
    *
-   * @param obj the object to be deleted
+   * @param obj the {@link Storable} object to be deleted
    */
   public void deleteFromDatabase(Storable obj) {
     String sql = String.format("DELETE FROM %s WHERE %s = ?",
         obj.getClass().getSimpleName(), obj.getIdName());
     try (Connection connection = connectionProvider.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       preparedStatement.setInt(1, obj.getId());
       preparedStatement.executeUpdate();
     } catch (SQLException e) {
@@ -64,19 +68,19 @@ public class DAO {
     }
   }
 
-
   /**
-   * This method updates an object in the database.
+   * This method updates a storable object in the database.
    *
-   * @param obj the object to be updated
+   * @param obj the {@link Storable} object to be updated
+   * @throws RuntimeException if an error occurs while updating the object
    */
-  public void updateDatabase(Storable obj) {
+  public void updateDatabase(Storable obj) throws RuntimeException {
     String sql = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
         obj.getClass().getSimpleName(),
         String.join(" = ?, ", obj.getAttributeNames()), obj.getIdName());
     List<String> attributes = obj.getAttributes();
     try (Connection connection = connectionProvider.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       for (int i = 0; i < attributes.size(); i++) {
         preparedStatement.setString(i + 1, attributes.get(i));
         if (i == attributes.size() - 1) {
@@ -90,12 +94,16 @@ public class DAO {
   }
 
   /**
-   * This method returns all attributes from a table.
+   * Returns all attributes from a table.
    *
-   * @param table the table to get attributes from
-   * @return a list of lists containing all attributes from a table
+   * @param table      the table to get attributes from
+   * @param joinTable  the table to join with if needed
+   * @param joinColumn the column to join on if needed
+   * @return a list of lists containing the attributes of the objects in the table
+   * @throws RuntimeException if an error occurs while getting all items
    */
-  public List<List<String>> getAllFromTable(String table, String joinTable, String joinColumn) {
+  public List<List<String>> getAllFromTable(String table, String joinTable, String joinColumn)
+      throws RuntimeException {
     List<List<String>> items = new ArrayList<>();
     String sql;
     if (joinTable == null) {
@@ -103,11 +111,11 @@ public class DAO {
     } else {
       sql = "SELECT * FROM " + table
           + " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = "
-          + joinTable + "." +  joinColumn;
+          + joinTable + "." + joinColumn;
     }
     try (Connection connection = connectionProvider.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-         ResultSet resultSet = preparedStatement.executeQuery()) {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery()) {
       List<String> columns = getColumnsFromTable(table);
       if (joinTable != null) {
         columns.addAll(getColumnsFromTable(joinTable));
@@ -128,14 +136,17 @@ public class DAO {
   /**
    * This method searches for objects by name in the database.
    *
-   * @param table the table to search in
-   * @param name the name to search for (can also be only part of the name)
-   * @param joinTable the table to join with if needed
+   * @param table      the table to search in
+   * @param name       the name to search for (can also be only part of the name)
+   * @param joinTable  the table to join with if needed
    * @param joinColumn the column to join on if needed
-   * @return a list of lists containing the attributes of the objects with the given name
+   * @return a list of lists containing the attributes of the objects with the
+   *         given name
+   * @throws RuntimeException if an error occurs while searching for items
    */
   public List<List<String>> searchFromTable(
-      String table, String name, String joinTable, String joinColumn) {
+      String table, String name, String joinTable, String joinColumn)
+      throws RuntimeException {
     List<List<String>> items = new ArrayList<>();
     String sql;
     if (joinTable == null) {
@@ -143,11 +154,11 @@ public class DAO {
     } else {
       sql = "SELECT * FROM " + table
           + " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = "
-          + joinTable + "." +  joinColumn
+          + joinTable + "." + joinColumn
           + " WHERE name LIKE ?";
     }
     try (Connection connection = connectionProvider.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       preparedStatement.setString(1, "%" + name + "%");
       ResultSet resultSet = preparedStatement.executeQuery();
       List<String> columns = getColumnsFromTable(table);
@@ -170,16 +181,18 @@ public class DAO {
   /**
    * This method filters objects by a given column in the database.
    *
-   * @param table the table to filter from
+   * @param table        the table to filter from
    * @param filterColumn the column to filter by
-   * @param filter the filter to use
-   * @param joinTable the table to join with if needed
-   * @param joinColumn the column to join on if needed
+   * @param filter       the filter to use
+   * @param joinTable    the table to join with if needed
+   * @param joinColumn   the column to join on if needed
    * @return a list of items with the given category
+   * @throws RuntimeException if an error occurs while filtering items
    */
   public List<List<String>> filterFromTable(
       String table, String filterColumn, String filter,
-      String joinTable, String joinColumn) {
+      String joinTable, String joinColumn)
+      throws RuntimeException {
     List<List<String>> items = new ArrayList<>();
     String sql;
     if (joinTable == null) {
@@ -187,11 +200,11 @@ public class DAO {
     } else {
       sql = "SELECT * FROM " + table
           + " JOIN " + joinTable + " ON " + table + "." + joinColumn + " = "
-          + joinTable + "." +  joinColumn
+          + joinTable + "." + joinColumn
           + " WHERE " + filterColumn + " LIKE ?";
     }
     try (Connection connection = connectionProvider.getConnection();
-         PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
       preparedStatement.setString(1, filter);
       ResultSet resultSet = preparedStatement.executeQuery();
       List<String> columns = getColumnsFromTable(table);
@@ -212,12 +225,13 @@ public class DAO {
   }
 
   /**
-   * This method returns all columns from a table.
+   * Returns all columns from a table.
    *
    * @param table the table to get columns from
-   * @return a list of all columns from the table
+   * @return a list of column names
+   * @throws RuntimeException if an error occurs while retrieving column names
    */
-  private List<String> getColumnsFromTable(String table) {
+  private List<String> getColumnsFromTable(String table) throws RuntimeException {
     List<String> columns = new ArrayList<>();
     try (Connection connection = connectionProvider.getConnection()) {
       DatabaseMetaData metaData = connection.getMetaData();

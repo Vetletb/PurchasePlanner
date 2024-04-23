@@ -1,6 +1,9 @@
 package no.ntnu.idatt1002.demo.repo;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
@@ -13,7 +16,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 /**
- * Test class for the EventRegister class. Contain positive and negative tests for the methods.
+ * Test class for the EventRegister class. Contain positive and negative tests
+ * for the methods.
  */
 class EventRegisterTest {
   @Mock
@@ -33,13 +37,13 @@ class EventRegisterTest {
 
     @Test
     @DisplayName("Test constructor")
-    public void constructorDoesNotThrowExceptionOnValidParameters() {
+    void constructorDoesNotThrowExceptionOnValidParameters() {
       assertDoesNotThrow(() -> new EventRegister(dao));
     }
 
     @Test
     @DisplayName("Test getAllEvents")
-    public void getAllEventsSetsCorrectAmountOfItems() {
+    void getAllEventsSetsCorrectAmountOfItems() {
       when(dao.getAllFromTable("Event", "Recipe", "recipe_id"))
           .thenReturn(List.of(
               List.of("1", "1", "20241003", "1", "name", "10", "category"),
@@ -52,7 +56,7 @@ class EventRegisterTest {
 
     @Test
     @DisplayName("Test getEventsByDate")
-    public void getEventsByDateSetsCorrectAmountOfItems() {
+    void getEventsByDateSetsCorrectAmountOfItems() {
       when(dao.filterFromTable("Event", "date", "20241013", "recipe", "recipe_id"))
           .thenReturn(List.of(
               List.of("1", "1", "20241013", "1", "name", "10", "category"),
@@ -65,25 +69,25 @@ class EventRegisterTest {
 
     @Test
     @DisplayName("Test addEvent")
-    public void addEventDoesNotThrowExceptionOnValidParameters() {
+    void addEventDoesNotThrowExceptionOnValidParameters() {
       assertDoesNotThrow(() -> eventRegister.addEvent(1, 11111111));
     }
 
     @Test
     @DisplayName("Test getEvent")
-    public void getEventsReturnsCorrectItems() {
+    void getEventsReturnsCorrectItems() {
       assertNotNull(eventRegister.getEvents());
     }
 
     @Test
     @DisplayName("Test getEventAsList")
-    public void getEventsAsListReturnsCorrectItems() {
+    void getEventsAsListReturnsCorrectItems() {
       assertNotNull(eventRegister.getEventsAsList());
     }
 
     @Test
     @DisplayName("Test getEventById")
-    public void getEventsByIdSetsCorrectAmountOfItems() {
+    void getEventsByIdSetsCorrectAmountOfItems() {
       when(dao.filterFromTable("Event", "event_id", "1", "Recipe", "recipe_id"))
           .thenReturn(List.of(
               List.of("1", "1", "20241003", "1", "name", "10", "category")));
@@ -107,13 +111,13 @@ class EventRegisterTest {
 
       @Test
       @DisplayName("Test deleteEvent")
-      public void deleteEventDoesNotThrowExceptionOnValidParameters() {
+      void deleteEventDoesNotThrowExceptionOnValidParameters() {
         assertDoesNotThrow(() -> eventRegister.deleteEvent(1));
       }
 
       @Test
       @DisplayName("Test updateEvent")
-      public void updateEventDoesNotThrowExceptionOnValidParameters() {
+      void updateEventDoesNotThrowExceptionOnValidParameters() {
         assertDoesNotThrow(() -> eventRegister.updateEvent(3, 2, 20240808));
       }
     }
@@ -125,25 +129,25 @@ class EventRegisterTest {
 
     @Test
     @DisplayName("Test constructor")
-    public void constructorThrowsExceptionOnNullDAO() {
+    void constructorThrowsExceptionOnNullDAO() {
       assertThrows(IllegalArgumentException.class, () -> new EventRegister(null));
     }
 
     @Test
     @DisplayName("Test getEventsByDate")
-    public void getEventsByDateThrowsExceptionOnWrongFormatDate() {
+    void getEventsByDateThrowsExceptionOnWrongFormatDate() {
       assertThrows(IllegalArgumentException.class, () -> eventRegister.getEventsByDate(100));
     }
 
     @Test
     @DisplayName("Test deleteItem")
-    public void deleteItemThrowsExceptionOnNonExistingItem() {
+    void deleteItemThrowsExceptionOnNonExistingItem() {
       assertThrows(IllegalArgumentException.class, () -> eventRegister.deleteEvent(5));
     }
 
     @Test
     @DisplayName("Test updateItem")
-    public void updateItemThrowsExceptionOnNonExistingItem() {
+    void updateItemThrowsExceptionOnNonExistingItem() {
       assertThrows(IllegalArgumentException.class, () -> eventRegister.updateEvent(5, 5, 101010));
     }
   }

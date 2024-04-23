@@ -13,6 +13,7 @@ import no.ntnu.idatt1002.demo.util.VerifyInput;
 public class InventoryRegister {
   private List<InventoryItem> inventoryItems;
   private final DAO dao;
+  private static final String TABLE_NAME = "InventoryItem";
 
   /**
    * Constructor for the Inventory class.
@@ -27,7 +28,7 @@ public class InventoryRegister {
   }
 
   /**
-   * This method returns the inventory items in the register in the form of lists.
+   * Returns the inventory items in the register in the form of lists.
    *
    * @return the inventory items in the register as lists of strings
    */
@@ -38,9 +39,9 @@ public class InventoryRegister {
   /**
    * This method retrieves all inventory items from the database.
    */
-  public void getAllInventroyItems() {
+  public void getAllInventoryItems() {
     inventoryItems = new ArrayList<>();
-    List<List<String>> items = dao.getAllFromTable("InventoryItem", "item", "item_id");
+    List<List<String>> items = dao.getAllFromTable(TABLE_NAME, "item", "item_id");
     packageToInventoryItems(items);
   }
 
@@ -53,9 +54,9 @@ public class InventoryRegister {
   public void filterInventoryByCategory(String category) {
     VerifyInput.verifyNotEmpty(category, "category");
     inventoryItems = new ArrayList<>();
-    List<List<String>> inventoryItems = dao.filterFromTable(
-        "InventoryItem", "category", category, "item", "item_id");
-    packageToInventoryItems(inventoryItems);
+    List<List<String>> filteredInventoryItems = dao.filterFromTable(
+        TABLE_NAME, "category", category, "item", "item_id");
+    packageToInventoryItems(filteredInventoryItems);
   }
 
   /**
@@ -68,7 +69,7 @@ public class InventoryRegister {
   public void searchInventoryByName(String name) {
     VerifyInput.verifyNotEmpty(name, "name");
     inventoryItems = new ArrayList<>();
-    List<List<String>> items = dao.searchFromTable("InventoryItem", name, "item", "item_id");
+    List<List<String>> items = dao.searchFromTable(TABLE_NAME, name, "item", "item_id");
     packageToInventoryItems(items);
   }
 
@@ -95,13 +96,15 @@ public class InventoryRegister {
   /**
    * This method adds a new inventory item to the database.
    *
-   * @param item_id        the id of the item
+   * @param itemId         the id of the item
    * @param quantity       the quantity of the item
    * @param unit           the unit of the item
    * @param expirationDate the expiration date of the item
    */
-  public void addInventoryItem(int item_id, int quantity, String unit, int expirationDate) {
-    dao.addToDatabase(new InventoryItem(item_id, "dummy", "dummy", "dummy", quantity, unit, expirationDate));
+  public void addInventoryItem(int itemId, int quantity, String unit, int expirationDate) {
+    dao.addToDatabase(new InventoryItem(itemId,
+        "dummy", "dummy", "dummy",
+        quantity, unit, expirationDate));
   }
 
   /**
@@ -136,20 +139,20 @@ public class InventoryRegister {
   /**
    * This method updates an inventory item in the database.
    *
-   * @param inventory_id   the id of the inventory item
-   * @param item_id        the id of the item
+   * @param inventoryId    the id of the inventory item
+   * @param itemId         the id of the item
    * @param quantity       the quantity of the item
    * @param unit           the unit of the item
    * @param expirationDate the expiration date of the item
    * @throws IllegalArgumentException if the id does not exist
    */
   public void updateInventoryItem(
-      int inventory_id, int item_id, int quantity, String unit, int expirationDate) {
-    if (getIndexFromId(inventory_id) == -1) {
-      throw new IllegalArgumentException("Inventory item with id" + inventory_id + "does not exist");
+      int inventoryId, int itemId, int quantity, String unit, int expirationDate) {
+    if (getIndexFromId(inventoryId) == -1) {
+      throw new IllegalArgumentException("Inventory item with id" + inventoryId + "does not exist");
     }
     InventoryItem inventoryItem = new InventoryItem(
-        inventory_id, item_id, "dummy", "dummy", "dummy", quantity, unit, expirationDate);
+        inventoryId, itemId, "dummy", "dummy", "dummy", quantity, unit, expirationDate);
     dao.updateDatabase(inventoryItem);
   }
 }

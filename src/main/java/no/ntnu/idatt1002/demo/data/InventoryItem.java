@@ -1,18 +1,15 @@
 package no.ntnu.idatt1002.demo.data;
 
-import no.ntnu.idatt1002.demo.Logger;
-import no.ntnu.idatt1002.demo.util.VerifyInput;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class is a simple bean for an inventory item.
  * This is an item with a quantity, a unit and an expiration date.
  */
 public class InventoryItem extends ShoppingListItem {
-  private int inventory_id;
+  private int inventoryId;
   private final int expirationDate;
 
   /**
@@ -26,9 +23,9 @@ public class InventoryItem extends ShoppingListItem {
    * @param expirationDate the expiration date of the item
    */
   public InventoryItem(
-      int item_id, String name, String category, String allergy,
+      int itemId, String name, String category, String allergy,
       int quantity, String unit, int expirationDate) {
-    super(item_id, name, category, allergy, quantity, unit);
+    super(itemId, name, category, allergy, quantity, unit);
     VerifyInput.verifyDateZeroAndMinusOneAccepted(expirationDate,
         "expirationDate");
     this.expirationDate = expirationDate;
@@ -37,8 +34,8 @@ public class InventoryItem extends ShoppingListItem {
   /**
    * Constructor for the InventoryItem class.
    *
-   * @param inventory_id   the id of the inventory item
-   * @param item_id        the id of the item
+   * @param inventoryId    the id of the inventory item
+   * @param itemId         the id of the item
    * @param name           the name of the item
    * @param category       the category of the item
    * @param allergy        the allergy of the item
@@ -47,14 +44,14 @@ public class InventoryItem extends ShoppingListItem {
    * @param expirationDate the expiration date of the item
    */
   public InventoryItem(
-      int inventory_id, int item_id, String name, String category,
+      int inventoryId, int itemId, String name, String category,
       String allergy, int quantity, String unit, int expirationDate) {
-    this(item_id, name, category, allergy, quantity, unit, expirationDate);
-    this.inventory_id = inventory_id;
+    this(itemId, name, category, allergy, quantity, unit, expirationDate);
+    this.inventoryId = inventoryId;
   }
 
   /**
-   * This method returns the attributes of the inventory item.
+   * Returns the attributes of the inventory item.
    *
    * @return the attributes of the inventory item
    */
@@ -69,7 +66,7 @@ public class InventoryItem extends ShoppingListItem {
   }
 
   /**
-   * This method returns the attribute names of the inventory item.
+   * Returns the attribute names of the inventory item.
    *
    * @return the attribute names of the inventory item
    */
@@ -84,17 +81,17 @@ public class InventoryItem extends ShoppingListItem {
   }
 
   /**
-   * This method returns the id of the inventory item.
+   * Returns the id of the inventory item.
    *
    * @return the id of the inventory item
    */
   @Override
   public int getId() {
-    return getInventory_id();
+    return getInventoryId();
   }
 
   /**
-   * This method returns the name of the id.
+   * Returns the name of the id.
    *
    * @return the name of the id
    */
@@ -117,7 +114,7 @@ public class InventoryItem extends ShoppingListItem {
    *
    * @return the inventory id
    */
-  public int getInventory_id() {
-    return inventory_id;
+  public int getInventoryId() {
+    return inventoryId;
   }
 }

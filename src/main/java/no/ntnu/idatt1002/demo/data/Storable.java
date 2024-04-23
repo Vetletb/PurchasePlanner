@@ -8,7 +8,7 @@ import java.util.List;
 public interface Storable {
 
   /**
-   * This method returns the attribute names of the object.
+   * Returns the attribute names of the object.
    * These should be the same as the column names in the database.
    *
    * @return the attribute names of the object
@@ -16,7 +16,7 @@ public interface Storable {
   List<String> getAttributeNames();
 
   /**
-   * This method returns the attributes of the object.
+   * Returns the attributes of the object.
    * These should be the values to be stored in the columns of the database.
    *
    * @return the attributes of the object
@@ -24,7 +24,7 @@ public interface Storable {
   List<String> getAttributes();
 
   /**
-   * This method returns the name of the id.
+   * Returns the name of the id.
    * This should be the same as the column name in the database.
    *
    * @return the name of the id
@@ -32,7 +32,7 @@ public interface Storable {
   String getIdName();
 
   /**
-   * This method returns the id of the object.
+   * Returns the id of the object.
    * This should be the value to be stored in the id column of the database.
    *
    * @return the id of the object

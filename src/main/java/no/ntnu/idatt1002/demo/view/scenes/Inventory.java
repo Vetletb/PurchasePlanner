@@ -1,7 +1,6 @@
 package no.ntnu.idatt1002.demo.view.scenes;
 
 import java.util.List;
-import java.util.Map;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
@@ -55,7 +54,7 @@ public class Inventory extends VBox implements UpdateableScene {
 
     // get all items
     inventoryRegister = new InventoryRegister(new DAO(new DBConnectionProvider()));
-    inventoryRegister.getAllInventroyItems();
+    inventoryRegister.getAllInventoryItems();
     inventoryItems = inventoryRegister.getInventoryItems();
 
     ListHeader inventoryHeader = new ListHeader();
@@ -117,7 +116,7 @@ public class Inventory extends VBox implements UpdateableScene {
         e.printStackTrace();
         return;
       }
-      inventoryRegister.getAllInventroyItems();
+      inventoryRegister.getAllInventoryItems();
       inventoryItems = inventoryRegister.getInventoryItems();
       ToastProvider.enqueue(new Toast("Success", "The item was successfully added", Toast.ToastType.SUCCESS));
       loadInventory(mode);
@@ -142,13 +141,16 @@ public class Inventory extends VBox implements UpdateableScene {
         } catch (Exception e) {
           Logger.fatal("Failed to add item");
           e.printStackTrace();
-          ToastProvider.enqueue(new Toast("Failed to add item", e.getMessage(), Toast.ToastType.ERROR));
+          ToastProvider.enqueue(
+              new Toast("Failed to add item", e.getMessage(), Toast.ToastType.ERROR));
           return;
         }
-        ToastProvider.enqueue(new Toast("Success", "The item was successfully added", Toast.ToastType.SUCCESS));
+        ToastProvider.enqueue(
+            new Toast("Success", "The item was successfully added", Toast.ToastType.SUCCESS));
         loadInventory(mode);
       } catch (Exception e) {
-        ToastProvider.enqueue(new Toast("Failed to add item", "One or more fields were empty", Toast.ToastType.ERROR));
+        ToastProvider.enqueue(
+            new Toast("Failed to add item", "One or more fields were empty", Toast.ToastType.ERROR));
         e.printStackTrace();
       }
     });
@@ -163,7 +165,6 @@ public class Inventory extends VBox implements UpdateableScene {
    * @param mode The mode to display the inventory in.
    */
   private void loadInventory(ViewModeButton.ViewMode mode) {
-    Logger.debug("loading inventory");
     this.mode = mode; // save the mode for later use
 
     inventoryContainer.getChildren().clear();
@@ -245,7 +246,7 @@ public class Inventory extends VBox implements UpdateableScene {
 
   private void updateItem(int id, int itemId, String name, String category, String allergies, String unit, int amount,
       int expirationDate) {
-    inventoryRegister.getAllInventroyItems();
+    inventoryRegister.getAllInventoryItems();
 
     ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
     itemRegister.getAllItems();
@@ -253,12 +254,14 @@ public class Inventory extends VBox implements UpdateableScene {
 
     try {
       inventoryRegister.updateInventoryItem(id, itemId, amount, unit, expirationDate);
-      inventoryRegister.getAllInventroyItems();
+      inventoryRegister.getAllInventoryItems();
       inventoryItems = inventoryRegister.getInventoryItems();
-      ToastProvider.enqueue(new Toast("Success", "The item was successfully updated", Toast.ToastType.SUCCESS));
+      ToastProvider.enqueue(
+          new Toast("Success", "The item was successfully updated", Toast.ToastType.SUCCESS));
       loadInventory(mode);
     } catch (Exception e) {
-      ToastProvider.enqueue(new Toast("Failed to update item", e.getMessage(), Toast.ToastType.ERROR));
+      ToastProvider.enqueue(
+          new Toast("Failed to update item", e.getMessage(), Toast.ToastType.ERROR));
       e.printStackTrace();
     }
   }
@@ -266,26 +269,23 @@ public class Inventory extends VBox implements UpdateableScene {
   private void deleteItem(int id, int itemId) {
 
     try {
-      inventoryRegister.getAllInventroyItems();
+      inventoryRegister.getAllInventoryItems();
       inventoryRegister.deleteInventoryItem(id);
 
-//      ItemRegister itemRegister = new ItemRegister(new DAO(new DBConnectionProvider()));
-//      itemRegister.getAllItems();
-//      itemRegister.deleteItem(itemId);
-//      itemRegister.getAllItems();
-
-      inventoryRegister.getAllInventroyItems();
+      inventoryRegister.getAllInventoryItems();
       inventoryItems = inventoryRegister.getInventoryItems();
-      ToastProvider.enqueue(new Toast("Success", "The item was successfully deleted", Toast.ToastType.SUCCESS));
+      ToastProvider.enqueue(
+          new Toast("Success", "The item was successfully deleted", Toast.ToastType.SUCCESS));
       loadInventory(mode);
     } catch (Exception e) {
-      ToastProvider.enqueue(new Toast("Failed to delete item", e.getMessage(), Toast.ToastType.ERROR));
+      ToastProvider.enqueue(
+          new Toast("Failed to delete item", e.getMessage(), Toast.ToastType.ERROR));
       e.printStackTrace();
     }
   }
 
   public void updateScene() {
-    inventoryRegister.getAllInventroyItems();
+    inventoryRegister.getAllInventoryItems();
     inventoryItems = inventoryRegister.getInventoryItems();
     loadInventory(mode);
   }

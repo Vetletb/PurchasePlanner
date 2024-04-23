@@ -21,13 +21,16 @@ import no.ntnu.idatt1002.demo.view.components.PrimaryButton.Type;
 import org.controlsfx.control.SearchableComboBox;
 
 /**
- * The inventory page.
+ * The cooking mode page.
  */
 public class CookingMode extends VBox implements UpdateableScene {
   private int currentStep = 0;
   private Recipe currentRecipe;
   private boolean isCooking = false;
 
+  /**
+   * Constructor for the cooking mode.
+   */
   public CookingMode() {
     super();
     VBox.setVgrow(this, Priority.ALWAYS);
@@ -76,7 +79,7 @@ public class CookingMode extends VBox implements UpdateableScene {
 
         break;
       case 1:
-        Recipe recipe = recipeRegister.getRecipes().get(currentEvents.get(0).getRecipe_id());
+        Recipe recipe = recipeRegister.getRecipes().get(currentEvents.get(0).getRecipeId());
         Text oneEventText = new Text("You have " + recipe.getName() + " planned for today");
         oneEventText.getStyleClass().addAll("centered", "one-event-text");
 
@@ -101,7 +104,7 @@ public class CookingMode extends VBox implements UpdateableScene {
         mainContent.getChildren().add(multiplEventsText);
 
         for (Event event : currentEvents) {
-          Recipe eventRecipe = recipeRegister.getRecipes().get(event.getRecipe_id());
+          Recipe eventRecipe = recipeRegister.getRecipes().get(event.getRecipeId());
           PrimaryButton startButton = new PrimaryButton("" + eventRecipe.getName(),
               Type.PRIMARY);
           startButton.setPrefSize(150, 60);

@@ -1,54 +1,53 @@
 package no.ntnu.idatt1002.demo.data;
 
-import no.ntnu.idatt1002.demo.util.VerifyInput;
-
 import java.util.ArrayList;
 import java.util.List;
+import no.ntnu.idatt1002.demo.util.VerifyInput;
 
 /**
  * This class represents a recipe ingredient connected to a recipe.
  */
 public class RecipeIngredient extends ShoppingListItem {
 
-  private int recipeIngredient_id;
-  private final int recipe_id;
+  private int recipeIngredientId;
+  private final int recipeId;
 
   /**
    * Constructor for the RecipeIngredient class.
    *
-   * @param item_id   the id of the item
-   * @param name      the name of the item
-   * @param category  the category of the item
-   * @param allergy   the allergy information of the item
-   * @param quantity  the quantity of the item
-   * @param unit      the unit of the item
-   * @param recipe_id the id of the recipe
+   * @param itemId   the id of the item
+   * @param name     the name of the item
+   * @param category the category of the item
+   * @param allergy  the allergy information of the item
+   * @param quantity the quantity of the item
+   * @param unit     the unit of the item
+   * @param recipeId the id of the recipe
    */
   public RecipeIngredient(
-      int item_id, String name, String category, String allergy,
-      int quantity, String unit, int recipe_id) {
-    super(item_id, name, category, allergy, quantity, unit);
-    VerifyInput.verifyPositiveNumberZeroNotAccepted(recipe_id, "recipe_id");
-    this.recipe_id = recipe_id;
+      int itemId, String name, String category, String allergy,
+      int quantity, String unit, int recipeId) {
+    super(itemId, name, category, allergy, quantity, unit);
+    VerifyInput.verifyPositiveNumberZeroNotAccepted(recipeId, "recipe_id");
+    this.recipeId = recipeId;
   }
 
   /**
    * Constructor for the RecipeIngredient class with recipe ingredient id.
    *
-   * @param recipeIngredient_id the id of the recipe ingredient
-   * @param item_id             the id of the item
-   * @param name                the name of the item
-   * @param category            the category of the item
-   * @param allergy             the allergy information of the item
-   * @param quantity            the quantity of the item
-   * @param unit                the unit of the item
-   * @param recipe_id           the id of the recipe
+   * @param recipeIngredientId the id of the recipe ingredient
+   * @param itemId             the id of the item
+   * @param name               the name of the item
+   * @param category           the category of the item
+   * @param allergy            the allergy information of the item
+   * @param quantity           the quantity of the item
+   * @param unit               the unit of the item
+   * @param recipeId           the id of the recipe
    */
   public RecipeIngredient(
-      int recipeIngredient_id, int item_id, String name, String category,
-      String allergy, int quantity, String unit, int recipe_id) {
-    this(item_id, name, category, allergy, quantity, unit, recipe_id);
-    this.recipeIngredient_id = recipeIngredient_id;
+      int recipeIngredientId, int itemId, String name, String category,
+      String allergy, int quantity, String unit, int recipeId) {
+    this(itemId, name, category, allergy, quantity, unit, recipeId);
+    this.recipeIngredientId = recipeIngredientId;
   }
 
   /**
@@ -62,7 +61,7 @@ public class RecipeIngredient extends ShoppingListItem {
     attributes.add(Integer.toString(super.getItemId()));
     attributes.add(Integer.toString(super.getQuantity()));
     attributes.add(super.getUnit());
-    attributes.add(Integer.toString(recipe_id));
+    attributes.add(Integer.toString(recipeId));
     return attributes;
   }
 
@@ -88,7 +87,7 @@ public class RecipeIngredient extends ShoppingListItem {
    */
   @Override
   public int getId() {
-    return getRecipeIngredient_id();
+    return getRecipeIngredientId();
   }
 
   /**
@@ -106,8 +105,8 @@ public class RecipeIngredient extends ShoppingListItem {
    *
    * @return the recipe id of the recipe ingredient
    */
-  public int getRecipe_id() {
-    return recipe_id;
+  public int getRecipeId() {
+    return recipeId;
   }
 
   /**
@@ -115,7 +114,7 @@ public class RecipeIngredient extends ShoppingListItem {
    *
    * @return the recipe ingredient id
    */
-  public int getRecipeIngredient_id() {
-    return recipeIngredient_id;
+  public int getRecipeIngredientId() {
+    return recipeIngredientId;
   }
 }
