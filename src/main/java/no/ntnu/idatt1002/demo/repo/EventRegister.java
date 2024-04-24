@@ -1,9 +1,12 @@
 package no.ntnu.idatt1002.demo.repo;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.data.Event;
 import no.ntnu.idatt1002.demo.util.VerifyInput;
@@ -153,6 +156,25 @@ public class EventRegister {
    */
   public Map<Integer, Event> getEvents() {
     return events.stream().collect(Collectors.toMap(Event::getId, event -> event));
+  }
+
+  /**
+   * Removes all events that are before this week's monday.
+   */
+  public void removePassedEvents() {
+    // get all events
+    this.getAllEvents();
+    // get the date for this week's monday
+    LocalDate date = LocalDate.now();
+    int weekStartDate = Integer.parseInt(date.toString().replace("-", "")) - (date.getDayOfWeek().getValue() - 1);
+    // remove all events that are before this week's monday
+    events.forEach(event -> {
+      if (event.getDate() < weekStartDate) {
+        dao.deleteFromDatabase(event);
+      }
+    });
+    // update the list of events
+    this.getAllEvents();
   }
 
   /**

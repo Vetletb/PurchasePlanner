@@ -1,10 +1,7 @@
 package no.ntnu.idatt1002.demo.view.scenes;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -14,6 +11,7 @@ import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.UpdateableScene;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
+import no.ntnu.idatt1002.demo.data.Date;
 import no.ntnu.idatt1002.demo.data.Event;
 import no.ntnu.idatt1002.demo.data.InventoryItem;
 import no.ntnu.idatt1002.demo.data.QuantityUnit;
@@ -456,6 +454,9 @@ public class ShoppingList extends VBox implements UpdateableScene {
   }
 
   public void updateScene() {
+    EventRegister eventRegister = new EventRegister(
+        new DAO(new DBConnectionProvider()));
+    eventRegister.removePassedEvents();
     getItemsToAddToList();
     loadShoppingList();
   }
@@ -517,10 +518,16 @@ public class ShoppingList extends VBox implements UpdateableScene {
     // Create a map of the items needed
     Map<Integer, QuantityUnit> neededItems = new HashMap<>();
     // Get the items needed from the events
-    eventItems.forEach((id, event) -> recipeItems.get(event.getRecipeId())
-        .getIngredients().forEach(item -> neededItems.put(
-            item.getItemId(),
-            convertQuantity(item.getUnit(), item.getQuantity()))));
+    eventItems.forEach((id, event) -> {
+      LocalDate Today = LocalDate.now();
+      LocalDate eventDate = new Date(event.getDate()).getDate();
+      if(Today.isBefore(eventDate) || Today.isEqual(eventDate)){
+        recipeItems.get(event.getRecipeId())
+            .getIngredients().forEach(item -> neededItems.put(
+                item.getItemId(),
+                convertQuantity(item.getUnit(), item.getQuantity())));
+      }
+    });
 
     // Create a map of the items to add
 
