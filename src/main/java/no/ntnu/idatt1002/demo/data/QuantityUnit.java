@@ -52,4 +52,8 @@ public class QuantityUnit {
   public String toString() {
     return quantity + " : " + unit;
   }
+
+  public static QuantityUnit add(QuantityUnit a, QuantityUnit b) {
+    return new QuantityUnit(a.getQuantity() + b.getQuantity(), a.getUnit());
+  }
 }
