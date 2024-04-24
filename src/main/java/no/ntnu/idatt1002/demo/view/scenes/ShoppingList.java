@@ -1,10 +1,7 @@
 package no.ntnu.idatt1002.demo.view.scenes;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -14,11 +11,8 @@ import no.ntnu.idatt1002.demo.Logger;
 import no.ntnu.idatt1002.demo.UpdateableScene;
 import no.ntnu.idatt1002.demo.dao.DAO;
 import no.ntnu.idatt1002.demo.dao.DBConnectionProvider;
-import no.ntnu.idatt1002.demo.data.Event;
-import no.ntnu.idatt1002.demo.data.InventoryItem;
-import no.ntnu.idatt1002.demo.data.QuantityUnit;
-import no.ntnu.idatt1002.demo.data.Recipe;
-import no.ntnu.idatt1002.demo.data.ShoppingListItem;
+import no.ntnu.idatt1002.demo.data.*;
+import no.ntnu.idatt1002.demo.data.Date;
 import no.ntnu.idatt1002.demo.repo.EventRegister;
 import no.ntnu.idatt1002.demo.repo.InventoryRegister;
 import no.ntnu.idatt1002.demo.repo.ItemRegister;
@@ -456,6 +450,9 @@ public class ShoppingList extends VBox implements UpdateableScene {
   }
 
   public void updateScene() {
+    EventRegister eventRegister = new EventRegister(
+        new DAO(new DBConnectionProvider()));
+    eventRegister.removePassedEvents();
     getItemsToAddToList();
     loadShoppingList();
   }
@@ -517,10 +514,31 @@ public class ShoppingList extends VBox implements UpdateableScene {
     // Create a map of the items needed
     Map<Integer, QuantityUnit> neededItems = new HashMap<>();
     // Get the items needed from the events
-    eventItems.forEach((id, event) -> recipeItems.get(event.getRecipeId())
-        .getIngredients().forEach(item -> neededItems.put(
-            item.getItemId(),
-            convertQuantity(item.getUnit(), item.getQuantity()))));
+    eventItems.forEach((id, event) -> {
+      // Create a LocalDate object for the event date
+      LocalDate eventDate = new Date(event.getDate()).getDate();
+
+      // Create a LocalDate object for today
+      LocalDate today = LocalDate.now().plusDays(-1);
+
+      // Check if the event date is after today
+      if (eventDate.isAfter(today)) {
+        // Iterate through the ingredients in the recipe
+        recipeItems.get(event.getRecipeId())
+                .getIngredients()
+                .forEach(item -> {
+                  // Convert the quantity and unit to a QuantityUnit object
+                  QuantityUnit quantityUnit = convertQuantity(item.getUnit(), item.getQuantity());
+
+                  // Merge the QuantityUnit object into the neededItems map
+                  neededItems.merge(
+                          item.getItemId(), // The key is the item ID
+                          quantityUnit, // The value is the QuantityUnit object
+                          QuantityUnit::add // The merging function sums up the quantities for duplicate keys
+                  );
+                });
+      }
+    });
 
     // Create a map of the items to add
 

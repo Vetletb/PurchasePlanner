@@ -79,6 +79,15 @@ class QuantityUnitTest {
         fail("Should not have thrown any exception");
       }
     }
+
+    @Test
+    @DisplayName("Test static add")
+    void testStaticAdd() {
+      QuantityUnit quantityUnit2 = new QuantityUnit(3, "dl");
+      QuantityUnit quantityUnit3 = QuantityUnit.add(quantityUnit, quantityUnit2);
+      assertEquals(5, quantityUnit3.getQuantity());
+      assertEquals("dl", quantityUnit3.getUnit());
+    }
   }
 
   @Nested

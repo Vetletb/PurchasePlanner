@@ -28,9 +28,9 @@ public class Date implements Storable {
   public Date(int date) {
     String dateStr = Integer.toString(date);
     this.date = LocalDate.of(
-        Integer.parseInt(dateStr.substring(0, 2) + 2000),
-        Integer.parseInt(dateStr.substring(2, 4)),
-        Integer.parseInt(dateStr.substring(4, 6)));
+        Integer.parseInt(dateStr.substring(0, 4)),
+        Integer.parseInt(dateStr.substring(4, 6)),
+        Integer.parseInt(dateStr.substring(6, 8)));
   }
 
   /**
