@@ -6,7 +6,7 @@
 
     <groupId>no.ntnu.idatt1002.demo</groupId>
     <artifactId>idatt2002demo</artifactId>
-    <version>1.0.0-ALPHA</version>
+    <version>1.0.0</version>
     <name>demo</name>
     <packaging>jar</packaging>
 
